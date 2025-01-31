@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 10 jan. 2025 à 18:01
+-- Généré le : ven. 31 jan. 2025 à 16:38
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -278,9 +278,9 @@ CREATE TABLE `wbcc_contact` (
 --
 
 INSERT INTO `wbcc_contact` (`idContact`, `numeroContact`, `nomContact`, `prenomContact`, `fullName`, `telContact`, `emailContact`, `dateNaissance`, `adresseContact`, `codePostalContact`, `villeContact`, `statutContact`, `etatContact`, `civiliteContact`, `copieCNI`, `copieCA`, `copieTP`, `commentaireCNI`, `commentaireCA`, `commentaireTP`, `lienParente`, `age`, `fiscalementCharge`, `fileJustificatifOcc`, `idContactFContact`, `codeFiche`, `skype`, `whatsapp`, `commentaire`, `category`, `companyName`, `departement`, `mobilePhone`, `faxPhone`, `emailCollaboratif`, `businessLine2`, `businessState`, `businessCountryName`, `digicode1`, `codePorte`, `batiment`, `etage`, `source`, `referredBy`, `createDate`, `editDate`, `jobTitle`, `service`, `motifSuppressionCompte`, `isUser`, `isPersonnel`) VALUES
-(1, 'vdfgsdfsddfhdffgd', 'BALTI', 'Jawher', 'Jawher BALTI', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'current_timestamp()', 'current_timestamp()', NULL, NULL, NULL, 0, 0),
-(2, 'CON_05050404', 'nc1', 'pc1', 'npc1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'current_timestamp()', 'current_timestamp()', NULL, NULL, NULL, 1, 1),
-(100, 'CON_1', 'nabila', 'nabila', 'nabila nabila', NULL, 'nabila.nabila@gmail.com', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'current_timestamp()', 'current_timestamp()', NULL, NULL, NULL, 0, 0),
+(1, 'vdfgsdfsddfhdffgd', 'BALTI', 'Jawher', 'Jawher BALTI', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-05-01 11:50:34', '2024-12-16 11:50:34', NULL, NULL, NULL, 0, 0),
+(2, 'CON_05050404', 'nc1', 'pc1', 'npc1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-10-01 11:50:34', '2024-10-01 11:50:34', NULL, NULL, NULL, 1, 1),
+(100, 'CON_1', 'nabila', 'nabila', 'nabila nabila', NULL, 'nabila.nabila@gmail.com', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-10-01 11:50:34', '2024-10-01 11:50:34', NULL, NULL, NULL, 0, 0),
 (1998, 'CON_05050404202420242024115034', 'DRIDI', 'Hamza', 'Hamza DRIDI', '0766596464', 'jeanmarc.d@wbcc.fr', NULL, '', '', '', NULL, 1, 'M', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', NULL, NULL, '', '', '', '', 'jeanmarc.d@wbcc.fr', '', '', NULL, NULL, '', '', '', NULL, 'Extranet WBCC', '2024-04-05 11:50:34', '2024-08-30 08:50:33', '', '', NULL, 1, 0),
 (8462, 'CON_05050404202420242024115035', 'admin', 'admin', 'admin admin', NULL, 'admin.admin@wbcc.fr', NULL, '', '', '', 'Commercial', 1, 'M', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', NULL, NULL, '', '', '', '', NULL, '', '', NULL, NULL, '', '', '', NULL, 'Extranet WBCC', '', '', '', '', NULL, 1, 0),
 (8464, 'CON_05050404202420242024115034', 'MEHERZI', 'Mohamed Achref', 'Mohamed Achref MEHERZI', '0766596464', 'achref@wbcc.fr', NULL, '', '', '', NULL, 1, 'M', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', NULL, NULL, '', '', '', '', 'achref@wbcc.fr', '', '', NULL, NULL, '', '', '', NULL, 'Extranet WBCC', '2024-04-05 11:50:34', '2024-08-30 08:50:33', '', '', NULL, 1, 0),
@@ -351,6 +351,92 @@ INSERT INTO `wbcc_critere_subvention` (`idCritereSubvention`, `numeroCritereSubv
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `wbcc_demandesconge`
+--
+
+CREATE TABLE `wbcc_demandesconge` (
+  `idDemande` int(11) NOT NULL,
+  `idUtilisateurF` int(11) DEFAULT NULL,
+  `idTypeCongeF` int(11) DEFAULT NULL,
+  `motif` text DEFAULT NULL,
+  `dateDebutDeCongeSouhaite` date DEFAULT NULL,
+  `dateFinDeCongeSouhaite` date DEFAULT NULL,
+  `dateDebutDeCongePropose` date DEFAULT NULL,
+  `dateFinDeCongePropose` date DEFAULT NULL,
+  `dateDebutDeCongeReelle` date DEFAULT NULL,
+  `dateFinDeCongeReelle` date DEFAULT NULL,
+  `commentaire` varchar(200) DEFAULT NULL,
+  `statut` enum('0','1','2','3') DEFAULT NULL COMMENT '0=en_attente, 1=approuvé, 2=rejeté, 3=annulé',
+  `quotasRestant` int(11) NOT NULL,
+  `dateCreation` datetime DEFAULT NULL,
+  `dateModification` datetime DEFAULT NULL,
+  `idTraiteF` int(11) DEFAULT NULL,
+  `jours` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `wbcc_demandesconge`
+--
+
+INSERT INTO `wbcc_demandesconge` (`idDemande`, `idUtilisateurF`, `idTypeCongeF`, `motif`, `dateDebutDeCongeSouhaite`, `dateFinDeCongeSouhaite`, `dateDebutDeCongePropose`, `dateFinDeCongePropose`, `dateDebutDeCongeReelle`, `dateFinDeCongeReelle`, `commentaire`, `statut`, `quotasRestant`, `dateCreation`, `dateModification`, `idTraiteF`, `jours`) VALUES
+(1, 609, 1, 'motif123123', '2024-08-08', '2024-08-16', NULL, NULL, '2024-08-07', '2024-08-10', '', '1', 0, NULL, '2025-01-23 17:51:16', 1, NULL),
+(2, 611, 1, 'bb', '2024-09-11', '2024-09-28', NULL, NULL, NULL, NULL, 'vvv', '0', 0, '2024-09-17 02:38:50', '2025-01-23 17:48:50', 2, NULL),
+(8, 609, 3, 'ttt', '2024-09-20', '2024-09-28', '2025-01-25', '2025-01-26', NULL, NULL, 'azer', '2', 0, '2024-09-17 02:38:50', '2025-01-24 14:14:38', 1, NULL),
+(9, 609, 3, 'sddssd', '2024-09-01', '2024-09-30', NULL, NULL, NULL, NULL, NULL, '1', 0, '2024-09-27 01:32:49', '2025-01-22 14:08:25', 609, NULL),
+(10, 611, 1, '', '2024-09-07', '2024-09-29', NULL, NULL, '2024-08-21', '2024-08-23', NULL, '1', 0, '2024-09-27 01:33:49', '2025-01-23 17:49:15', 1, NULL),
+(31, 609, 2, 'azeazeazeazeazeazeqqqqqqqqqqqqqqqqqqqqqqq', '2025-01-22', '2025-01-24', '2025-01-25', '2025-01-31', '2025-01-25', '2025-01-31', 'zzzzzzzzzzzzzzzzzzzzzz', '1', 0, '2025-01-21 15:57:20', '2025-01-23 10:57:24', 1, NULL),
+(32, 1, 3, 'pppppppppppppppppppppppp', '2025-01-24', '2025-01-26', NULL, NULL, NULL, NULL, NULL, '2', 0, '2025-01-21 15:57:56', '2025-01-23 17:49:46', 1, NULL),
+(33, 1, 2, 'qsdqsdqsdqs', '2025-01-23', '2025-01-28', NULL, NULL, '2025-01-23', '2025-01-28', NULL, '1', 0, '2025-01-21 15:58:56', '2025-01-23 17:35:27', 1, NULL),
+(34, 1, 3, '1231234564', '2025-01-30', '2025-01-31', '2025-01-25', '2025-01-26', NULL, NULL, 'commentaire', '0', 0, '2025-01-21 15:59:56', '2025-01-24 14:13:27', 1, NULL),
+(41, 609, 2, '111111111111111', '2025-01-24', '2025-01-25', NULL, NULL, NULL, NULL, NULL, '2', 0, '2025-01-23 11:07:14', '2025-01-23 11:16:36', 1, NULL),
+(42, 609, 1, 'azeazeaze', '2025-01-29', '2025-01-31', NULL, NULL, '2025-01-29', '2025-01-31', NULL, '1', 0, '2025-01-23 11:12:39', '2025-01-23 11:17:09', 1, NULL),
+(43, 609, 3, '4\r\n45\r\n4', '2025-01-25', '2025-01-27', '2025-01-30', '2025-01-31', '2025-01-22', '2025-01-31', 'azeaze', '1', 0, '2025-01-23 11:17:37', '2025-01-23 11:18:49', 1, NULL),
+(44, 609, 1, 'sdfgsdfg', '2025-01-23', '2025-01-26', '2025-01-24', '2025-01-26', NULL, NULL, '456', '3', 0, '2025-01-23 11:19:25', '2025-01-24 14:15:14', 1, NULL),
+(45, 609, 2, '123456789', '2025-01-24', '2025-01-28', NULL, NULL, '2025-01-24', '2025-01-28', NULL, '1', 0, '2025-01-23 14:53:51', '2025-01-23 17:49:39', 1, NULL),
+(46, 609, 2, '1111111111111111111111', '2025-01-24', '2025-01-27', '2025-01-24', '2025-01-25', '2025-01-24', '2025-01-25', 'azeaze', '1', 0, '2025-01-24 12:25:52', '2025-01-24 12:36:37', 1, NULL),
+(47, 609, 1, 'motif2', '2025-01-25', '2025-01-28', NULL, NULL, NULL, NULL, 'Raison rejet: azerazerazer', '2', 0, '2025-01-24 14:15:59', '2025-01-27 09:38:54', 1, NULL),
+(48, 609, 2, 'azeqsdwxc', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'commentaire proposition', '1', 0, '2025-01-27 10:19:32', '2025-01-27 10:31:39', 1, NULL),
+(49, 609, 1, 'qsdwxc', '2025-01-30', '2025-01-31', NULL, NULL, '2025-01-30', '2025-01-31', NULL, '1', 0, '2025-01-27 10:28:09', '2025-01-27 10:31:18', 1, NULL),
+(50, 609, 1, 'qqqqqqqqqqqq', '2025-01-30', '2025-01-31', '2025-01-29', '2025-01-30', NULL, NULL, '456', '2', 0, '2025-01-27 10:32:12', '2025-01-27 10:32:51', 1, NULL),
+(53, 609, 2, 'aaaaaaaaaaaaa', '2025-01-28', '2025-01-30', NULL, NULL, '2025-01-28', '2025-01-30', NULL, '1', 0, '2025-01-28 16:39:16', '2025-01-28 16:56:18', 1, 3),
+(54, 609, 2, 'qwwwwwwwwwwwwwwwwwwwwwwwww', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'aazeaze', '1', 0, '2025-01-28 16:55:33', '2025-01-28 17:05:44', 1, 2),
+(55, 609, 3, 'xxxxxxxxxxxxxxxxxxxxx', '2025-01-28', '2025-01-31', '2025-01-28', '2025-01-30', '2025-01-28', '2025-01-30', 'zzzzzzzzzzzzzzzzzzzzzz', '1', 0, '2025-01-28 16:55:53', '2025-01-28 17:03:53', 1, 3),
+(56, 609, 2, '', '2025-01-30', '2025-01-31', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', '', '1', 0, '2025-01-28 17:07:39', '2025-01-28 17:09:05', 1, 2),
+(57, 609, 2, 'aaaaaaaaaaaaa', '2025-01-28', '2025-01-31', NULL, NULL, '2025-01-28', '2025-01-31', NULL, '1', 0, '2025-01-28 17:15:28', '2025-01-28 17:15:45', 1, 4),
+(58, 609, 2, 'aaaaaaaaaaaaaa', '2025-01-28', '2025-01-31', '2025-01-28', '2025-01-30', '2025-01-28', '2025-01-30', 'aaaaaaaaaaaaa', '1', 0, '2025-01-28 17:16:05', '2025-01-28 17:16:51', 1, 3),
+(59, 609, 2, 'ssssssssssssssssss', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'sssssssss', '1', 0, '2025-01-28 17:17:11', '2025-01-28 17:17:51', 1, 2),
+(60, 609, 3, 'qqqqqqqqqqqqqq', '2025-01-30', '2025-01-31', '2025-02-10', '2025-02-11', '2025-02-10', '2025-02-11', '', '3', 0, '2025-01-29 14:15:06', '2025-01-30 15:37:31', 1, 2),
+(61, 609, 3, 'qqqqqqqqqqqqqq', '2025-01-29', '2025-01-31', '2025-02-19', '2025-02-20', '2025-02-19', '2025-02-20', '', '1', 0, '2025-01-29 14:16:22', '2025-01-30 13:37:34', 1, 2),
+(62, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-06', '2025-02-17', NULL, NULL, '2025-02-06', '2025-02-17', NULL, '1', 0, '2025-01-29 17:27:37', '2025-01-30 16:45:22', 1, 8),
+(63, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-06', '2025-02-17', NULL, NULL, '2025-02-06', '2025-02-17', NULL, '1', 0, '2025-01-29 17:27:37', '2025-01-30 15:35:08', 1, 8),
+(64, 609, 1, 'aaaaaaaaaaaaaaaa', '2025-02-07', '2025-02-11', NULL, NULL, '2025-02-07', '2025-02-11', NULL, '3', 0, '2025-01-30 10:06:26', '2025-01-30 16:57:26', 1, 3),
+(65, 609, 1, 'aaaaaaaaaaaaaaaa', '2025-02-07', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '3', 0, '2025-01-30 10:06:26', '2025-01-30 15:38:15', NULL, 3),
+(66, 609, 2, 'aaaaaaaa', '2025-02-07', '2025-02-13', NULL, NULL, '2025-02-07', '2025-02-13', NULL, '1', 0, '2025-01-30 16:58:10', '2025-01-30 16:58:20', 1, 5),
+(67, 609, 2, '', '2025-02-07', '2025-02-13', NULL, NULL, '2025-02-07', '2025-02-13', NULL, '1', 0, '2025-01-30 16:59:55', '2025-01-30 17:00:02', 1, 5),
+(68, 609, 2, 'aaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '3', 0, '2025-01-31 08:18:25', '2025-01-31 09:44:54', 1, 2),
+(69, 609, 2, 'aaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 09:48:59', '2025-01-31 09:49:26', 1, 3),
+(70, 609, 2, 'aaaaaaaaaaaaaaa', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 09:58:52', '2025-01-31 09:59:11', 1, 3),
+(71, 609, 2, 'aaaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:01:42', '2025-01-31 10:01:52', 1, 2),
+(72, 609, 2, 'aaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:02:19', '2025-01-31 10:02:32', 1, 2),
+(73, 609, 2, 'aaaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:04:37', '2025-01-31 10:04:51', 1, 2),
+(74, 609, 2, 'qqqqqqqqqqqqqqqqqqqqqq', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:08:08', '2025-01-31 10:08:26', 1, 2),
+(75, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-20', '2025-02-21', NULL, NULL, '2025-02-20', '2025-02-21', NULL, '1', 0, '2025-01-31 10:10:24', '2025-01-31 10:10:34', 1, 2),
+(76, 609, 2, 'aaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:11:23', '2025-01-31 10:11:39', 1, 2),
+(77, 609, 2, 'fffffffffffffffffff', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 10:14:28', '2025-01-31 10:14:43', 1, 3),
+(78, 1, 2, 'qqqqqqqqqqqqqq', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 10:23:28', '2025-01-31 10:25:44', 609, 3),
+(79, 1, 2, 'ccccccccccccccc', '2025-02-10', '2025-02-12', '2025-02-10', '2025-02-11', NULL, NULL, 'xxxxxxxxxxxxxxx', '0', 0, '2025-01-31 10:28:25', '2025-01-31 10:28:40', 609, 3),
+(80, 609, 2, 'wwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 10:45:21', '2025-01-31 10:45:21', NULL, 2),
+(81, 609, 2, 'wwwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-12', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 10:46:27', '2025-01-31 10:46:27', NULL, 3),
+(82, 609, 2, 'wwwwwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 10:47:17', '2025-01-31 10:47:17', NULL, 2),
+(83, 609, 2, 'wwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 11:13:33', '2025-01-31 11:13:33', NULL, 2),
+(84, 609, 2, 'wwwwwwwwwwwwwwwwwffffffffffwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 11:13:53', '2025-01-31 11:35:41', NULL, 2),
+(85, 609, 2, 'wwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:25:30', '2025-01-31 12:25:30', NULL, 2),
+(86, 609, 2, 'ccccccccccccccccccccc', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:29:37', '2025-01-31 12:29:37', NULL, 2),
+(87, 609, 2, 'xxxxxxxxxxxxxxxxaaaa', '2025-02-10', '2025-03-05', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:34:58', '2025-01-31 14:33:59', NULL, 18);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `wbcc_document`
 --
 
@@ -410,7 +496,53 @@ INSERT INTO `wbcc_document` (`idDocument`, `numeroDocument`, `nomDocument`, `url
 (49866, 'DOC100120251556421900', 'aze', 'Pj_190a20250110155642.png', NULL, '2025-01-10 15:56:42', '2025-01-10 15:56:42', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
 (49867, 'DOC100120251558553660', 'justificatifArrivée', 'Pj_366j20250110155855.png', NULL, '2025-01-10 15:58:55', '2025-01-10 15:58:55', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
 (49868, 'DOC100120251559363660', 'justificatifDepart', 'Pj_366j20250110155936.png', NULL, '2025-01-10 15:59:36', '2025-01-10 15:59:36', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
-(49869, 'DOC100120251600232020', 'justificatifDabsence', 'Pj_202j20250110160023.png', NULL, '2025-01-10 16:00:23', '2025-01-10 16:00:23', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0);
+(49869, 'DOC100120251600232020', 'justificatifDabsence', 'Pj_202j20250110160023.png', NULL, '2025-01-10 16:00:23', '2025-01-10 16:00:23', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49870, 'DOC130120250938335050', 'nomJustificatifArrivée', 'Pj_505n20250113093833.png', NULL, '2025-01-13 09:38:33', '2025-01-13 09:38:33', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49871, 'DOC130120250939245050', 'JustificatifDepart', 'Pj_505J20250113093924.png', NULL, '2025-01-13 09:39:24', '2025-01-13 09:39:24', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49872, 'DOC140120251453383470', 'nomDocument', 'Pj_347n20250114145338.png', NULL, '2025-01-14 14:53:38', '2025-01-14 14:53:38', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49875, 'DOC200120251011514870', 'AZE', 'Pj_487A20250120101151.png', NULL, '2025-01-20 10:11:51', '2025-01-20 10:11:51', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49885, 'DOC200120251154314870', 'eeeeeeee', 'Pj_487_e_20250120115431.png', 'zzzzzzzzz', '2025-01-20 11:54:31', '2025-01-20 11:54:31', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49886, 'DOC200120251206424870', 'aaaaaaaaaaaaaa', 'Pj_487_a_20250120120642.png', 'zzzzzzzzzzzzzzzzz', '2025-01-20 12:06:42', '2025-01-20 12:06:42', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49887, 'DOC200120251209513250', '111111111111111', 'Pj_325_1_20250120120951.png', '222222222222', '2025-01-20 12:09:51', '2025-01-20 12:09:51', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49888, 'DOC29012025141506600', 'a', 'Pj_60a20250129141506.png', 'z', '2025-01-29 14:15:06', '2025-01-29 14:15:06', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49889, 'DOC31012025104521800', 'q', 'Pj_80q20250131104521.png', 'c', '2025-01-31 10:45:21', '2025-01-31 10:45:21', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49890, 'DOC31012025104627810', 'a', 'Pj_81a20250131104627.png', 'c', '2025-01-31 10:46:27', '2025-01-31 10:46:27', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49891, 'DOC31012025104717820', 'a', 'Pj_82a20250131104717.png', 'c', '2025-01-31 10:47:17', '2025-01-31 10:47:17', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49892, 'DOC31012025122530850', 'a', 'Pj_85a20250131122530.png', 'z', '2025-01-31 12:25:30', '2025-01-31 12:25:30', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49893, 'DOC31012025122937860', '[', 'Pj_8620250131122937.png', '[', '2025-01-31 12:29:37', '2025-01-31 12:29:37', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49894, 'DOC31012025123458870', 'n', 'Pj_87n20250131123458.png', 'c', '2025-01-31 12:34:58', '2025-01-31 12:34:58', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0),
+(49895, 'DOC31012025141514870', 'Unnamed_Document_0', 'Pj_87UnnamedDocument020250131141514.png', NULL, '2025-01-31 14:15:14', '2025-01-31 14:15:14', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'EXTRANET', NULL, 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `wbcc_document_conge`
+--
+
+CREATE TABLE `wbcc_document_conge` (
+  `idDocumentConge` int(11) NOT NULL,
+  `idDocumentF` int(11) NOT NULL,
+  `idDemandeF` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `wbcc_document_conge`
+--
+
+INSERT INTO `wbcc_document_conge` (`idDocumentConge`, `idDocumentF`, `idDemandeF`) VALUES
+(3, 49887, 59),
+(4, 49886, 59),
+(5, 49885, 58),
+(6, 49875, 57),
+(7, 49872, 56),
+(18, 49888, 60),
+(19, 49889, 80),
+(20, 49890, 81),
+(21, 49891, 82),
+(22, 49892, 85),
+(23, 49893, 86),
+(24, 49894, 87),
+(25, 49895, 87);
 
 -- --------------------------------------------------------
 
@@ -624,7 +756,25 @@ INSERT INTO `wbcc_document_pointage` (`id`, `idDocumentF`, `idPointageF`, `nomDo
 (0, 49866, 190, 'a', 1, '2025-01-10 14:56:42', 0),
 (0, 49867, 366, 'j', 1, '2025-01-10 14:58:55', 0),
 (0, 49868, 366, 'j', 0, '2025-01-10 14:59:36', 0),
-(0, 49869, 202, 'j', NULL, '2025-01-10 15:00:23', 1);
+(0, 49869, 202, 'j', NULL, '2025-01-10 15:00:23', 1),
+(0, 49870, 505, 'n', 1, '2025-01-13 08:38:33', 0),
+(0, 49871, 505, 'J', 0, '2025-01-13 08:39:24', 0),
+(0, 49872, 347, 'n', NULL, '2025-01-14 13:53:38', 1),
+(0, 49873, 487, 'a', NULL, '2025-01-20 08:17:37', 1),
+(0, 49874, 487, 'q', NULL, '2025-01-20 09:07:59', 1),
+(0, 49875, 487, 'A', NULL, '2025-01-20 09:11:51', 1),
+(0, 49876, 487, 'a', NULL, '2025-01-20 09:14:54', 1),
+(0, 49877, 487, NULL, NULL, '2025-01-20 09:31:32', 1),
+(0, 49878, 487, NULL, NULL, '2025-01-20 09:39:44', 1),
+(0, 49879, 487, NULL, NULL, '2025-01-20 09:40:43', 1),
+(0, 49880, 487, NULL, NULL, '2025-01-20 09:45:35', 1),
+(0, 49881, 487, NULL, NULL, '2025-01-20 10:47:32', 1),
+(0, 49882, 487, NULL, NULL, '2025-01-20 10:47:32', 1),
+(0, 49883, 487, NULL, NULL, '2025-01-20 10:47:55', 1),
+(0, 49884, 487, NULL, NULL, '2025-01-20 10:47:55', 1),
+(0, 49885, 487, NULL, NULL, '2025-01-20 10:54:31', 1),
+(0, 49886, 487, NULL, NULL, '2025-01-20 11:06:42', 1),
+(0, 49887, 325, NULL, 1, '2025-01-20 11:09:51', 0);
 
 -- --------------------------------------------------------
 
@@ -907,7 +1057,161 @@ INSERT INTO `wbcc_historique` (`idHistorique`, `action`, `nomComplet`, `dateActi
 (181, 'Déconnexion', 'Jawher BALTI', '2025-01-10 14:02:27', NULL, 1, NULL),
 (182, 'Connexion', 'Jawher BALTI', '2025-01-10 14:02:32', NULL, 1, NULL),
 (183, 'Déconnexion', 'Jawher BALTI', '2025-01-10 14:19:31', NULL, 1, NULL),
-(184, 'Connexion', 'Hamza DRIDI', '2025-01-10 14:19:35', NULL, 609, NULL);
+(184, 'Connexion', 'Hamza DRIDI', '2025-01-10 14:19:35', NULL, 609, NULL),
+(185, 'Connexion', 'Jawher BALTI', '2025-01-13 08:03:58', NULL, 1, NULL),
+(186, 'Déconnexion', 'Jawher BALTI', '2025-01-13 08:18:32', NULL, 1, NULL),
+(187, 'Connexion', 'Hamza DRIDI', '2025-01-13 08:18:39', NULL, 609, NULL),
+(188, 'Déconnexion', 'Hamza DRIDI', '2025-01-14 07:56:47', NULL, 609, NULL),
+(189, 'Connexion', 'Jawher BALTI', '2025-01-14 07:56:53', NULL, 1, NULL),
+(190, 'Déconnexion', 'Jawher BALTI', '2025-01-14 07:57:15', NULL, 1, NULL),
+(191, 'Connexion', 'Hamza DRIDI', '2025-01-14 07:57:20', NULL, 609, NULL),
+(192, 'Déconnexion', 'Hamza DRIDI', '2025-01-14 08:04:50', NULL, 609, NULL),
+(193, 'Connexion', 'Jawher BALTI', '2025-01-14 08:04:56', NULL, 1, NULL),
+(194, 'Déconnexion', 'Jawher BALTI', '2025-01-14 12:43:02', NULL, 1, NULL),
+(195, 'Connexion', 'Jawher BALTI', '2025-01-14 12:43:07', NULL, 1, NULL),
+(196, 'Déconnexion', 'Jawher BALTI', '2025-01-14 13:50:22', NULL, 1, NULL),
+(197, 'Connexion', 'Hamza DRIDI', '2025-01-14 13:52:40', NULL, 609, NULL),
+(198, 'Déconnexion', 'Hamza DRIDI', '2025-01-15 09:39:26', NULL, 609, NULL),
+(199, 'Connexion', 'Jawher BALTI', '2025-01-15 09:39:31', NULL, 1, NULL),
+(200, 'Déconnexion', 'Jawher BALTI', '2025-01-15 14:53:05', NULL, 1, NULL),
+(201, 'Connexion', 'Hamza DRIDI', '2025-01-15 14:53:11', NULL, 609, NULL),
+(202, 'Déconnexion', 'Hamza DRIDI', '2025-01-16 08:35:53', NULL, 609, NULL),
+(203, 'Connexion', 'Jawher BALTI', '2025-01-16 08:35:58', NULL, 1, NULL),
+(204, 'Déconnexion', 'Jawher BALTI', '2025-01-16 08:36:18', NULL, 1, NULL),
+(205, 'Connexion', 'Hamza DRIDI', '2025-01-16 08:36:23', NULL, 609, NULL),
+(206, 'Déconnexion', 'Hamza DRIDI', '2025-01-16 14:23:10', NULL, 609, NULL),
+(207, 'Connexion', 'Jawher BALTI', '2025-01-16 14:23:14', NULL, 1, NULL),
+(208, 'Déconnexion', 'Jawher BALTI', '2025-01-16 14:25:34', NULL, 1, NULL),
+(209, 'Connexion', 'Jawher BALTI', '2025-01-16 14:25:38', NULL, 1, NULL),
+(210, 'Déconnexion', 'Jawher BALTI', '2025-01-16 14:29:19', NULL, 1, NULL),
+(211, 'Connexion', 'Hamza DRIDI', '2025-01-16 14:29:26', NULL, 609, NULL),
+(212, 'Déconnexion', 'Hamza DRIDI', '2025-01-16 14:45:53', NULL, 609, NULL),
+(213, 'Connexion', 'Jawher BALTI', '2025-01-16 14:45:58', NULL, 1, NULL),
+(214, 'Déconnexion', 'Jawher BALTI', '2025-01-16 15:30:01', NULL, 1, NULL),
+(215, 'Connexion', 'Jawher BALTI', '2025-01-16 15:30:13', NULL, 1, NULL),
+(216, 'Déconnexion', 'Jawher BALTI', '2025-01-16 15:39:44', NULL, 1, NULL),
+(217, 'Connexion', 'Jawher BALTI', '2025-01-16 15:39:48', NULL, 1, NULL),
+(218, 'Déconnexion', 'Jawher BALTI', '2025-01-16 15:47:15', NULL, 1, NULL),
+(219, 'Connexion', 'Hamza DRIDI', '2025-01-16 15:47:20', NULL, 609, NULL),
+(220, 'Déconnexion', 'Hamza DRIDI', '2025-01-16 15:51:45', NULL, 609, NULL),
+(221, 'Connexion', 'Jawher BALTI', '2025-01-16 15:51:49', NULL, 1, NULL),
+(222, 'Déconnexion', 'Jawher BALTI', '2025-01-16 15:52:01', NULL, 1, NULL),
+(223, 'Connexion', 'Jawher BALTI', '2025-01-16 15:52:14', NULL, 1, NULL),
+(224, 'Déconnexion', 'Jawher BALTI', '2025-01-16 16:22:50', NULL, 1, NULL),
+(225, 'Connexion', 'Hamza DRIDI', '2025-01-16 16:22:54', NULL, 609, NULL),
+(226, 'Déconnexion', 'Hamza DRIDI', '2025-01-20 13:53:18', NULL, 609, NULL),
+(227, 'Connexion', 'Jawher BALTI', '2025-01-20 13:53:22', NULL, 1, NULL),
+(228, 'Déconnexion', 'Jawher BALTI', '2025-01-21 09:32:13', NULL, 1, NULL),
+(229, 'Connexion', 'Hamza DRIDI', '2025-01-21 09:32:18', NULL, 609, NULL),
+(230, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 09:34:02', NULL, 609, NULL),
+(231, 'Connexion', 'Jawher BALTI', '2025-01-21 09:34:06', NULL, 1, NULL),
+(232, 'Déconnexion', 'Jawher BALTI', '2025-01-21 09:45:36', NULL, 1, NULL),
+(233, 'Connexion', 'Hamza DRIDI', '2025-01-21 09:45:41', NULL, 609, NULL),
+(234, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 09:49:35', NULL, 609, NULL),
+(235, 'Connexion', 'Jawher BALTI', '2025-01-21 09:49:39', NULL, 1, NULL),
+(236, 'Déconnexion', 'Jawher BALTI', '2025-01-21 09:49:46', NULL, 1, NULL),
+(237, 'Connexion', 'Jawher BALTI', '2025-01-21 09:49:50', NULL, 1, NULL),
+(238, 'Déconnexion', 'Jawher BALTI', '2025-01-21 09:49:57', NULL, 1, NULL),
+(239, 'Connexion', 'Hamza DRIDI', '2025-01-21 09:50:01', NULL, 609, NULL),
+(240, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 09:53:21', NULL, 609, NULL),
+(241, 'Connexion', 'Jawher BALTI', '2025-01-21 09:53:25', NULL, 1, NULL),
+(242, 'Déconnexion', 'Jawher BALTI', '2025-01-21 11:02:12', NULL, 1, NULL),
+(243, 'Connexion', 'Hamza DRIDI', '2025-01-21 11:02:18', NULL, 609, NULL),
+(244, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 11:02:51', NULL, 609, NULL),
+(245, 'Connexion', 'Jawher BALTI', '2025-01-21 11:02:56', NULL, 1, NULL),
+(246, 'Déconnexion', 'Jawher BALTI', '2025-01-21 12:49:05', NULL, 1, NULL),
+(247, 'Connexion', 'Hamza DRIDI', '2025-01-21 12:49:10', NULL, 609, NULL),
+(248, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 12:49:29', NULL, 609, NULL),
+(249, 'Connexion', 'Jawher BALTI', '2025-01-21 12:49:34', NULL, 1, NULL),
+(250, 'Déconnexion', 'Jawher BALTI', '2025-01-21 14:34:04', NULL, 1, NULL),
+(251, 'Connexion', 'Hamza DRIDI', '2025-01-21 14:34:11', NULL, 609, NULL),
+(252, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 14:57:28', NULL, 609, NULL),
+(253, 'Connexion', 'Jawher BALTI', '2025-01-21 14:57:36', NULL, 1, NULL),
+(254, 'Déconnexion', 'Jawher BALTI', '2025-01-21 15:18:12', NULL, 1, NULL),
+(255, 'Connexion', 'Hamza DRIDI', '2025-01-21 15:18:23', NULL, 609, NULL),
+(256, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 15:18:35', NULL, 609, NULL),
+(257, 'Connexion', 'Jawher BALTI', '2025-01-21 15:18:39', NULL, 1, NULL),
+(258, 'Déconnexion', 'Jawher BALTI', '2025-01-21 15:44:31', NULL, 1, NULL),
+(259, 'Connexion', 'Hamza DRIDI', '2025-01-21 15:44:36', NULL, 609, NULL),
+(260, 'Déconnexion', 'Hamza DRIDI', '2025-01-21 15:45:15', NULL, 609, NULL),
+(261, 'Connexion', 'Jawher BALTI', '2025-01-21 15:45:19', NULL, 1, NULL),
+(262, 'Connexion', 'Jawher BALTI', '2025-01-21 16:56:38', NULL, 1, NULL),
+(263, 'Déconnexion', 'Jawher BALTI', '2025-01-22 11:28:44', NULL, 1, NULL),
+(264, 'Connexion', 'Hamza DRIDI', '2025-01-22 11:28:48', NULL, 609, NULL),
+(265, 'Déconnexion', 'Hamza DRIDI', '2025-01-22 11:37:21', NULL, 609, NULL),
+(266, 'Connexion', 'Jawher BALTI', '2025-01-22 11:37:27', NULL, 1, NULL),
+(267, 'Déconnexion', 'Jawher BALTI', '2025-01-22 13:07:29', NULL, 1, NULL),
+(268, 'Connexion', 'Hamza DRIDI', '2025-01-22 13:07:36', NULL, 609, NULL),
+(269, 'Déconnexion', 'Hamza DRIDI', '2025-01-22 13:09:33', NULL, 609, NULL),
+(270, 'Connexion', 'Jawher BALTI', '2025-01-22 13:09:38', NULL, 1, NULL),
+(271, 'Déconnexion', 'Jawher BALTI', '2025-01-22 13:38:00', NULL, 1, NULL),
+(272, 'Connexion', 'Hamza DRIDI', '2025-01-22 13:38:05', NULL, 609, NULL),
+(273, 'Déconnexion', 'Hamza DRIDI', '2025-01-22 13:49:00', NULL, 609, NULL),
+(274, 'Connexion', 'Jawher BALTI', '2025-01-22 13:49:05', NULL, 1, NULL),
+(275, 'Déconnexion', 'Jawher BALTI', '2025-01-22 14:15:10', NULL, 1, NULL),
+(276, 'Connexion', 'Hamza DRIDI', '2025-01-22 14:15:15', NULL, 609, NULL),
+(277, 'Déconnexion', 'Hamza DRIDI', '2025-01-22 14:15:44', NULL, 609, NULL),
+(278, 'Connexion', 'Jawher BALTI', '2025-01-22 14:15:53', NULL, 1, NULL),
+(279, 'Déconnexion', 'Jawher BALTI', '2025-01-22 15:42:25', NULL, 1, NULL),
+(280, 'Connexion', 'Hamza DRIDI', '2025-01-22 15:42:37', NULL, 609, NULL),
+(281, 'Déconnexion', 'Hamza DRIDI', '2025-01-22 15:49:49', NULL, 609, NULL),
+(282, 'Connexion', 'Jawher BALTI', '2025-01-22 15:49:53', NULL, 1, NULL),
+(283, 'Déconnexion', 'Jawher BALTI', '2025-01-23 07:18:53', NULL, 1, NULL),
+(284, 'Connexion', 'Hamza DRIDI', '2025-01-23 07:19:01', NULL, 609, NULL),
+(285, 'Connexion', 'Jawher BALTI', '2025-01-23 07:28:23', NULL, 1, NULL),
+(286, 'Déconnexion', 'Hamza DRIDI', '2025-01-23 08:21:28', NULL, 609, NULL),
+(287, 'Connexion', 'Jawher BALTI', '2025-01-23 08:21:39', NULL, 1, NULL),
+(288, 'Déconnexion', 'Jawher BALTI', '2025-01-23 08:35:43', NULL, 1, NULL),
+(289, 'Connexion', 'Hamza DRIDI', '2025-01-23 08:35:52', NULL, 609, NULL),
+(290, 'Déconnexion', 'Hamza DRIDI', '2025-01-23 08:43:21', NULL, 609, NULL),
+(291, 'Connexion', 'Jawher BALTI', '2025-01-23 08:43:26', NULL, 1, NULL),
+(292, 'Déconnexion', 'Jawher BALTI', '2025-01-23 08:51:40', NULL, 1, NULL),
+(293, 'Connexion', 'Jawher BALTI', '2025-01-23 08:51:44', NULL, 1, NULL),
+(294, 'Déconnexion', 'Jawher BALTI', '2025-01-23 08:51:58', NULL, 1, NULL),
+(295, 'Connexion', 'Hamza DRIDI', '2025-01-23 08:52:17', NULL, 609, NULL),
+(296, 'Déconnexion', 'Hamza DRIDI', '2025-01-23 09:25:55', NULL, 609, NULL),
+(297, 'Connexion', 'Jawher BALTI', '2025-01-23 09:26:02', NULL, 1, NULL),
+(298, 'Déconnexion', 'Jawher BALTI', '2025-01-23 09:28:04', NULL, 1, NULL),
+(299, 'Connexion', 'Hamza DRIDI', '2025-01-23 09:28:09', NULL, 609, NULL),
+(300, 'Déconnexion', 'Hamza DRIDI', '2025-01-23 09:54:47', NULL, 609, NULL),
+(301, 'Connexion', 'Jawher BALTI', '2025-01-23 09:54:53', NULL, 1, NULL),
+(302, 'Déconnexion', 'Jawher BALTI', '2025-01-23 09:55:46', NULL, 1, NULL),
+(303, 'Connexion', 'Hamza DRIDI', '2025-01-23 09:55:51', NULL, 609, NULL),
+(304, 'Déconnexion', 'Hamza DRIDI', '2025-01-23 10:13:10', NULL, 609, NULL),
+(305, 'Connexion', 'Jawher BALTI', '2025-01-23 10:13:17', NULL, 1, NULL),
+(306, 'Connexion', 'Hamza DRIDI', '2025-01-23 10:14:18', NULL, 609, NULL),
+(307, 'Déconnexion', 'Jawher BALTI', '2025-01-23 16:54:21', NULL, 1, NULL),
+(308, 'Connexion', 'Hamza DRIDI', '2025-01-23 16:54:25', NULL, 609, NULL),
+(309, 'Déconnexion', 'Hamza DRIDI', '2025-01-23 16:57:20', NULL, 609, NULL),
+(310, 'Connexion', 'Jawher BALTI', '2025-01-23 16:57:25', NULL, 1, NULL),
+(311, 'Déconnexion', 'Jawher BALTI', '2025-01-24 10:29:51', NULL, 1, NULL),
+(312, 'Connexion', 'Hamza DRIDI', '2025-01-24 10:29:58', NULL, 609, NULL),
+(313, 'Déconnexion', 'Hamza DRIDI', '2025-01-24 10:42:30', NULL, 609, NULL),
+(314, 'Connexion', 'Jawher BALTI', '2025-01-24 10:42:35', NULL, 1, NULL),
+(315, 'Déconnexion', 'Jawher BALTI', '2025-01-24 11:22:42', NULL, 1, NULL),
+(316, 'Connexion', 'Jawher BALTI', '2025-01-24 11:22:46', NULL, 1, NULL),
+(317, 'Déconnexion', 'Jawher BALTI', '2025-01-24 11:23:03', NULL, 1, NULL),
+(318, 'Connexion', 'Jawher BALTI', '2025-01-24 11:23:12', NULL, 1, NULL),
+(319, 'Déconnexion', 'Jawher BALTI', '2025-01-24 14:01:42', NULL, 1, NULL),
+(320, 'Connexion', 'Hamza DRIDI', '2025-01-24 14:01:48', NULL, 609, NULL),
+(321, 'Déconnexion', 'Hamza DRIDI', '2025-01-24 14:08:54', NULL, 609, NULL),
+(322, 'Connexion', 'Jawher BALTI', '2025-01-24 14:09:02', NULL, 1, NULL),
+(323, 'Connexion', 'Jawher BALTI', '2025-01-27 07:59:47', NULL, 1, NULL),
+(324, 'Connexion', 'Hamza DRIDI', '2025-01-27 08:00:29', NULL, 609, NULL),
+(325, 'Connexion', 'Jawher BALTI', '2025-01-28 14:37:00', NULL, 1, NULL),
+(326, 'Connexion', 'Hamza DRIDI', '2025-01-28 15:21:36', NULL, 609, NULL),
+(327, 'Déconnexion', 'Jawher BALTI', '2025-01-29 10:53:20', NULL, 1, NULL),
+(328, 'Connexion', 'Jawher BALTI', '2025-01-29 10:53:25', NULL, 1, NULL),
+(329, 'Déconnexion', 'Jawher BALTI', '2025-01-29 11:28:39', NULL, 1, NULL),
+(330, 'Connexion', 'Jawher BALTI', '2025-01-29 11:28:44', NULL, 1, NULL),
+(331, 'Déconnexion', 'Jawher BALTI', '2025-01-31 09:22:01', NULL, 1, NULL),
+(332, 'Connexion', 'Jawher BALTI', '2025-01-31 09:22:05', NULL, 1, NULL),
+(333, 'Déconnexion', 'Hamza DRIDI', '2025-01-31 09:22:10', NULL, 609, NULL),
+(334, 'Connexion', 'Hamza DRIDI', '2025-01-31 09:22:17', NULL, 609, NULL),
+(335, 'Déconnexion', 'Jawher BALTI', '2025-01-31 09:29:58', NULL, 1, NULL),
+(336, 'Connexion', 'Jawher BALTI', '2025-01-31 09:30:03', NULL, 1, NULL),
+(337, 'Déconnexion', 'Hamza DRIDI', '2025-01-31 09:30:07', NULL, 609, NULL),
+(338, 'Connexion', 'Hamza DRIDI', '2025-01-31 09:30:13', NULL, 609, NULL);
 
 -- --------------------------------------------------------
 
@@ -1004,6 +1308,610 @@ INSERT INTO `wbcc_module` (`idModule`, `nomModule`, `lieu`, `etatModule`) VALUES
 (8, 'Occupant', NULL, 1),
 (9, 'Particulier', NULL, 1),
 (10, 'Espace DO', NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `wbcc_notification`
+--
+
+CREATE TABLE `wbcc_notification` (
+  `idNotification` int(11) NOT NULL,
+  `idUtilisateur` int(11) NOT NULL,
+  `idPointage` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `wbcc_notification`
+--
+
+INSERT INTO `wbcc_notification` (`idNotification`, `idUtilisateur`, `idPointage`, `title`, `message`, `created_at`, `is_read`) VALUES
+(1, 2, NULL, 'Acceptation justification', 'Votre manager a été accepter votre justification', '2024-11-11 20:22:20', 0),
+(2, 2, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification', '2024-11-11 20:32:27', 0),
+(3, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification', '2024-11-11 20:33:50', 1),
+(4, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification 1', '2024-11-11 20:33:50', 1),
+(5, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification 2', '2024-11-11 20:33:50', 1),
+(6, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification 3', '2024-11-11 20:33:50', 1),
+(7, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification 4', '2024-11-11 20:33:50', 1),
+(8, 613, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification 5', '2024-11-11 20:33:50', 1),
+(12, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification', '2024-11-14 14:31:46', 1),
+(13, 609, NULL, 'Justification Confirmée', 'Le résultat de la justification est : Accepté', '2024-11-14 20:57:36', 1),
+(17, 609, NULL, 'Retard détecté', 'Votre manager a été accepter votre justification', '2024-11-18 15:30:14', 1),
+(21, 613, NULL, 'Retard détecté', 'Vous avez un retard de 11 heures et 23 minutes.', '2024-11-19 20:23:34', 1),
+(22, 613, NULL, 'Retard détecté', 'Vous avez un retard de 11 heures et 49 minutes.', '2024-11-19 20:49:07', 1),
+(23, 613, NULL, 'Retard détecté', 'Vous avez un retard de 12 heures et 13 minutes.', '2024-11-19 21:13:08', 1),
+(24, 613, NULL, 'Retard détecté', 'Vous avez un retard de 5 heures et 58 minutes.', '2024-11-20 14:58:59', 1),
+(25, 613, NULL, 'Retard détecté', 'Vous avez un retard de 6 heures et 5 minutes.', '2024-11-20 15:05:37', 1),
+(26, 613, NULL, 'Retard détecté', 'Vous avez un retard de 6 heures et 11 minutes.', '2024-11-20 15:11:26', 1),
+(27, 613, NULL, 'Retard détecté', 'Vous avez un retard de 6 heures et 13 minutes.', '2024-11-20 15:13:15', 1),
+(28, 613, NULL, 'Retard détecté', 'Vous avez un retard de 6 heures et 13 minutes.', '2024-11-20 15:13:56', 1),
+(29, 613, NULL, 'Retard détecté', 'Vous avez un retard de 10 heures et 48 minutes.', '2024-11-20 19:48:45', 1),
+(30, 613, NULL, 'Retard détecté', 'Vous avez un retard de 10 heures et 49 minutes.', '2024-11-20 19:49:40', 1),
+(31, 613, NULL, 'Retard détecté', 'Vous avez un retard de 11 heures et 25 minutes.', '2024-11-20 20:25:08', 1),
+(32, 609, NULL, 'Retard détecté', 'Vous avez un retard de 4 heures et 52 minutes.', '2024-11-21 13:52:13', 1),
+(33, 609, NULL, 'Résultat de votre justification', 'Votre manager a été accepter votre justification', '2024-11-22 09:10:37', 1),
+(34, 609, NULL, 'Résultat de votre justification', 'Votre manager a été accepter votre justification', '2024-11-22 09:10:50', 1),
+(35, 609, NULL, 'Retard détecté', 'Vous avez un retard de 18 minutes.', '2024-11-22 09:18:52', 1),
+(36, 613, NULL, 'Retard détecté', ' Vous êtes en retard de 29 minutes. Veuillez justifier ce retard.', '2024-11-22 09:29:59', 1),
+(37, 609, NULL, 'Résultat de votre justification', 'Votre manager a été accepter votre justification', '2024-11-22 09:33:45', 1),
+(38, 609, NULL, 'Résultat de votre justification', 'Votre manager a été accepter votre justification', '2024-11-22 09:33:47', 1),
+(39, 609, NULL, 'Temps restant', 'Il vous reste 7 heures et 38 minutes pour terminer votre journée.', '2024-11-22 10:21:22', 1),
+(40, 613, NULL, 'Temps restant', 'Il vous reste 4 heures et 32 minutes pour terminer votre journée.Connectez-vous à votre profil pour justifier', '2024-11-22 10:27:45', 1),
+(41, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 1 heures et 45 minutes. Veuillez justifier ce retard.', '2024-11-22 10:45:47', 1),
+(42, 613, NULL, 'Retour imminent:', ' Il vous reste 4 heures et 12 minutes avant la fin de votre journée. Veuillez justifier votre retour avant l\'heure de départ.', '2024-11-22 10:48:00', 1),
+(43, 609, NULL, 'Justificatif accepté', 'Votre justificatif a été approuvé par votre manager.', '2024-11-22 11:12:06', 1),
+(44, 609, NULL, 'Justificatif accepté', 'Votre justificatif a été approuvé par votre manager.', '2024-11-22 11:12:43', 1),
+(45, 609, NULL, 'Justificatif refusé', 'Votre justificatif a été rejeté par votre manager.', '2024-11-22 11:21:40', 1),
+(46, 609, NULL, 'Justificatif accepté', 'Votre justificatif a été approuvé par votre manager.', '2024-11-22 11:21:59', 1),
+(47, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 10 heures et 52 minutes. Veuillez justifier ce retard.', '2024-11-22 19:52:36', 1),
+(48, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 11 heures et 2 minutes. Veuillez justifier ce retard.', '2024-11-22 20:02:50', 1),
+(49, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 11 heures et 14 minutes. Veuillez justifier ce retard.', '2024-11-22 20:14:43', 1),
+(50, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 11 heures et 19 minutes. Veuillez justifier ce retard.', '2024-11-22 20:19:25', 1),
+(51, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 11 heures et 48 minutes. Veuillez justifier ce retard.', '2024-11-22 20:48:04', 1),
+(52, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 11 heures et 56 minutes. Veuillez justifier ce retard.', '2024-11-22 20:56:20', 1),
+(53, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 6 heures et 50 minutes. Veuillez justifier ce retard.', '2024-11-23 16:50:11', 1),
+(54, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 8 heures et 10 minutes. Veuillez justifier ce retard.', '2024-11-23 17:10:13', 1),
+(55, 613, NULL, 'Retard détecté:', ' Vous êtes en retard de 8 heures et 56 minutes. Veuillez justifier ce retard.', '2024-11-23 17:56:50', 1),
+(56, 613, NULL, 'Fin de journée imminente:', ' Il vous reste 1 heures et 2 minutes avant la fin de votre journée. Veuillez justifier votre retour avant l\'heure de départ.', '2024-11-23 17:57:17', 1),
+(69, 613, NULL, 'Justification Confirmée', 'Le résultat de la justification d\'arrivée est : Accepté', '2024-11-26 11:17:52', 1),
+(70, 613, NULL, 'Justification Confirmée', 'Le résultat de la justification d\'arrivée est : Accepté', '2024-11-26 11:21:23', 1),
+(71, 609, NULL, 'Retard détecté:', ' Vous êtes en retard de 3 heures et 25 minutes. Veuillez justifier ce retard.', '2024-11-26 11:25:11', 1),
+(73, 609, NULL, 'Fin de journée imminente:', ' Il vous reste 7 minutes avant la fin de votre journée. Veuillez justifier votre retour avant l\'heure de départ.', '2024-11-26 13:52:15', 1),
+(87, 613, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée a été approuvé par votre manager.', '2024-11-27 01:39:06', 1),
+(88, 613, NULL, 'Justificatif refusé', 'Votre justificatif de départ pour le 23/11/24 a été rejeté par votre manager.', '2024-11-27 01:52:49', 1),
+(89, 609, NULL, 'Justificatif accepté', 'Votre justificatif de départ pour le 22/11/2024 a été approuvé par votre manager. ', '2024-11-27 02:08:16', 1),
+(91, 609, NULL, 'Retard détecté:', ' Vous êtes en retard de 6 heures et 15 minutes. Veuillez justifier ce retard.', '2024-11-27 14:15:27', 1),
+(92, 609, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée pour le - a été approuvé par votre manager.', '2024-11-27 14:24:23', 1),
+(93, 609, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée pour le 27/11/24 a été approuvé par votre manager.', '2024-11-27 14:40:50', 1),
+(105, 609, NULL, 'Retard détecté:', ' Vous êtes en retard de 6 heures et 32 minutes. Veuillez justifier ce retard.', '2024-11-28 14:32:47', 1),
+(106, 613, NULL, 'Justificatif d\'arrivée envoyé', 'Hamza DRIDI a été envoyer une justification d\'arrivé', '2024-11-28 14:36:10', 1),
+(107, 609, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée  pour le 28/11/2024 a été approuvé par votre manager.', '2024-11-28 14:37:34', 1),
+(108, 609, NULL, 'Fin de journée imminente:', ' Il vous reste 2 heures et 19 minutes avant la fin de votre journée. Veuillez justifier votre retour avant l\'heure de départ.', '2024-11-28 14:40:30', 1),
+(109, 609, NULL, 'Justificatif refusé', 'Votre justificatif de départ pour le 28/11/24 a été rejeté par votre manager.', '2024-11-28 14:42:48', 1),
+(110, 609, NULL, 'Justificatif accepté', 'Votre justificatif de départ pour le 28/11/24 a été approuvé par votre manager.', '2024-11-28 15:13:47', 1),
+(112, 613, NULL, 'Nouvelle justification de départ', 'Hamza DRIDI a soumis une justification pour son départ. Veuillez la consulter.', '2024-11-29 00:44:57', 1),
+(113, 613, NULL, 'Nouvelle justification de départ', 'Hamza DRIDI a soumis une justification pour son départ. Veuillez la consulter.', '2024-11-29 01:17:16', 1),
+(114, 611, NULL, 'Retard détecté:', ' Vous êtes en retard de 28 minutes. Veuillez justifier ce retard.', '2024-11-29 08:28:21', 1),
+(115, 613, NULL, 'Nouvelle justification d\'arrivée', 'Mohamed Achref MEHERZI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-11-29 08:31:53', 1),
+(116, 613, NULL, 'Nouvelle justification d\'arrivée', 'Mohamed Achref MEHERZI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-11-29 08:39:28', 1),
+(117, 611, NULL, 'Justificatif refusé', 'Votre justificatif d\'arrivée pour le 29/11/24 a été rejeté par votre manager.', '2024-11-29 08:40:06', 1),
+(118, 611, NULL, 'Fin de journée imminente:', 'Veuillez noter qu\'il vous reste 5 heures et 13 minutes avant la fin de votre journée. Il est impératif de justifier votre retour dans ce délai.', '2024-11-29 08:46:05', 1),
+(119, 613, NULL, 'Nouvelle justification de départ', 'Mohamed Achref MEHERZI a soumis une justification pour son départ. Veuillez la consulter.', '2024-11-29 08:50:32', 1),
+(120, 611, NULL, 'Justificatif accepté', 'Votre justificatif de départ pour le 29/11/2024 a été approuvé par votre manager.', '2024-11-29 08:52:13', 1),
+(121, 614, NULL, 'Retard détecté:', ' Vous êtes en retard de 1 heures et 42 minutes. Veuillez justifier ce retard.', '2024-11-29 09:42:11', 1),
+(124, 2, NULL, 'Nouvelle justification d\'arrivée', 'hend OUESLATI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-11-29 11:08:16', 0),
+(171, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-02 16:26:31', 1),
+(172, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-02 16:27:08', 0),
+(173, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-02 16:28:46', 1),
+(174, 609, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée pour le 02/12/24 a été approuvé par votre manager.', '2024-12-02 16:30:19', 1),
+(175, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-02 20:07:16', 1),
+(193, 609, NULL, 'Retard détecté:', ' Vous êtes en retard de 1 heures et 53 minutes. Veuillez justifier ce retard.', '2024-12-04 09:53:22', 1),
+(194, 609, 403, 'Retard détecté:::', ' Vous êtes en retard de 2 heures et 36 minutes. Veuillez justifier ce retard.', '2024-12-05 10:36:26', 1),
+(195, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-05 11:11:45', 0),
+(196, 609, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée pour le 05/12/2024 a été approuvé par votre manager.', '2024-12-05 11:26:35', 1),
+(197, 609, NULL, 'Justificatif refusé', 'Votre justificatif d\'arrivée pour le 05/12/2024 a été rejeté par votre manager.', '2024-12-05 11:27:23', 1),
+(198, 609, NULL, 'Justificatif accepté', 'Votre justificatif d\'arrivée pour le 05/12/2024 a été approuvé par votre manager.', '2024-12-05 11:29:11', 1),
+(199, 613, NULL, 'undefined', 'undefined', '2024-12-05 11:32:12', 0),
+(200, 613, NULL, 'Nouvelle justification de départ', 'Hamza DRIDI a soumis une justification pour son départ. Veuillez la consulter.', '2024-12-05 11:34:18', 0),
+(201, 609, NULL, 'Justificatif accepté', 'Votre justificatif de départ pour le 05/12/2024 a été approuvé par votre manager.', '2024-12-05 11:43:54', 1),
+(202, 609, NULL, 'Fin de journée imminente:', 'Veuillez noter qu\'il vous reste 5 heures et 7 minutes avant la fin de votre journée. Il est impératif de justifier votre retour dans ce délai.', '2024-12-05 11:52:24', 1),
+(203, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-07 12:43:26', 0),
+(204, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-07 12:50:19', 1),
+(205, 609, 418, 'Retard détecté', 'Vous avez un retard de 20 minutes.', '2024-12-09 08:20:00', 1),
+(206, 613, NULL, 'Nouvelle justification d\'arrivée', 'Hamza DRIDI a soumis une justification pour son arrivée. Veuillez la consulter.', '2024-12-09 08:42:36', 1),
+(207, 609, 418, 'Justificatif accepté', 'Votre justificatif d\'arrivée pour le 09/12/2024 a été approuvé par votre manager.', '2024-12-09 10:03:03', 1),
+(208, 609, 530, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 51 minutes. Veuillez justifier ce retard.', '2024-12-20 14:51:18', 1),
+(209, 611, 524, 'Retard détecté:', 'Vous êtes en retard de 9 heures et 9 minutes. Veuillez justifier ce retard.', '2024-12-20 19:39:48', 0),
+(210, 609, 533, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 41 minutes. Veuillez justifier ce retard.', '2024-12-20 19:41:29', 1),
+(211, 609, 534, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 57 minutes. Veuillez justifier ce retard.', '2024-12-20 19:57:09', 1),
+(212, 609, 535, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 4 minutes. Veuillez justifier ce retard.', '2024-12-20 20:04:11', 1),
+(213, 609, 535, 'Pointage Avant l\'Heure', 'Vous êtes pointer avant l\'heure de 55 minutes. Veuillez justifier ce pointage.', '2024-12-20 20:04:17', 1),
+(214, 611, 545, 'Retard détecté:', 'Vous êtes en retard de 20 minutes. Veuillez justifier ce retard.', '2024-12-23 08:20:20', 1),
+(215, 611, 545, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 5 heures et 21 minutes. Veuillez justifier ce pointage.', '2024-12-23 08:38:11', 0),
+(216, 611, 550, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 40 minutes. Veuillez justifier ce retard.', '2024-12-25 12:40:45', 0),
+(217, 614, 555, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 42 minutes. Veuillez justifier ce retard.', '2024-12-25 12:42:06', 0),
+(218, 611, 556, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 52 minutes. Veuillez justifier ce retard.', '2024-12-25 12:52:24', 0),
+(219, 611, 557, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 4 minutes. Veuillez justifier ce retard.', '2024-12-25 13:04:35', 0),
+(220, 614, 555, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 5 minutes. Veuillez justifier ce retard.', '2024-12-25 13:05:45', 0),
+(221, 614, 555, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 6 minutes. Veuillez justifier ce retard.', '2024-12-25 13:06:27', 0),
+(222, 614, 555, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 15 minutes. Veuillez justifier ce retard.', '2024-12-25 13:15:34', 0),
+(223, 613, 554, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 16 minutes. Veuillez justifier ce retard.', '2024-12-25 13:16:27', 0),
+(224, 611, 558, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 17 minutes. Veuillez justifier ce retard.', '2024-12-25 13:17:41', 0),
+(225, 613, 554, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 22 minutes. Veuillez justifier ce retard.', '2024-12-25 13:22:16', 0),
+(226, 611, 558, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 36 minutes. Veuillez justifier ce pointage.', '2024-12-25 13:23:20', 0),
+(227, 611, 559, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 37 minutes. Veuillez justifier ce retard.', '2024-12-25 14:37:10', 0),
+(228, 613, 554, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 47 minutes. Veuillez justifier ce retard.', '2024-12-25 14:47:36', 1),
+(229, 611, 561, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 54 minutes. Veuillez justifier ce retard.', '2024-12-25 14:54:59', 0),
+(230, 611, 562, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 45 minutes. Veuillez justifier ce retard.', '2024-12-25 15:45:24', 0),
+(231, 611, 563, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 46 minutes. Veuillez justifier ce retard.', '2024-12-25 15:46:12', 0),
+(232, 611, 564, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 58 minutes. Veuillez justifier ce retard.', '2024-12-25 15:58:05', 0),
+(233, 611, 565, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 59 minutes. Veuillez justifier ce retard.', '2024-12-25 15:59:19', 0),
+(234, 614, 566, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 0 minutes. Veuillez justifier ce retard.', '2024-12-25 16:00:02', 0),
+(235, 614, 566, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 59 minutes. Veuillez justifier ce pointage.', '2024-12-25 16:00:11', 0),
+(236, 614, 567, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 0 minutes. Veuillez justifier ce retard.', '2024-12-25 16:00:48', 0),
+(237, 614, 568, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 1 minutes. Veuillez justifier ce retard.', '2024-12-25 16:01:34', 0),
+(238, 611, 569, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 1 minutes. Veuillez justifier ce retard.', '2024-12-25 16:01:42', 0),
+(239, 614, 570, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 2 minutes. Veuillez justifier ce retard.', '2024-12-25 16:02:55', 0),
+(240, 614, 571, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 3 minutes. Veuillez justifier ce retard.', '2024-12-25 16:03:36', 0),
+(241, 614, 571, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 55 minutes. Veuillez justifier ce pointage.', '2024-12-25 16:04:02', 0),
+(242, 614, 572, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 11 minutes. Veuillez justifier ce retard.', '2024-12-25 16:11:58', 0),
+(243, 614, 573, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 12 minutes. Veuillez justifier ce retard.', '2024-12-25 16:12:35', 0),
+(244, 611, 574, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 13 minutes. Veuillez justifier ce retard.', '2024-12-25 16:13:15', 0),
+(245, 614, 575, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 13 minutes. Veuillez justifier ce retard.', '2024-12-25 16:13:21', 0),
+(246, 611, 576, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 17 minutes. Veuillez justifier ce retard.', '2024-12-25 16:17:29', 0),
+(247, 614, 577, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 18 minutes. Veuillez justifier ce retard.', '2024-12-25 16:18:33', 0),
+(248, 611, 578, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 19 minutes. Veuillez justifier ce retard.', '2024-12-25 16:19:34', 0),
+(249, 611, 579, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 20 minutes. Veuillez justifier ce retard.', '2024-12-25 16:20:16', 0),
+(250, 611, 580, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 21 minutes. Veuillez justifier ce retard.', '2024-12-25 16:21:35', 0),
+(251, 611, 581, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 24 minutes. Veuillez justifier ce retard.', '2024-12-25 16:24:53', 0),
+(252, 611, 582, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 27 minutes. Veuillez justifier ce retard.', '2024-12-25 16:27:27', 0),
+(253, 614, 583, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 27 minutes. Veuillez justifier ce retard.', '2024-12-25 16:27:39', 0),
+(254, 614, 584, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 28 minutes. Veuillez justifier ce retard.', '2024-12-25 16:28:51', 0),
+(255, 614, 585, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 33 minutes. Veuillez justifier ce retard.', '2024-12-25 19:33:55', 0),
+(256, 611, 586, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 34 minutes. Veuillez justifier ce retard.', '2024-12-25 19:34:52', 0),
+(257, 614, 587, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 35 minutes. Veuillez justifier ce retard.', '2024-12-25 19:35:03', 0),
+(258, 611, 588, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 36 minutes. Veuillez justifier ce retard.', '2024-12-25 19:36:45', 0),
+(259, 611, 589, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 38 minutes. Veuillez justifier ce retard.', '2024-12-25 19:38:20', 0),
+(260, 614, 590, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 38 minutes. Veuillez justifier ce retard.', '2024-12-25 19:38:32', 0),
+(261, 611, 593, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 48 minutes. Veuillez justifier ce retard.', '2024-12-25 19:48:57', 0),
+(262, 614, 594, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 49 minutes. Veuillez justifier ce retard.', '2024-12-25 19:49:05', 0),
+(263, 611, 595, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 49 minutes. Veuillez justifier ce retard.', '2024-12-25 19:49:43', 0),
+(264, 614, 596, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 49 minutes. Veuillez justifier ce retard.', '2024-12-25 19:49:52', 0),
+(265, 611, 597, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 53 minutes. Veuillez justifier ce retard.', '2024-12-25 19:53:52', 0),
+(266, 614, 598, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 55 minutes. Veuillez justifier ce retard.', '2024-12-25 19:55:53', 0),
+(267, 611, 599, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 56 minutes. Veuillez justifier ce retard.', '2024-12-25 19:56:37', 0),
+(268, 614, 600, 'Retard détecté:', 'Vous êtes en retard de 11 heures et 56 minutes. Veuillez justifier ce retard.', '2024-12-25 19:56:50', 0),
+(269, 609, 553, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 6 minutes. Veuillez justifier ce retard.', '2024-12-25 20:06:15', 1),
+(270, 609, 601, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 10 minutes. Veuillez justifier ce retard.', '2024-12-25 20:10:15', 1),
+(271, 609, 602, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 14 minutes. Veuillez justifier ce retard.', '2024-12-25 20:14:15', 1),
+(272, 609, 603, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 19 minutes. Veuillez justifier ce retard.', '2024-12-25 20:19:42', 1),
+(273, 609, 605, 'Retard détecté:', 'Vous êtes en retard de 18 minutes. Veuillez justifier ce retard.', '2024-12-26 00:18:33', 1),
+(274, 609, 606, 'Retard détecté:', 'Vous êtes en retard de 26 minutes. Veuillez justifier ce retard.', '2024-12-26 00:26:11', 1),
+(275, 609, 607, 'Retard détecté:', 'Vous êtes en retard de 29 minutes. Veuillez justifier ce retard.', '2024-12-26 00:29:04', 1),
+(276, 609, 608, 'Retard détecté:', 'Vous êtes en retard de 31 minutes. Veuillez justifier ce retard.', '2024-12-26 00:31:16', 1),
+(277, 609, 609, 'Retard détecté:', 'Vous êtes en retard de 48 minutes. Veuillez justifier ce retard.', '2024-12-26 00:48:59', 1),
+(278, 609, 610, 'Retard détecté:', 'Vous êtes en retard de 52 minutes. Veuillez justifier ce retard.', '2024-12-26 00:52:34', 1),
+(279, 611, 616, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 39 minutes. Veuillez justifier ce retard.', '2024-12-26 09:39:44', 0),
+(280, 614, 615, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 50 minutes. Veuillez justifier ce retard.', '2024-12-26 09:50:04', 0),
+(281, 609, 610, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 5 minutes. Veuillez justifier ce retard.', '2024-12-26 11:05:16', 1),
+(282, 609, 617, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 20 minutes. Veuillez justifier ce retard.', '2024-12-26 11:20:22', 1),
+(283, 611, 619, 'Retard détecté:', 'Vous êtes en retard de 39 minutes. Veuillez justifier ce retard.', '2024-12-27 11:09:45', 0),
+(284, 611, 625, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 4 minutes. Veuillez justifier ce retard.', '2024-12-27 11:34:29', 0),
+(285, 609, 622, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 28 minutes. Veuillez justifier ce retard.', '2024-12-27 12:28:52', 1),
+(286, 614, 624, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 49 minutes. Veuillez justifier ce retard.', '2024-12-27 15:49:17', 0),
+(287, 614, 624, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 1 heures et 10 minutes. Veuillez justifier ce pointage.', '2024-12-27 15:49:32', 0),
+(288, 609, 629, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 14 heures et 43 minutes. Veuillez justifier ce pointage.', '2024-12-30 02:16:11', 1),
+(289, 609, 635, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 1 minutes. Veuillez justifier ce retard.', '2024-12-30 09:01:19', 1),
+(290, 609, 635, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 7 heures et 54 minutes. Veuillez justifier ce pointage.', '2024-12-30 09:05:40', 1),
+(291, 611, 632, 'Retard détecté:', 'Vous êtes en retard de 2 heures et 31 minutes. Veuillez justifier ce retard.', '2024-12-30 10:31:59', 1),
+(292, 613, 633, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 28 minutes. Veuillez justifier ce retard.', '2024-12-30 11:28:19', 0),
+(293, 614, 634, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 25 minutes. Veuillez justifier ce retard.', '2024-12-30 13:25:43', 0),
+(294, 614, 636, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 5 minutes. Veuillez justifier ce retard.', '2024-12-30 14:05:53', 0),
+(295, 614, 637, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 10 minutes. Veuillez justifier ce retard.', '2024-12-30 14:10:00', 0),
+(296, 614, 638, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 57 minutes. Veuillez justifier ce retard.', '2024-12-30 14:57:55', 0),
+(297, 611, 640, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 4 minutes. Veuillez justifier ce retard.', '2024-12-30 15:04:05', 0),
+(298, 611, 643, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 6 minutes. Veuillez justifier ce retard.', '2024-12-30 15:06:12', 0),
+(299, 611, 644, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 7 minutes. Veuillez justifier ce retard.', '2024-12-30 15:07:58', 0),
+(300, 614, 642, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 12 minutes. Veuillez justifier ce retard.', '2024-12-30 15:12:34', 0),
+(301, 613, 641, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 15 minutes. Veuillez justifier ce retard.', '2024-12-30 15:15:35', 0),
+(302, 611, 645, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 18 minutes. Veuillez justifier ce retard.', '2024-12-30 15:18:59', 0),
+(303, 611, 646, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 21 minutes. Veuillez justifier ce retard.', '2024-12-30 15:21:32', 0),
+(304, 611, 647, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 22 minutes. Veuillez justifier ce retard.', '2024-12-30 15:22:40', 0),
+(305, 611, 648, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 31 minutes. Veuillez justifier ce retard.', '2024-12-30 15:31:08', 0),
+(306, 614, 649, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 32 minutes. Veuillez justifier ce retard.', '2024-12-30 15:32:29', 0),
+(307, 614, 649, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 1 heures et 27 minutes. Veuillez justifier ce pointage.', '2024-12-30 15:32:35', 0),
+(308, 611, 650, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 34 minutes. Veuillez justifier ce retard.', '2024-12-30 15:34:34', 0),
+(309, 614, 651, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 34 minutes. Veuillez justifier ce retard.', '2024-12-30 15:34:57', 0),
+(310, 614, 651, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 1 heures et 24 minutes. Veuillez justifier ce pointage.', '2024-12-30 15:35:03', 0),
+(311, 613, 652, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 42 minutes. Veuillez justifier ce retard.', '2024-12-30 15:42:14', 0),
+(312, 613, 653, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 46 minutes. Veuillez justifier ce retard.', '2024-12-30 15:46:25', 1),
+(313, 609, 639, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 47 minutes. Veuillez justifier ce retard.', '2024-12-30 15:47:24', 1),
+(314, 609, 639, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 1 heures et 12 minutes. Veuillez justifier ce pointage.', '2024-12-30 15:47:34', 1),
+(315, 611, 655, 'Retard détecté:', 'Vous êtes en retard de 13 heures et 18 minutes. Veuillez justifier ce retard.', '2024-12-30 21:18:57', 1),
+(316, 611, 661, 'Retard détecté:', 'Vous êtes en retard de 31 minutes. Veuillez justifier ce retard.', '2024-12-31 08:31:05', 1),
+(317, 611, 664, 'Retard détecté:', 'Vous êtes en retard de 40 minutes. Veuillez justifier ce retard.', '2024-12-31 08:40:31', 1),
+(318, 611, 664, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 7 heures et 25 minutes. Veuillez justifier ce pointage.', '2024-12-31 09:34:01', 1),
+(319, 609, 660, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 12 minutes. Veuillez justifier ce retard.', '2024-12-31 11:12:46', 1),
+(320, 609, 660, 'Pointage Avant l\'Heure :', 'Vous êtes pointer avant l\'heure de 5 heures et 46 minutes. Veuillez justifier ce pointage.', '2024-12-31 11:13:50', 1),
+(321, 611, 665, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 33 minutes. Veuillez justifier ce retard.', '2025-01-01 15:33:53', 0),
+(322, 609, 666, 'Retard détecté:', 'Vous êtes en retard de 13 heures et 34 minutes. Veuillez justifier ce retard.', '2025-01-01 21:34:40', 1),
+(323, 611, 667, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 14 heures et 2 minutes. Veuillez justifier ce pointage.', '2025-01-01 23:57:35', 0),
+(324, 613, 668, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 13 heures et 58 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:01:42', 0),
+(325, 614, 669, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 16 heures et 57 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:02:41', 0),
+(326, 613, 670, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 13 heures et 55 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:04:46', 0),
+(327, 613, 671, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 13 heures et 54 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:05:41', 0),
+(328, 614, 672, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 16 heures et 53 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:06:27', 0),
+(329, 613, 673, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 13 heures et 52 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:07:21', 0),
+(330, 614, 674, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 16 heures et 50 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:09:04', 0),
+(331, 613, 675, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 13 heures et 49 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:10:55', 0),
+(332, 614, 676, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 16 heures et 47 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:12:02', 0),
+(333, 611, 677, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 13 heures et 46 minutes. Veuillez justifier ce pointage.', '2025-01-02 00:13:28', 0),
+(334, 611, 683, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 21 minutes. Veuillez justifier ce retard.', '2025-01-02 09:21:15', 0),
+(335, 614, 682, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 22 minutes. Veuillez justifier ce retard.', '2025-01-02 09:22:47', 0),
+(336, 611, 684, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 24 minutes. Veuillez justifier ce retard.', '2025-01-02 09:24:27', 0),
+(337, 611, 684, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 4 heures et 35 minutes. Veuillez justifier ce pointage.', '2025-01-02 09:24:34', 0),
+(338, 609, 680, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 29 minutes. Veuillez justifier ce retard.', '2025-01-02 09:29:17', 1),
+(339, 609, 685, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 33 minutes. Veuillez justifier ce retard.', '2025-01-02 09:33:27', 1),
+(340, 609, 686, 'Retard détecté:', 'Vous êtes en retard de 2 heures et 50 minutes. Veuillez justifier ce retard.', '2025-01-02 10:50:15', 1),
+(341, 609, 687, 'Retard détecté:', 'Vous êtes en retard de 2 heures et 57 minutes. Veuillez justifier ce retard.', '2025-01-02 10:57:00', 1),
+(342, 609, 688, 'Retard détecté:', 'Vous êtes en retard de 2 heures et 58 minutes. Veuillez justifier ce retard.', '2025-01-02 10:58:17', 1),
+(343, 609, 689, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 0 minutes. Veuillez justifier ce retard.', '2025-01-02 11:00:30', 1),
+(344, 609, 689, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 59 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:00:57', 1),
+(345, 609, 689, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 54 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:05:44', 1),
+(346, 609, 690, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 6 minutes. Veuillez justifier ce retard.', '2025-01-02 11:06:33', 1),
+(347, 609, 690, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 53 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:06:42', 1),
+(348, 609, 691, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 8 minutes. Veuillez justifier ce retard.', '2025-01-02 11:08:28', 1),
+(349, 609, 691, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 51 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:08:34', 1),
+(350, 611, 692, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 14 minutes. Veuillez justifier ce retard.', '2025-01-02 11:14:31', 0),
+(351, 611, 692, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 2 heures et 45 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:14:34', 0),
+(352, 614, 693, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 16 minutes. Veuillez justifier ce retard.', '2025-01-02 11:16:24', 0),
+(353, 614, 693, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 43 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:16:59', 0),
+(354, 611, 694, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 21 minutes. Veuillez justifier ce retard.', '2025-01-02 11:21:43', 1),
+(355, 611, 694, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 2 heures et 38 minutes. Veuillez justifier ce pointage.', '2025-01-02 11:21:46', 1),
+(356, 614, 695, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 59 minutes. Veuillez justifier ce retard.', '2025-01-02 13:59:13', 0),
+(357, 613, 681, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 2 minutes. Veuillez justifier ce retard.', '2025-01-02 14:02:02', 0),
+(358, 614, 696, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 7 minutes. Veuillez justifier ce retard.', '2025-01-02 14:07:32', 0),
+(359, 613, 697, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 29 minutes. Veuillez justifier ce retard.', '2025-01-02 14:29:41', 1),
+(360, 614, 698, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 33 minutes. Veuillez justifier ce retard.', '2025-01-02 15:33:34', 0),
+(361, 614, 699, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 51 minutes. Veuillez justifier ce retard.', '2025-01-02 15:51:36', 0),
+(362, 614, 699, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 8 minutes. Veuillez justifier ce pointage.', '2025-01-02 15:51:40', 0),
+(363, 609, 700, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 56 minutes. Veuillez justifier ce retard.', '2025-01-02 15:56:29', 1),
+(364, 609, 700, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 0 minutes. Veuillez justifier ce pointage.', '2025-01-02 15:59:07', 1),
+(365, 609, 701, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 0 minutes. Veuillez justifier ce retard.', '2025-01-02 16:00:13', 1),
+(366, 609, 701, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 59 minutes. Veuillez justifier ce pointage.', '2025-01-02 16:00:35', 1),
+(367, 609, 702, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 3 minutes. Veuillez justifier ce retard.', '2025-01-02 16:03:32', 1),
+(368, 609, 702, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 55 minutes. Veuillez justifier ce pointage.', '2025-01-02 16:04:20', 1),
+(369, 609, 703, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 8 minutes. Veuillez justifier ce retard.', '2025-01-02 16:08:39', 1),
+(370, 609, 703, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 49 minutes. Veuillez justifier ce pointage.', '2025-01-02 16:10:17', 1),
+(371, 613, 704, 'Retard détecté:', 'Vous êtes en retard de 10 heures et 25 minutes. Veuillez justifier ce retard.', '2025-01-02 18:25:15', 0),
+(372, 613, 705, 'Retard détecté:', 'Vous êtes en retard de 10 heures et 31 minutes. Veuillez justifier ce retard.', '2025-01-02 18:31:53', 1),
+(373, 611, 706, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 3 heures et 37 minutes. Veuillez justifier ce pointage.', '2025-01-03 10:22:09', 0),
+(374, 611, 707, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 20 minutes. Veuillez justifier ce retard.', '2025-01-03 13:50:58', 1),
+(383, 611, 708, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 7 minutes. Veuillez justifier ce retard.', '2025-01-03 14:37:57', 1),
+(385, 613, 708, 'Nouvelle justification d\'arrivée', 'Le salarié a soumis une justification pour son arrivée : \"mkhfff\"', '2025-01-03 14:54:03', 1),
+(386, 613, 708, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée\"', '2025-01-03 14:59:57', 0),
+(387, 613, 708, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-03 15:47:37', 0),
+(388, 611, 714, 'Retard détecté:', 'Vous êtes en retard de 13 heures et 59 minutes. Veuillez justifier ce retard.', '2025-01-05 22:59:56', 1),
+(389, 611, 715, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 17 heures et 52 minutes. Veuillez justifier ce pointage.', '2025-01-05 23:07:24', 1),
+(390, 613, 715, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 00:39:58', 0),
+(391, 613, 715, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 00:43:41', 0),
+(392, 613, 715, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 00:57:52', 0),
+(393, 613, 715, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 00:58:10', 0),
+(394, 613, 715, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 01:03:37', 1),
+(395, 613, 715, 'Nouvelle justification de départ', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son départ\"', '2025-01-06 01:07:43', 1),
+(397, 611, 694, 'Justification refusée', 'Votre justification d\'arrivée est refusée par votre manager.', '2025-01-06 09:18:22', 0),
+(400, 611, 694, 'Justification refusée', 'Votre justification d\'arrivée pour le 02/01/2025 00:00 est refusée par votre manager.', '2025-01-06 09:40:35', 0),
+(401, 611, 694, 'Justification refusée', 'Votre justification d\'arrivée pour le 2025-01-02 est refusée par votre manager.', '2025-01-06 09:46:20', 1),
+(402, 611, 694, 'Justification refusée', 'Votre justification d\'arrivée pour le 02/01/2025 est refusée par votre manager.', '2025-01-06 09:49:48', 1),
+(403, 611, 722, 'Retard détecté:', 'Vous êtes en retard de 2 heures et 55 minutes. Veuillez justifier ce retard.', '2025-01-06 10:55:26', 1),
+(404, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 10:57:33', 1),
+(405, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 11:06:47', 1),
+(406, 611, 722, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 3 heures et 8 minutes. Veuillez justifier ce pointage.', '2025-01-06 13:51:27', 1),
+(407, 613, 722, 'Nouvelle justification de départ', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son départ\"', '2025-01-06 13:52:28', 1),
+(408, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:08:38', 1),
+(409, 613, 722, 'Nouvelle justification de départ', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son départ\"', '2025-01-06 14:16:23', 0),
+(410, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:16:56', 0),
+(411, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:19:39', 0),
+(412, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:20:27', 1),
+(413, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:21:14', 1),
+(414, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:22:16', 1),
+(415, 613, 722, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-06 14:23:48', 1),
+(416, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 14:56:23', 0),
+(417, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 14:57:09', 0),
+(418, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:01:14', 0),
+(419, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:01:30', 0),
+(420, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:05:40', 0),
+(421, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:07:39', 0),
+(422, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:09:20', 0),
+(423, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:10:28', 0),
+(424, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:12:52', 0),
+(425, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:13:40', 0),
+(426, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:13:48', 0),
+(427, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:14:06', 0),
+(428, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:14:10', 0),
+(429, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:14:26', 0),
+(430, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:18:22', 0),
+(431, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:41:16', 0),
+(432, 611, 722, 'Justification refusée', 'Votre justification d\'arrivée pour le 06/01/2025 est refusée par votre manager.', '2025-01-06 15:57:05', 0),
+(433, 611, 722, 'Justification acceptée', 'Votre justification d\'arrivée pour le 06/01/2025 a été acceptée comme temporaire.', '2025-01-06 16:07:03', 0),
+(434, 611, 722, 'Justification acceptée', 'Votre justification d\'arrivée pour le 06/01/2025 a été acceptée comme définitive.', '2025-01-06 16:10:01', 0),
+(435, 611, 722, 'Justification de départ refusée', 'Votre justification de départ pour le 06/01/2025 a été refusée.', '2025-01-06 16:30:52', 1),
+(436, 611, 722, 'Justification acceptée', 'Votre justification de départ pour le 06/01/2025 a été acceptée comme temporaire.', '2025-01-06 16:40:23', 0),
+(437, 611, 722, 'Justification acceptée', 'Votre justification de départ pour le 06/01/2025 a été acceptée comme définitive.', '2025-01-06 16:40:34', 0),
+(438, 609, 721, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 17 heures et 7 minutes. Veuillez justifier ce pointage.', '2025-01-06 23:52:44', 1),
+(439, 613, 723, 'Retard détecté:', 'Vous êtes en retard de 6 minutes. Veuillez justifier ce retard.', '2025-01-07 08:06:41', 1),
+(440, 2, 723, 'Nouvelle justification d\'arrivée', 'Le salarié nabila TAGUEZ a soumis une justification pour son arrivée.', '2025-01-07 09:06:58', 0),
+(441, 613, 723, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 07/01/2025 a été acceptée comme définitive.', '2025-01-07 09:11:46', 1),
+(442, 613, 723, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 4 heures et 13 minutes. Veuillez justifier ce pointage.', '2025-01-07 09:46:24', 1),
+(443, 2, 723, 'Nouvelle justification de départ', 'Le salarié nabila TAGUEZ a soumis une justification pour son départ.', '2025-01-07 09:54:15', 0),
+(444, 613, 723, 'Justification de départ refusée', 'Votre justification de départ pour le 07/01/2025 a été refusée.', '2025-01-07 09:55:18', 1),
+(445, 2, 723, 'Nouvelle justification de départ', 'Le salarié nabila TAGUEZ a soumis une justification pour son départ.', '2025-01-07 09:57:38', 0),
+(446, 2, 723, 'Nouvelle justification de départ', 'Le salarié nabila TAGUEZ a soumis une justification pour son départ.', '2025-01-07 09:57:56', 0),
+(450, 614, 729, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 13 minutes. Veuillez justifier ce retard.', '2025-01-07 11:13:38', 0),
+(451, 611, 730, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 14 minutes. Veuillez justifier ce retard.', '2025-01-07 11:14:05', 0),
+(452, 614, 729, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 45 minutes. Veuillez justifier ce pointage.', '2025-01-07 11:14:09', 0),
+(453, 611, 730, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 45 minutes. Veuillez justifier ce pointage.', '2025-01-07 11:14:13', 0),
+(454, 611, 731, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 25 minutes. Veuillez justifier ce retard.', '2025-01-07 11:25:02', 0),
+(455, 611, 731, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 34 minutes. Veuillez justifier ce pointage.', '2025-01-07 11:25:04', 0),
+(456, 614, 732, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 33 minutes. Veuillez justifier ce retard.', '2025-01-07 11:33:54', 0),
+(457, 614, 732, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 26 minutes. Veuillez justifier ce pointage.', '2025-01-07 11:33:57', 0),
+(458, 611, 733, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 42 minutes. Veuillez justifier ce retard.', '2025-01-07 11:42:44', 0),
+(459, 611, 733, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 17 minutes. Veuillez justifier ce pointage.', '2025-01-07 11:42:51', 0),
+(460, 614, 734, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 45 minutes. Veuillez justifier ce retard.', '2025-01-07 11:45:26', 0),
+(461, 614, 734, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 5 heures et 14 minutes. Veuillez justifier ce pointage.', '2025-01-07 11:45:30', 0),
+(462, 614, 735, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 46 minutes. Veuillez justifier ce retard.', '2025-01-07 11:46:57', 0),
+(463, 614, 736, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 47 minutes. Veuillez justifier ce retard.', '2025-01-07 11:47:22', 0),
+(464, 611, 737, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 10 minutes. Veuillez justifier ce retard.', '2025-01-07 12:10:23', 0),
+(465, 611, 737, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 4 heures et 49 minutes. Veuillez justifier ce pointage.', '2025-01-07 12:10:29', 0),
+(466, 614, 738, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 34 minutes. Veuillez justifier ce retard.', '2025-01-07 13:34:10', 0),
+(467, 614, 738, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 3 heures et 25 minutes. Veuillez justifier ce pointage.', '2025-01-07 13:34:21', 0),
+(468, 614, 739, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 39 minutes. Veuillez justifier ce retard.', '2025-01-07 13:39:49', 0),
+(469, 614, 739, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 3 heures et 6 minutes. Veuillez justifier ce pointage.', '2025-01-07 13:53:41', 0),
+(470, 614, 740, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 54 minutes. Veuillez justifier ce retard.', '2025-01-07 13:54:15', 0),
+(471, 609, 726, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 7 minutes. Veuillez justifier ce retard.', '2025-01-07 14:07:51', 1),
+(472, 613, 726, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-07 14:09:13', 1);
+INSERT INTO `wbcc_notification` (`idNotification`, `idUtilisateur`, `idPointage`, `title`, `message`, `created_at`, `is_read`) VALUES
+(473, 609, 726, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 07/01/2025 est refusée par votre manager.', '2025-01-07 14:10:10', 1),
+(474, 609, 726, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 07/01/2025 est refusée par votre manager.', '2025-01-07 14:13:39', 1),
+(475, 609, 726, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 07/01/2025 est refusée par votre manager.', '2025-01-07 14:16:00', 1),
+(476, 609, 726, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 07/01/2025 est refusée par votre manager.', '2025-01-07 14:16:08', 1),
+(477, 609, 726, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 07/01/2025 est refusée par votre manager.', '2025-01-07 14:16:38', 1),
+(478, 614, 741, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 43 minutes. Veuillez justifier ce retard.', '2025-01-07 14:43:59', 0),
+(479, 614, 742, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 47 minutes. Veuillez justifier ce retard.', '2025-01-07 14:47:05', 0),
+(480, 614, 743, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 14 minutes. Veuillez justifier ce retard.', '2025-01-07 15:14:13', 0),
+(481, 614, 744, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 15 minutes. Veuillez justifier ce retard.', '2025-01-07 15:15:34', 0),
+(482, 611, 745, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 32 minutes. Veuillez justifier ce retard.', '2025-01-07 15:32:21', 0),
+(483, 614, 746, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 32 minutes. Veuillez justifier ce retard.', '2025-01-07 15:32:28', 0),
+(484, 611, 745, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 27 minutes. Veuillez justifier ce pointage.', '2025-01-07 15:32:46', 0),
+(485, 614, 746, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 17 minutes. Veuillez justifier ce pointage.', '2025-01-07 15:42:48', 0),
+(486, 614, 747, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 43 minutes. Veuillez justifier ce retard.', '2025-01-07 15:43:41', 0),
+(487, 614, 747, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 16 minutes. Veuillez justifier ce pointage.', '2025-01-07 15:43:47', 0),
+(488, 609, 748, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 0 minutes. Veuillez justifier ce retard.', '2025-01-07 16:00:10', 1),
+(489, 609, 748, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 33 minutes. Veuillez justifier ce pointage.', '2025-01-07 16:26:12', 1),
+(490, 609, 749, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 27 minutes. Veuillez justifier ce retard.', '2025-01-07 16:27:11', 1),
+(491, 614, 750, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 19 minutes. Veuillez justifier ce retard.', '2025-01-07 20:19:27', 0),
+(492, 614, 751, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 25 minutes. Veuillez justifier ce retard.', '2025-01-07 20:25:15', 0),
+(493, 614, 752, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 30 minutes. Veuillez justifier ce retard.', '2025-01-07 20:30:01', 0),
+(494, 614, 753, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 34 minutes. Veuillez justifier ce retard.', '2025-01-07 20:34:54', 0),
+(495, 614, 754, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 36 minutes. Veuillez justifier ce retard.', '2025-01-07 20:36:59', 0),
+(496, 614, 755, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 38 minutes. Veuillez justifier ce retard.', '2025-01-07 20:38:37', 0),
+(497, 614, 756, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 42 minutes. Veuillez justifier ce retard.', '2025-01-07 20:42:16', 0),
+(498, 614, 757, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 46 minutes. Veuillez justifier ce retard.', '2025-01-07 20:46:05', 0),
+(499, 614, 758, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 46 minutes. Veuillez justifier ce retard.', '2025-01-07 20:46:43', 0),
+(500, 614, 759, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 52 minutes. Veuillez justifier ce retard.', '2025-01-07 20:52:04', 0),
+(501, 614, 760, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 53 minutes. Veuillez justifier ce retard.', '2025-01-07 20:53:05', 0),
+(502, 614, 761, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 54 minutes. Veuillez justifier ce retard.', '2025-01-07 20:54:27', 0),
+(503, 614, 762, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 55 minutes. Veuillez justifier ce retard.', '2025-01-07 20:55:06', 0),
+(504, 614, 763, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 56 minutes. Veuillez justifier ce retard.', '2025-01-07 20:56:00', 0),
+(505, 614, 764, 'Retard détecté:', 'Vous êtes en retard de 12 heures et 56 minutes. Veuillez justifier ce retard.', '2025-01-07 20:56:39', 0),
+(506, 614, 765, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 16 heures et 37 minutes. Veuillez justifier ce pointage.', '2025-01-08 00:22:30', 0),
+(507, 614, 766, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 16 heures et 34 minutes. Veuillez justifier ce pointage.', '2025-01-08 00:25:02', 0),
+(508, 611, 767, 'Retard détecté:', 'Vous êtes en retard de 11 minutes. Veuillez justifier ce retard.', '2025-01-08 08:11:35', 0),
+(509, 614, 768, 'Retard détecté:', 'Vous êtes en retard de 12 minutes. Veuillez justifier ce retard.', '2025-01-08 08:12:10', 0),
+(510, 613, 777, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 12 heures et 25 minutes. Veuillez justifier ce pointage.', '2025-01-08 08:35:00', 1),
+(511, 614, 784, 'Retard détecté:', 'Vous êtes en retard de 59 minutes. Veuillez justifier ce retard.', '2025-01-08 08:59:40', 0),
+(512, 609, 773, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 26 minutes. Veuillez justifier ce retard.', '2025-01-08 09:26:21', 1),
+(513, 609, 787, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 28 minutes. Veuillez justifier ce retard.', '2025-01-08 09:28:51', 1),
+(514, 609, 788, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 33 minutes. Veuillez justifier ce retard.', '2025-01-08 09:33:04', 1),
+(515, 609, 789, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 34 minutes. Veuillez justifier ce retard.', '2025-01-08 09:34:04', 1),
+(527, 609, 798, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 51 minutes. Veuillez justifier ce retard.', '2025-01-08 09:51:38', 1),
+(528, 609, 799, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 52 minutes. Veuillez justifier ce retard.', '2025-01-08 09:52:15', 1),
+(529, 609, 799, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 7 heures et 7 minutes. Veuillez justifier ce pointage.', '2025-01-08 09:52:22', 1),
+(530, 609, 800, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 52 minutes. Veuillez justifier ce retard.', '2025-01-08 09:52:40', 1),
+(531, 609, 801, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 56 minutes. Veuillez justifier ce retard.', '2025-01-08 09:56:43', 1),
+(532, 609, 807, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 54 minutes. Veuillez justifier ce retard.', '2025-01-08 11:54:05', 1),
+(533, 609, 812, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 0 minutes. Veuillez justifier ce retard.', '2025-01-08 12:00:32', 1),
+(534, 611, 813, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 3 minutes. Veuillez justifier ce retard.', '2025-01-08 12:03:33', 1),
+(535, 607, 814, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 6 minutes. Veuillez justifier ce retard.', '2025-01-08 12:06:19', 0),
+(536, 614, 815, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 6 minutes. Veuillez justifier ce retard.', '2025-01-08 12:06:23', 0),
+(537, 2, 816, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 6 minutes. Veuillez justifier ce retard.', '2025-01-08 12:06:26', 0),
+(538, 2, 816, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 53 minutes. Veuillez justifier ce pointage.', '2025-01-08 12:06:57', 0),
+(539, 609, 818, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 12 minutes. Veuillez justifier ce retard.', '2025-01-08 12:12:07', 1),
+(540, 613, 813, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-08 13:19:49', 0),
+(541, 613, 813, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-08 14:08:31', 1),
+(542, 611, 819, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 46 minutes. Veuillez justifier ce retard.', '2025-01-08 14:46:32', 0),
+(543, 609, 820, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 46 minutes. Veuillez justifier ce retard.', '2025-01-08 14:46:56', 1),
+(544, 609, 821, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 49 minutes. Veuillez justifier ce retard.', '2025-01-08 14:49:08', 1),
+(545, 609, 822, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 52 minutes. Veuillez justifier ce retard.', '2025-01-08 14:52:44', 1),
+(546, 611, 823, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 3 minutes. Veuillez justifier ce retard.', '2025-01-08 15:03:25', 1),
+(547, 613, 824, 'Retard détecté:', 'Vous êtes en retard de 3 heures et 11 minutes. Veuillez justifier ce retard.', '2025-01-08 15:14:38', 0),
+(548, 614, 825, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 39 minutes. Veuillez justifier ce retard.', '2025-01-08 15:39:28', 0),
+(549, 614, 826, 'Retard détecté:', 'Vous êtes en retard de 7 heures et 44 minutes. Veuillez justifier ce retard.', '2025-01-08 15:44:59', 0),
+(550, 613, 824, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 8 minutes. Veuillez justifier ce pointage.', '2025-01-08 19:51:55', 0),
+(554, 609, 828, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-09 00:46:38', 1),
+(555, 613, 363, 'Nouvelle justification d\'absence', 'Le salarié Hamza DRIDI a soumis une justification pour son absence.', '2025-01-09 08:56:11', 1),
+(556, 613, 822, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-09 10:50:26', 1),
+(557, 613, 749, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-09 11:29:08', 1),
+(558, 613, 538, 'Nouvelle justification d\'absence', 'Le salarié Hamza DRIDI a soumis une justification pour son absence.', '2025-01-09 11:31:22', 1),
+(559, 613, 538, 'Nouvelle justification d\'absence', 'Le salarié Hamza DRIDI a soumis une justification pour son absence.', '2025-01-09 12:13:30', 1),
+(560, 613, 538, 'Nouvelle justification d\'absence', 'Le salarié Hamza DRIDI a soumis une justification pour son absence.', '2025-01-09 12:31:50', 1),
+(561, 611, 831, 'Justification d\'absence refusée', 'Votre justification d\'absence pour le 09/01/2025 a été refusée.', '2025-01-09 15:23:37', 0),
+(562, 611, 831, 'Justification d\'absence acceptée', 'Votre justification d\'absence pour le 09/01/2025 a été acceptée comme temporaire.', '2025-01-09 15:24:31', 0),
+(563, 611, 831, 'Justification d\'absence acceptée', 'Votre justification d\'absence pour le 09/01/2025 a été acceptée comme définitive.', '2025-01-09 15:24:52', 0),
+(564, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 15:36:02', 1),
+(565, 609, 828, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-09 15:43:09', 0),
+(566, 609, 828, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 1 heures et 16 minutes. Veuillez justifier ce pointage.', '2025-01-09 15:43:09', 0),
+(567, 613, 828, 'Nouvelle justification de départ', 'Le salarié Hamza DRIDI a soumis une justification pour son départ.', '2025-01-09 15:43:52', 1),
+(568, 613, 828, 'Nouvelle justification de départ', 'Le salarié Hamza DRIDI a soumis une justification pour son départ.', '2025-01-09 16:11:37', 0),
+(569, 613, 828, 'Nouvelle justification de départ', 'Le salarié Hamza DRIDI a soumis une justification pour son départ.', '2025-01-09 16:14:41', 0),
+(570, 613, 832, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-09 16:16:47', 0),
+(571, 613, 832, 'Retard détecté:', 'Vous êtes en retard de 8 heures et 16 minutes. Veuillez justifier ce retard.', '2025-01-09 16:16:47', 0),
+(572, 613, 832, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-09 16:18:05', 0),
+(573, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 16:31:31', 0),
+(574, 613, 823, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-09 16:36:00', 1),
+(575, 611, 834, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-09 17:00:31', 0),
+(576, 611, 834, 'Retard détecté:', 'Vous êtes en retard de 9 heures et 0 minutes. Veuillez justifier ce retard.', '2025-01-09 17:00:32', 0),
+(577, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:25:42', 0),
+(578, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:34:57', 0),
+(579, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:36:37', 0),
+(580, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:41:18', 0),
+(581, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:49:36', 0),
+(582, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:51:56', 0),
+(583, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:52:42', 0),
+(584, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:53:52', 0),
+(585, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 20:54:37', 0),
+(586, 613, 745, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-09 20:58:08', 0),
+(587, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 21:01:40', 0),
+(588, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-09 21:04:36', 0),
+(589, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:29:33', 0),
+(590, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:33:33', 0),
+(591, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:36:17', 0),
+(592, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:37:36', 0),
+(593, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:39:55', 0),
+(594, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:50:30', 0),
+(595, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:56:20', 0),
+(596, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:56:34', 0),
+(597, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 00:59:09', 0),
+(598, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 01:34:04', 0),
+(599, 613, 823, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-10 01:36:10', 0),
+(600, 613, 745, 'Nouvelle justification de départ', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son départ.', '2025-01-10 01:38:52', 0),
+(601, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 10:05:11', 0),
+(602, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 10:07:42', 0),
+(603, 613, 823, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-10 10:15:31', 0),
+(604, 613, 823, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-10 10:19:11', 0),
+(605, 613, 823, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-10 10:25:34', 0),
+(606, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 10:26:04', 0),
+(607, 611, 844, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-10 10:41:48', 0),
+(608, 611, 844, 'Retard détecté:', 'Vous êtes en retard de 11 minutes. Veuillez justifier ce retard.', '2025-01-10 10:41:48', 0),
+(609, 611, 844, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-10 10:41:54', 0),
+(610, 611, 844, 'Pointage Avant l\'Heure :', 'Vous avez pointé avant l\'heure de 3 heures et 18 minutes. Veuillez justifier ce pointage.', '2025-01-10 10:41:54', 0),
+(611, 613, 834, 'Nouvelle justification d\'absence', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son absence.', '2025-01-10 12:10:02', 0),
+(612, 2, 714, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-12 19:29:57', 0),
+(613, 613, 714, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-12 19:29:57', 0),
+(614, 614, 714, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-12 19:29:57', 0),
+(615, 2, 851, 'Nouvelle justification d\'arrivée', 'Le salarié nabila TAGUEZ a soumis une justification pour son arrivée.', '2025-01-13 01:28:05', 0),
+(617, 611, 859, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:05:12', 0),
+(618, 611, 859, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 5 minutes. Veuillez justifier ce retard.', '2025-01-13 09:05:13', 0),
+(619, 611, 860, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:05:37', 0),
+(620, 611, 860, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 5 minutes. Veuillez justifier ce retard.', '2025-01-13 09:05:37', 0),
+(621, 611, 861, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:08:57', 0),
+(622, 611, 861, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 8 minutes. Veuillez justifier ce retard.', '2025-01-13 09:08:57', 0),
+(623, 611, 862, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:18:21', 0),
+(624, 611, 863, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:18:54', 0),
+(625, 611, 864, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:20:23', 0),
+(626, 611, 865, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:23:25', 0),
+(627, 611, 866, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:27:20', 0),
+(628, 611, 867, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 09:28:33', 1),
+(629, 611, 868, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 10:07:48', 0),
+(630, 611, 870, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 11:10:00', 0),
+(631, 611, 870, 'Retard détecté:', 'Vous êtes en retard de 5 minutes. Veuillez justifier ce retard.', '2025-01-13 11:10:00', 0),
+(632, 611, 871, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-13 11:11:26', 0),
+(633, 2, 714, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-13 23:01:09', 0),
+(634, 613, 714, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-13 23:01:09', 0),
+(635, 614, 714, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-13 23:01:10', 0),
+(636, 2, 857, 'Nouvelle justification d\'arrivée', 'Le salarié nabila TAGUEZ a soumis une justification pour son arrivée.', '2025-01-14 08:38:02', 0),
+(637, 611, 872, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 09:29:30', 0),
+(638, 611, 872, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 24 minutes. Veuillez justifier ce retard.', '2025-01-14 09:29:30', 1),
+(639, 2, 872, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 09:44:03', 0),
+(640, 613, 872, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 09:44:03', 1),
+(641, 614, 872, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 09:44:03', 0),
+(642, 611, 872, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 09:45:29', 0),
+(643, 611, 872, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 09:45:33', 0),
+(644, 611, 872, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 09:52:36', 0),
+(645, 611, 872, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 09:53:53', 0),
+(646, 611, 872, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 09:54:23', 0),
+(647, 611, 872, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 09:56:10', 0),
+(648, 611, 872, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 09:56:14', 0),
+(649, 611, 872, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 09:56:51', 0),
+(650, 611, 873, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 09:59:26', 0),
+(651, 611, 873, 'Retard détecté:', 'Vous êtes en retard de 1 heures et 54 minutes. Veuillez justifier ce retard.', '2025-01-14 09:59:26', 1),
+(652, 2, 873, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:01:37', 0),
+(653, 613, 873, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:01:37', 1),
+(654, 614, 873, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:01:37', 0),
+(655, 611, 873, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 10:02:43', 0),
+(656, 611, 873, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 10:03:05', 0),
+(657, 2, 873, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:04:13', 0),
+(658, 613, 873, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:04:13', 0),
+(659, 614, 873, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:04:13', 0),
+(660, 611, 873, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme définitive.', '2025-01-14 10:04:57', 0),
+(661, 611, 844, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 10/01/2025 est refusée par votre manager.', '2025-01-14 10:32:46', 1),
+(662, 2, 844, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:36:12', 0),
+(663, 613, 844, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:36:13', 0),
+(664, 614, 844, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 10:36:13', 0),
+(665, 609, 874, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 10:43:58', 0),
+(666, 609, 874, 'Retard détecté:', 'Vous êtes en retard de 2 heures et 38 minutes. Veuillez justifier ce retard.', '2025-01-14 10:43:59', 0),
+(667, 2, 874, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-14 10:44:28', 0),
+(668, 613, 874, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-14 10:44:28', 0),
+(669, 614, 874, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-14 10:44:29', 0),
+(670, 609, 874, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 10:45:07', 0),
+(671, 609, 822, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 08/01/2025 a été acceptée comme temporaire.', '2025-01-14 10:46:28', 0),
+(672, 609, 828, 'Justification de départ refusée', 'Votre justification de départ pour le 09/01/2025 a été refusée.', '2025-01-14 10:58:16', 0),
+(673, 609, 828, 'Justification de départ acceptée', 'Votre justification de départ pour le 09/01/2025 a été acceptée comme temporaire.', '2025-01-14 11:01:01', 0),
+(674, 611, 875, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 12:31:29', 0),
+(675, 611, 875, 'Retard détecté:', 'Vous êtes en retard de 4 heures et 26 minutes. Veuillez justifier ce retard.', '2025-01-14 12:31:29', 1),
+(676, 2, 875, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 12:34:52', 0),
+(677, 613, 875, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 12:34:52', 1),
+(678, 614, 875, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 12:34:52', 0),
+(679, 611, 875, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 12:36:08', 1),
+(680, 2, 875, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 12:37:41', 0),
+(681, 613, 875, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 12:37:42', 0),
+(682, 614, 875, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 12:37:42', 0),
+(683, 611, 875, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme définitive.', '2025-01-14 12:38:32', 0),
+(684, 611, 876, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 13:45:01', 0),
+(685, 611, 876, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 40 minutes. Veuillez justifier ce retard.', '2025-01-14 13:45:01', 1),
+(686, 2, 876, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:46:29', 0),
+(687, 613, 876, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:46:30', 0),
+(688, 614, 876, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:46:30', 0),
+(689, 2, 876, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:47:21', 0),
+(690, 613, 876, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:47:21', 0),
+(691, 614, 876, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:47:21', 0),
+(692, 611, 877, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 13:49:47', 0),
+(693, 611, 877, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 44 minutes. Veuillez justifier ce retard.', '2025-01-14 13:49:48', 1),
+(694, 2, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:51:10', 0),
+(695, 613, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:51:10', 0),
+(696, 614, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:51:10', 0),
+(697, 2, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:53:02', 0),
+(698, 613, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:53:02', 0),
+(699, 2, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:53:02', 0),
+(700, 614, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:53:02', 0),
+(701, 613, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:53:02', 0),
+(702, 614, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:53:02', 0),
+(703, 2, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:54:24', 0),
+(704, 613, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:54:24', 0),
+(705, 614, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:54:24', 0),
+(706, 2, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:54:28', 0),
+(707, 613, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:54:28', 0),
+(708, 614, 877, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 13:54:28', 0),
+(709, 611, 878, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 13:59:19', 0),
+(710, 611, 878, 'Retard détecté:', 'Vous êtes en retard de 5 heures et 54 minutes. Veuillez justifier ce retard.', '2025-01-14 13:59:19', 0),
+(711, 2, 878, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 14:00:54', 0),
+(712, 613, 878, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 14:00:54', 1),
+(713, 614, 878, 'Nouvelle justification d\'arrivée', 'Le salarié Mohamed Achref MEHERZI a soumis une justification pour son arrivée.', '2025-01-14 14:00:54', 0),
+(714, 611, 878, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 14:03:13', 0),
+(715, 611, 878, 'Justification d\'arrivée refusée', 'Votre justification d\'arrivée pour le 14/01/2025 est refusée par votre manager.', '2025-01-14 14:04:38', 0),
+(716, 611, 878, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme temporaire.', '2025-01-14 14:05:06', 0),
+(717, 611, 878, 'Justification d\'arrivée acceptée', 'Votre justification d\'arrivée pour le 14/01/2025 a été acceptée comme définitive.', '2025-01-14 14:05:22', 0),
+(718, 609, 879, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 14:08:07', 0),
+(719, 609, 879, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 3 minutes. Veuillez justifier ce retard.', '2025-01-14 14:08:07', 0),
+(720, 609, 880, 'Problème d\'adresse:', 'Il y a un problème avec votre adresse. Veuillez la vérifier avec l\'administrateur.', '2025-01-14 14:09:14', 0),
+(721, 609, 880, 'Retard détecté:', 'Vous êtes en retard de 6 heures et 4 minutes. Veuillez justifier ce retard.', '2025-01-14 14:09:14', 1),
+(722, 2, 880, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-14 14:11:03', 0),
+(723, 613, 880, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-14 14:11:03', 0),
+(724, 614, 880, 'Nouvelle justification d\'arrivée', 'Le salarié Hamza DRIDI a soumis une justification pour son arrivée.', '2025-01-14 14:11:03', 0);
 
 -- --------------------------------------------------------
 
@@ -1208,7 +2116,7 @@ INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `he
 (319, NULL, '2024-11-25', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, 'Ww', 'frfrf', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, 49666, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (320, NULL, '2024-11-26', '12:25:10', 'Tunis', '09:00', '15:00', 0, NULL, 0, 205, 1, 0, '', '', 1, 613, 'nabila TAGUEZ', '2024-11-26 20:11:16', 'Accepté', '14:52:14', 0, 1, 613, 'nabila TAGUEZ', '2024-11-25 22:11:34', 'Refusé', NULL, NULL, 0, 609, 49650, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (321, NULL, '2024-11-27', '15:15:27', 'Tunis', '09:00', '15:00', 0, NULL, 0, 375, 1, 0, 'Uuhhhyhjvcggj', 'test', 1, 613, 'nabila TAGUEZ', '2024-11-27 15:40:50', 'Accepté', NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, 49723, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(325, NULL, '2024-11-28', '15:32:47', 'Tunis', '09:00', '18:00', 0, NULL, 0, 392, 1, 0, 'testttzzrrtt', '', 0, NULL, NULL, NULL, NULL, '15:40:29', 0, 1, 613, 'nabila TAGUEZ', '2024-11-28 16:13:47', 'Accepté', NULL, NULL, 0, 609, 49772, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(325, NULL, '2024-11-28', '15:32:47', 'Tunis', '09:00', '18:00', 0, NULL, 0, 392, 1, 0, '33333333333333', '', 0, NULL, NULL, NULL, NULL, '15:40:29', 0, 1, 613, 'nabila TAGUEZ', '2024-11-28 16:13:47', 'Accepté', NULL, NULL, 0, 609, 49772, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (326, NULL, '2024-11-07', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (327, NULL, '2024-11-08', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (328, NULL, '2024-11-09', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1230,7 +2138,7 @@ INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `he
 (344, NULL, '2024-11-28', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (345, NULL, '2024-11-29', '09:28:21', 'Tunis', '09:00', '15:00', 0, NULL, 0, 28, 1, 0, 'le but fait un retrad de 10 min\n\n', 'des photos du document du bureau d\'emploi', 0, NULL, NULL, NULL, NULL, '09:46:05', 0, 0, 613, 'nabila TAGUEZ', '2024-11-29 09:52:12', 'Accepté', NULL, NULL, 0, 611, 49728, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (346, NULL, '2024-11-29', '10:42:11', 'Tunis', '09:00', '18:00', 0, NULL, 0, 102, 1, 0, 'deeeedaae', 'teddzz', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 614, 49733, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(347, NULL, '2024-11-29', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(347, NULL, '2024-11-29', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 'maladie', NULL, NULL),
 (350, NULL, '2024-11-25', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (351, NULL, '2024-11-26', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (352, NULL, '2024-11-27', NULL, 'Tunis', NULL, NULL, 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1251,7 +2159,7 @@ INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `he
 (395, NULL, '2024-12-07', NULL, NULL, '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 605, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (396, NULL, '2024-12-07', NULL, NULL, '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (397, NULL, '2024-12-07', NULL, NULL, '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(398, NULL, '2024-12-07', NULL, NULL, '10:00', '20:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(398, NULL, '2024-12-07', NULL, NULL, '10:00', '20:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 'Jawher BALTI', '2025-01-14 14:42:14', 'Refusé', NULL, NULL, NULL),
 (399, NULL, '2024-12-07', NULL, NULL, '10:00', '18:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 614, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (401, NULL, '2024-12-08', NULL, NULL, '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (402, NULL, '2024-12-08', NULL, NULL, '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1288,7 +2196,7 @@ INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `he
 (484, NULL, '2024-12-13', NULL, 'TUNIS', '09:00', '18:00', 0, NULL, 0, 0, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 614, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (485, NULL, '2024-12-14', NULL, 'PARIS', '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 3, 49829, NULL, NULL, NULL, NULL, NULL, 1, 1, 'Jawher BALTI', '2025-01-08 12:30:10', 'Accepté', 'maladie', NULL, NULL),
 (486, NULL, '2024-12-14', NULL, 'PARIS', '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 605, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(487, NULL, '2024-12-14', NULL, 'TUNIS', '10:00', '14:00', 0, NULL, 0, 0, 0, 1, 'vbn v', NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, 49808, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(487, NULL, '2024-12-14', NULL, 'TUNIS', '10:00', '14:00', 0, NULL, 0, 0, 0, 1, 'vbn v', NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, 49808, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 'eeeeeeeeeeeeeeee', NULL, NULL),
 (488, NULL, '2024-12-14', NULL, 'TUNIS', '10:00', '14:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (489, NULL, '2024-12-14', NULL, 'TUNIS', '10:00', '20:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (490, NULL, '2024-12-14', NULL, 'TUNIS', '10:00', '18:00', 0, NULL, 0, 0, 0, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 614, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1300,8 +2208,8 @@ INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `he
 (496, NULL, '2024-12-16', '17:23:44', 'TUNIS', '09:00', '18:00', 0, NULL, 0, 503, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, '20:28:54', 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 614, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (503, NULL, '2024-12-17', NULL, 'PARIS', '09:00', '15:00', 0, NULL, 0, 0, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (504, NULL, '2024-12-17', NULL, 'PARIS', '09:00', '15:00', 0, NULL, 0, 0, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 605, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(505, NULL, '2024-12-17', '17:10:44', 'TUNIS', '09:00', '18:00', 0, NULL, 0, 490, 1, 0, 'gfgh', NULL, 0, NULL, NULL, NULL, NULL, '17:10:59', 130, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, 49810, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(506, NULL, '2024-12-17', '17:10:50', 'TUNIS', '09:00', '18:00', 0, NULL, 0, 490, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, '17:11:17', 131, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(505, NULL, '2024-12-17', '17:10:44', 'TUNIS', '09:00', '18:00', 0, NULL, 0, 490, 1, 0, '', 'maladie', 0, NULL, NULL, NULL, NULL, '17:10:59', 130, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 609, 49810, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(506, NULL, '2024-12-17', '17:10:50', 'TUNIS', '09:00', '18:00', 0, NULL, 0, 490, 1, 0, NULL, NULL, 1, 1, 'Jawher BALTI', '2025-01-14 13:46:55', 'Accepté', '17:11:17', 131, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 611, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (507, NULL, '2024-12-17', '18:18:43', 'TUNIS', '09:00', '15:00', 0, NULL, 0, 558, 1, 0, NULL, NULL, 1, 1, 'Jawher BALTI', '2025-01-09 16:31:42', 'Refusé', '18:18:51', 198, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 613, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (508, NULL, '2024-12-17', NULL, 'TUNIS', '09:00', '18:00', 0, NULL, 0, 0, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 614, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (509, NULL, '2024-12-18', NULL, 'PARIS', '09:00', '15:00', 0, NULL, 0, 0, 1, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -2471,6 +3379,35 @@ INSERT INTO `wbcc_site` (`idSite`, `numeroSite`, `nomSite`, `etatSite`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `wbcc_solde_conge`
+--
+
+CREATE TABLE `wbcc_solde_conge` (
+  `idSoldeConge` int(11) NOT NULL,
+  `idUtilisateurF` int(11) DEFAULT NULL,
+  `annee` int(11) DEFAULT NULL,
+  `soldeCumule` int(11) DEFAULT NULL,
+  `soldeRestant` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `wbcc_solde_conge`
+--
+
+INSERT INTO `wbcc_solde_conge` (`idSoldeConge`, `idUtilisateurF`, `annee`, `soldeCumule`, `soldeRestant`) VALUES
+(1, 1, 2025, 10, 10),
+(2, 2, 2025, 6, 6),
+(3, 605, 2025, 6, 6),
+(4, 609, 2025, 20, 20),
+(5, 611, 2025, 6, 6),
+(6, 3, 2025, 6, 6),
+(7, 613, 2025, 6, 6),
+(8, 614, 2025, 6, 6),
+(9, 607, 2025, 6, 6);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `wbcc_sous_module`
 --
 
@@ -2588,6 +3525,31 @@ CREATE TABLE `wbcc_type_condition` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `wbcc_type_conge`
+--
+
+CREATE TABLE `wbcc_type_conge` (
+  `idTypeConge` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `quotas` int(11) DEFAULT NULL,
+  `politique` varchar(255) DEFAULT NULL,
+  `createDate` varchar(25) DEFAULT NULL,
+  `editDate` varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `wbcc_type_conge`
+--
+
+INSERT INTO `wbcc_type_conge` (`idTypeConge`, `type`, `quotas`, `politique`, `createDate`, `editDate`) VALUES
+(1, 'Congé maladie', 3, 'politique1aze', '2025-01-26 14:53:32', '2025-01-27 14:53:32'),
+(2, 'Congé payé', 22, 'politique23', '2025-01-23 14:53:32', '2025-01-31 12:19:18'),
+(3, 'Congé de paternité', 2, 'politique3', '2025-01-27 14:53:32', '2025-01-27 16:04:39'),
+(7, 'Congé de maternité', 30, 'politique4', '2025-01-27 14:53:32', '2025-01-27 14:53:32');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `wbcc_user_access`
 --
 
@@ -2663,12 +3625,12 @@ CREATE TABLE `wbcc_utilisateur` (
 --
 
 INSERT INTO `wbcc_utilisateur` (`idUtilisateur`, `login`, `mdp`, `email`, `matricule`, `role`, `etatUser`, `idContactF`, `firstConnection`, `isVerified`, `token`, `tokenPwd`, `valideCompte`, `jourTravail`, `horaireTravail`, `margeTravail`, `cpZoneRV`, `villeZoneRV`, `adresseZoneRV`, `typeZoneRV`, `codeDepartement`, `commentaireConfig`, `moyenTransport`, `idGuidWbccGroup`, `jourTravailB2C`, `horaireTravailB2C`, `margeTravailB2C`, `commentaireConfigB2C`, `nbOpPrevuB2C`, `nbVisitePrevuB2C`, `nbGardienB2C`, `cpZoneB2C`, `villeZoneB2C`, `typeZoneB2C`, `codeDepartementB2C`, `dateDesactivation`, `isExpert`, `isAdmin`, `isCommercial`, `isDirecteurCommercial`, `isGestionnaire`, `isFormateur`, `idSiteF`, `isInterne`, `typeUser`, `isServiceTechnique`, `isAccessAllOP`, `isPointageInterne`, `photo`, `typePointage`) VALUES
-(1, 'jawher@wbcc.fr', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'jawher@wbcc.fr', '', 25, 1, 1, 1, 11, NULL, NULL, 1, '', '', '', '', '', '', NULL, NULL, '', 'pied', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL),
+(1, 'jawher@wbcc.fr', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'jawher@wbcc.fr', '', 1, 1, 1, 1, 11, NULL, NULL, 1, '', '', '', '', '', '', NULL, NULL, '', 'pied', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL),
 (2, 'nabila.nabila@gmail.com', 'b5103fcf2b47213b852e9004c5ba76a03656c0d0', 'nabila.nabila@gmail.com', 'nabila', 1, 1, 2, 1, 1, NULL, NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;10:00-14:00', '', '', '', '', NULL, NULL, '', 'pied', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 0, 0, 1, 1, NULL, 0, 0, 1, NULL, NULL),
 (3, 'test.test@wbcc.fr', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'test.test@wbcc.fr', 'tt', 33, 1, 3, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;10:00-14:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 1, 0, 0, 0, 0, 1, 1, NULL, 0, 0, 1, NULL, NULL),
 (605, 'jeanmarc.d@wbcc.fr', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'jeanmarc.d@wbcc.fr', 'cc', 3, 1, 8460, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi;Dimanche', '09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;10:00-14:00;10:00-14:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 0, 0, 0, 1, 0, 1, 1, NULL, 0, 0, 1, NULL, NULL),
 (607, 'admin.admin@wbcc.fr', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'admin.admin@wbcc.fr', 'mm', 34, 1, 8462, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi;Dimanche', '09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;09:00-15:00;10:00-14:00;10:00-14:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, NULL, 0, NULL, NULL, NULL, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL),
-(609, 'hamzatestwbcc@yopmail.com', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'hamzatestwbcc@yopmail.com', 'cc', 3, 1, 1998, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi;Dimanche', '09:00-18:00;09:00-18:00;09:00-18:00;09:00-18:00;09:00-12:50;10:00-14:00;10:00-14:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 0, 0, 0, 1, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL),
+(609, 'hamzatestwbcc@yopmail.com', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'hamzatestwbcc@yopmail.com', 'cc', 3, 1, 1998, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi;Dimanche', '09:00-18:00;09:00-18:00;09:00-18:00;09:00-18:00;09:00-12:50;10:00-14:00;10:00-14:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 0, 0, 0, 1, 0, 1, 1, NULL, 0, 0, 1, NULL, NULL),
 (611, 'achref@wbcc.fr', '482f7629a2511d23ef4e958b13a5ba54bdba06f2', 'achref@wbcc.fr', 'cc', 3, 1, 8464, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi;Dimanche', '09:00-15:00;09:00-18:00;09:00-15:00;09:00-15:00;11:30-15:00;10:00-14:00;10:00-14:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 0, 0, 0, 1, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL),
 (613, 'tagueznabila8@gmail.com', 'b5103fcf2b47213b852e9004c5ba76a03656c0d0', 'tagueznabila8@gmail.com', 'nabila', 33, 1, 8465, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '09:00-15:00;09:00-15:00;09:00-22:00;09:00-15:00;09:00-15:00;10:00-20:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 1, 0, 0, 0, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL),
 (614, 'oueslatihend@wbcc.fr', 'b5103fcf2b47213b852e9004c5ba76a03656c0d0', 'oueslatihend@wbcc.fr', 'hend', 33, 1, 8466, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '09:00-18:00;09:00-18:00;09:00-18:00;09:00-18:00;09:00-18:00;10:00-18:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 1, 0, 0, 0, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL);
@@ -2754,11 +3716,27 @@ ALTER TABLE `wbcc_critere_subvention`
   ADD KEY `idCritereF` (`idCritereF`);
 
 --
+-- Index pour la table `wbcc_demandesconge`
+--
+ALTER TABLE `wbcc_demandesconge`
+  ADD PRIMARY KEY (`idDemande`),
+  ADD KEY `fk_idUtilisateur` (`idUtilisateurF`),
+  ADD KEY `fk_idTypeConge` (`idTypeCongeF`);
+
+--
 -- Index pour la table `wbcc_document`
 --
 ALTER TABLE `wbcc_document`
   ADD PRIMARY KEY (`idDocument`),
   ADD KEY `idUserF` (`idUtilisateurF`);
+
+--
+-- Index pour la table `wbcc_document_conge`
+--
+ALTER TABLE `wbcc_document_conge`
+  ADD PRIMARY KEY (`idDocumentConge`),
+  ADD KEY `idDocumentF` (`idDocumentF`),
+  ADD KEY `idDemandeF` (`idDemandeF`);
 
 --
 -- Index pour la table `wbcc_document_requis`
@@ -2793,6 +3771,13 @@ ALTER TABLE `wbcc_immeuble`
 --
 ALTER TABLE `wbcc_module`
   ADD PRIMARY KEY (`idModule`);
+
+--
+-- Index pour la table `wbcc_notification`
+--
+ALTER TABLE `wbcc_notification`
+  ADD PRIMARY KEY (`idNotification`),
+  ADD KEY `idUtilisateur` (`idUtilisateur`);
 
 --
 -- Index pour la table `wbcc_parametres`
@@ -2837,6 +3822,14 @@ ALTER TABLE `wbcc_site`
   ADD PRIMARY KEY (`idSite`);
 
 --
+-- Index pour la table `wbcc_solde_conge`
+--
+ALTER TABLE `wbcc_solde_conge`
+  ADD PRIMARY KEY (`idSoldeConge`),
+  ADD KEY `idUtilisateurF` (`idUtilisateurF`),
+  ADD KEY `idSoldeConge` (`idSoldeConge`,`idUtilisateurF`,`annee`,`soldeCumule`,`soldeRestant`);
+
+--
 -- Index pour la table `wbcc_sous_module`
 --
 ALTER TABLE `wbcc_sous_module`
@@ -2857,6 +3850,12 @@ ALTER TABLE `wbcc_subvention`
 ALTER TABLE `wbcc_type_condition`
   ADD PRIMARY KEY (`idTypeCondition`),
   ADD KEY `idAuteur` (`idAuteur`);
+
+--
+-- Index pour la table `wbcc_type_conge`
+--
+ALTER TABLE `wbcc_type_conge`
+  ADD PRIMARY KEY (`idTypeConge`);
 
 --
 -- Index pour la table `wbcc_user_access`
@@ -2932,10 +3931,22 @@ ALTER TABLE `wbcc_critere_subvention`
   MODIFY `idCritereSubvention` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT pour la table `wbcc_demandesconge`
+--
+ALTER TABLE `wbcc_demandesconge`
+  MODIFY `idDemande` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+
+--
 -- AUTO_INCREMENT pour la table `wbcc_document`
 --
 ALTER TABLE `wbcc_document`
-  MODIFY `idDocument` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49870;
+  MODIFY `idDocument` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49896;
+
+--
+-- AUTO_INCREMENT pour la table `wbcc_document_conge`
+--
+ALTER TABLE `wbcc_document_conge`
+  MODIFY `idDocumentConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT pour la table `wbcc_document_requis`
@@ -2953,7 +3964,7 @@ ALTER TABLE `wbcc_document_requis_subvention`
 -- AUTO_INCREMENT pour la table `wbcc_historique`
 --
 ALTER TABLE `wbcc_historique`
-  MODIFY `idHistorique` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=185;
+  MODIFY `idHistorique` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=339;
 
 --
 -- AUTO_INCREMENT pour la table `wbcc_immeuble`
@@ -2966,6 +3977,12 @@ ALTER TABLE `wbcc_immeuble`
 --
 ALTER TABLE `wbcc_module`
   MODIFY `idModule` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT pour la table `wbcc_notification`
+--
+ALTER TABLE `wbcc_notification`
+  MODIFY `idNotification` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=725;
 
 --
 -- AUTO_INCREMENT pour la table `wbcc_parametres`
@@ -3004,6 +4021,12 @@ ALTER TABLE `wbcc_site`
   MODIFY `idSite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT pour la table `wbcc_solde_conge`
+--
+ALTER TABLE `wbcc_solde_conge`
+  MODIFY `idSoldeConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT pour la table `wbcc_sous_module`
 --
 ALTER TABLE `wbcc_sous_module`
@@ -3020,6 +4043,12 @@ ALTER TABLE `wbcc_subvention`
 --
 ALTER TABLE `wbcc_type_condition`
   MODIFY `idTypeCondition` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `wbcc_type_conge`
+--
+ALTER TABLE `wbcc_type_conge`
+  MODIFY `idTypeConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT pour la table `wbcc_user_access`
@@ -3078,10 +4107,24 @@ ALTER TABLE `wbcc_critere_subvention`
   ADD CONSTRAINT `wbcc_critere_subvention_ibfk_2` FOREIGN KEY (`idSubventionF`) REFERENCES `wbcc_subvention` (`idSubvention`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Contraintes pour la table `wbcc_demandesconge`
+--
+ALTER TABLE `wbcc_demandesconge`
+  ADD CONSTRAINT `fk_idTypeConge` FOREIGN KEY (`idTypeCongeF`) REFERENCES `wbcc_type_conge` (`idTypeConge`),
+  ADD CONSTRAINT `fk_idUtilisateur` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
+
+--
 -- Contraintes pour la table `wbcc_document`
 --
 ALTER TABLE `wbcc_document`
   ADD CONSTRAINT `wbcc_document_ibfk_1` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
+
+--
+-- Contraintes pour la table `wbcc_document_conge`
+--
+ALTER TABLE `wbcc_document_conge`
+  ADD CONSTRAINT `wbcc_document_conge_ibfk_1` FOREIGN KEY (`idDocumentF`) REFERENCES `wbcc_document` (`idDocument`) ON DELETE CASCADE,
+  ADD CONSTRAINT `wbcc_document_conge_ibfk_2` FOREIGN KEY (`idDemandeF`) REFERENCES `wbcc_demandesconge` (`idDemande`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `wbcc_document_requis_subvention`
@@ -3097,6 +4140,12 @@ ALTER TABLE `wbcc_historique`
   ADD CONSTRAINT `wbcc_historique_ibfk_1` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Contraintes pour la table `wbcc_notification`
+--
+ALTER TABLE `wbcc_notification`
+  ADD CONSTRAINT `wbcc_notification_ibfk_1` FOREIGN KEY (`idUtilisateur`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
+
+--
 -- Contraintes pour la table `wbcc_projet`
 --
 ALTER TABLE `wbcc_projet`
@@ -3109,6 +4158,12 @@ ALTER TABLE `wbcc_projet`
 ALTER TABLE `wbcc_role_sous_module`
   ADD CONSTRAINT `wbcc_role_sous_module_ibfk_1` FOREIGN KEY (`idRoleF`) REFERENCES `wbcc_roles` (`idRole`),
   ADD CONSTRAINT `wbcc_role_sous_module_ibfk_2` FOREIGN KEY (`idSousModuleF`) REFERENCES `wbcc_sous_module` (`idSousModule`);
+
+--
+-- Contraintes pour la table `wbcc_solde_conge`
+--
+ALTER TABLE `wbcc_solde_conge`
+  ADD CONSTRAINT `wbcc_solde_conge_ibfk_1` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
 
 --
 -- Contraintes pour la table `wbcc_sous_module`
