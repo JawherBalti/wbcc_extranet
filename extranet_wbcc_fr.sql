@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : ven. 31 jan. 2025 à 16:38
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Feb 02, 2025 at 12:25 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `extranet_wbcc_fr`
+-- Database: `extranet_wbcc_fr`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_appartement`
+-- Table structure for table `wbcc_appartement`
 --
 
 CREATE TABLE `wbcc_appartement` (
@@ -85,10 +85,10 @@ CREATE TABLE `wbcc_appartement` (
   `idProprietaire` int(11) DEFAULT NULL,
   `idAgenceImmobiliere` int(11) DEFAULT NULL,
   `idCompanyCopro` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_appartement`
+-- Dumping data for table `wbcc_appartement`
 --
 
 INSERT INTO `wbcc_appartement` (`idApp`, `numeroApp`, `codeApp`, `etage`, `codePorte`, `escalier`, `batiment`, `lot`, `typeLot`, `libellePartieCommune`, `cote`, `digicode`, `interphone`, `idImmeubleF`, `etatApp`, `indexCompteur`, `numeroCompteur`, `photoCompteur`, `commentaire`, `nbPiece`, `surface`, `codeWBCC`, `codeImmeubleWBCC`, `proprietaire`, `occupant`, `typeOccupation`, `typeOccupant`, `compagnieAssuranceOccupant`, `courtierOccupant`, `refOccupant`, `numPoliceOccupant`, `dateEffetOccupant`, `dateEcheanceOccupant`, `copieOccupant`, `typeProprietaire`, `compagnieAssuranceProprietaire`, `numPoliceProprietaire`, `dateEffetProprietaire`, `dateEcheanceProprietaire`, `copieProprietaire`, `nomImmeubleSyndic`, `adresse`, `codePostal`, `ville`, `dateDebutContrat`, `dateFinContrat`, `createDate`, `editDate`, `departement`, `region`, `gererApp`, `guidOccupant`, `guidProprietaire`, `idOccupant`, `idProprietaire`, `idAgenceImmobiliere`, `idCompanyCopro`) VALUES
@@ -97,7 +97,7 @@ INSERT INTO `wbcc_appartement` (`idApp`, `numeroApp`, `codeApp`, `etage`, `codeP
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_appartement_contact`
+-- Table structure for table `wbcc_appartement_contact`
 --
 
 CREATE TABLE `wbcc_appartement_contact` (
@@ -107,12 +107,12 @@ CREATE TABLE `wbcc_appartement_contact` (
   `numeroAppartementF` varchar(100) DEFAULT NULL,
   `numeroContactF` varchar(100) DEFAULT NULL,
   `etatAppCon` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_company`
+-- Table structure for table `wbcc_company`
 --
 
 CREATE TABLE `wbcc_company` (
@@ -170,10 +170,10 @@ CREATE TABLE `wbcc_company` (
   `idArtisanDevisF` int(11) DEFAULT NULL,
   `registreCommerce` varchar(100) DEFAULT NULL,
   `logo` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_company`
+-- Dumping data for table `wbcc_company`
 --
 
 INSERT INTO `wbcc_company` (`idCompany`, `numeroCompany`, `numeroRCS`, `villeRCS`, `numeroSiret`, `codeSociete`, `dateCreationJuridique`, `etatConvention`, `dateEffetConvention`, `dateEcheanceConvention`, `categorieDO`, `sousCategorieDO`, `commentaire`, `industry`, `secteur`, `convention`, `kbs`, `email`, `nomCommercial`, `codeCommercial`, `idCommercial`, `region`, `enseigne`, `nomGestionnaire`, `codeGestionnaire`, `name`, `businessPostalCode`, `businessLine1`, `businessLine2`, `businessCity`, `businessCountryName`, `businessState`, `businessPhone`, `faxPhone`, `category`, `description`, `webaddress`, `siccode`, `revenue`, `numEmployees`, `referredBy`, `editDate`, `createDate`, `idTitreF`, `idServiceF`, `idGerantF`, `idGuidAA`, `idApporteurDO`, `idGuidAADO`, `formeJuridique`, `natureJuridique`, `idArtisanDevisF`, `registreCommerce`, `logo`) VALUES
@@ -182,7 +182,7 @@ INSERT INTO `wbcc_company` (`idCompany`, `numeroCompany`, `numeroRCS`, `villeRCS
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_condition`
+-- Table structure for table `wbcc_condition`
 --
 
 CREATE TABLE `wbcc_condition` (
@@ -196,12 +196,12 @@ CREATE TABLE `wbcc_condition` (
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `idAuteur` int(11) DEFAULT NULL,
   `etatCondition` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_condition_critere`
+-- Table structure for table `wbcc_condition_critere`
 --
 
 CREATE TABLE `wbcc_condition_critere` (
@@ -211,12 +211,12 @@ CREATE TABLE `wbcc_condition_critere` (
   `createDate` varchar(25) DEFAULT current_timestamp(),
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `idAuteur` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_contact`
+-- Table structure for table `wbcc_contact`
 --
 
 CREATE TABLE `wbcc_contact` (
@@ -271,10 +271,10 @@ CREATE TABLE `wbcc_contact` (
   `motifSuppressionCompte` text DEFAULT NULL,
   `isUser` int(11) NOT NULL DEFAULT 0,
   `isPersonnel` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_contact`
+-- Dumping data for table `wbcc_contact`
 --
 
 INSERT INTO `wbcc_contact` (`idContact`, `numeroContact`, `nomContact`, `prenomContact`, `fullName`, `telContact`, `emailContact`, `dateNaissance`, `adresseContact`, `codePostalContact`, `villeContact`, `statutContact`, `etatContact`, `civiliteContact`, `copieCNI`, `copieCA`, `copieTP`, `commentaireCNI`, `commentaireCA`, `commentaireTP`, `lienParente`, `age`, `fiscalementCharge`, `fileJustificatifOcc`, `idContactFContact`, `codeFiche`, `skype`, `whatsapp`, `commentaire`, `category`, `companyName`, `departement`, `mobilePhone`, `faxPhone`, `emailCollaboratif`, `businessLine2`, `businessState`, `businessCountryName`, `digicode1`, `codePorte`, `batiment`, `etage`, `source`, `referredBy`, `createDate`, `editDate`, `jobTitle`, `service`, `motifSuppressionCompte`, `isUser`, `isPersonnel`) VALUES
@@ -290,7 +290,7 @@ INSERT INTO `wbcc_contact` (`idContact`, `numeroContact`, `nomContact`, `prenomC
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_contact_company`
+-- Table structure for table `wbcc_contact_company`
 --
 
 CREATE TABLE `wbcc_contact_company` (
@@ -299,12 +299,12 @@ CREATE TABLE `wbcc_contact_company` (
   `idCompanyF` int(11) NOT NULL,
   `numeroContactF` varchar(255) DEFAULT NULL,
   `numeroCompanyF` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_critere`
+-- Table structure for table `wbcc_critere`
 --
 
 CREATE TABLE `wbcc_critere` (
@@ -316,10 +316,10 @@ CREATE TABLE `wbcc_critere` (
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `idAuteur` int(11) DEFAULT NULL,
   `etatCritere` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_critere`
+-- Dumping data for table `wbcc_critere`
 --
 
 INSERT INTO `wbcc_critere` (`idCritere`, `numeroCritere`, `valeurCritere`, `typeValeurCritere`, `createDate`, `editDate`, `idAuteur`, `etatCritere`) VALUES
@@ -328,7 +328,7 @@ INSERT INTO `wbcc_critere` (`idCritere`, `numeroCritere`, `valeurCritere`, `type
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_critere_subvention`
+-- Table structure for table `wbcc_critere_subvention`
 --
 
 CREATE TABLE `wbcc_critere_subvention` (
@@ -339,10 +339,10 @@ CREATE TABLE `wbcc_critere_subvention` (
   `createDate` varchar(25) DEFAULT current_timestamp(),
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `idAuteur` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_critere_subvention`
+-- Dumping data for table `wbcc_critere_subvention`
 --
 
 INSERT INTO `wbcc_critere_subvention` (`idCritereSubvention`, `numeroCritereSubvention`, `idCritereF`, `idSubventionF`, `createDate`, `editDate`, `idAuteur`) VALUES
@@ -351,7 +351,7 @@ INSERT INTO `wbcc_critere_subvention` (`idCritereSubvention`, `numeroCritereSubv
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_demandesconge`
+-- Table structure for table `wbcc_demandesconge`
 --
 
 CREATE TABLE `wbcc_demandesconge` (
@@ -371,73 +371,76 @@ CREATE TABLE `wbcc_demandesconge` (
   `dateCreation` datetime DEFAULT NULL,
   `dateModification` datetime DEFAULT NULL,
   `idTraiteF` int(11) DEFAULT NULL,
-  `jours` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `jours` int(11) DEFAULT NULL,
+  `joursCumule` int(11) DEFAULT 0,
+  `joursRestant` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_demandesconge`
+-- Dumping data for table `wbcc_demandesconge`
 --
 
-INSERT INTO `wbcc_demandesconge` (`idDemande`, `idUtilisateurF`, `idTypeCongeF`, `motif`, `dateDebutDeCongeSouhaite`, `dateFinDeCongeSouhaite`, `dateDebutDeCongePropose`, `dateFinDeCongePropose`, `dateDebutDeCongeReelle`, `dateFinDeCongeReelle`, `commentaire`, `statut`, `quotasRestant`, `dateCreation`, `dateModification`, `idTraiteF`, `jours`) VALUES
-(1, 609, 1, 'motif123123', '2024-08-08', '2024-08-16', NULL, NULL, '2024-08-07', '2024-08-10', '', '1', 0, NULL, '2025-01-23 17:51:16', 1, NULL),
-(2, 611, 1, 'bb', '2024-09-11', '2024-09-28', NULL, NULL, NULL, NULL, 'vvv', '0', 0, '2024-09-17 02:38:50', '2025-01-23 17:48:50', 2, NULL),
-(8, 609, 3, 'ttt', '2024-09-20', '2024-09-28', '2025-01-25', '2025-01-26', NULL, NULL, 'azer', '2', 0, '2024-09-17 02:38:50', '2025-01-24 14:14:38', 1, NULL),
-(9, 609, 3, 'sddssd', '2024-09-01', '2024-09-30', NULL, NULL, NULL, NULL, NULL, '1', 0, '2024-09-27 01:32:49', '2025-01-22 14:08:25', 609, NULL),
-(10, 611, 1, '', '2024-09-07', '2024-09-29', NULL, NULL, '2024-08-21', '2024-08-23', NULL, '1', 0, '2024-09-27 01:33:49', '2025-01-23 17:49:15', 1, NULL),
-(31, 609, 2, 'azeazeazeazeazeazeqqqqqqqqqqqqqqqqqqqqqqq', '2025-01-22', '2025-01-24', '2025-01-25', '2025-01-31', '2025-01-25', '2025-01-31', 'zzzzzzzzzzzzzzzzzzzzzz', '1', 0, '2025-01-21 15:57:20', '2025-01-23 10:57:24', 1, NULL),
-(32, 1, 3, 'pppppppppppppppppppppppp', '2025-01-24', '2025-01-26', NULL, NULL, NULL, NULL, NULL, '2', 0, '2025-01-21 15:57:56', '2025-01-23 17:49:46', 1, NULL),
-(33, 1, 2, 'qsdqsdqsdqs', '2025-01-23', '2025-01-28', NULL, NULL, '2025-01-23', '2025-01-28', NULL, '1', 0, '2025-01-21 15:58:56', '2025-01-23 17:35:27', 1, NULL),
-(34, 1, 3, '1231234564', '2025-01-30', '2025-01-31', '2025-01-25', '2025-01-26', NULL, NULL, 'commentaire', '0', 0, '2025-01-21 15:59:56', '2025-01-24 14:13:27', 1, NULL),
-(41, 609, 2, '111111111111111', '2025-01-24', '2025-01-25', NULL, NULL, NULL, NULL, NULL, '2', 0, '2025-01-23 11:07:14', '2025-01-23 11:16:36', 1, NULL),
-(42, 609, 1, 'azeazeaze', '2025-01-29', '2025-01-31', NULL, NULL, '2025-01-29', '2025-01-31', NULL, '1', 0, '2025-01-23 11:12:39', '2025-01-23 11:17:09', 1, NULL),
-(43, 609, 3, '4\r\n45\r\n4', '2025-01-25', '2025-01-27', '2025-01-30', '2025-01-31', '2025-01-22', '2025-01-31', 'azeaze', '1', 0, '2025-01-23 11:17:37', '2025-01-23 11:18:49', 1, NULL),
-(44, 609, 1, 'sdfgsdfg', '2025-01-23', '2025-01-26', '2025-01-24', '2025-01-26', NULL, NULL, '456', '3', 0, '2025-01-23 11:19:25', '2025-01-24 14:15:14', 1, NULL),
-(45, 609, 2, '123456789', '2025-01-24', '2025-01-28', NULL, NULL, '2025-01-24', '2025-01-28', NULL, '1', 0, '2025-01-23 14:53:51', '2025-01-23 17:49:39', 1, NULL),
-(46, 609, 2, '1111111111111111111111', '2025-01-24', '2025-01-27', '2025-01-24', '2025-01-25', '2025-01-24', '2025-01-25', 'azeaze', '1', 0, '2025-01-24 12:25:52', '2025-01-24 12:36:37', 1, NULL),
-(47, 609, 1, 'motif2', '2025-01-25', '2025-01-28', NULL, NULL, NULL, NULL, 'Raison rejet: azerazerazer', '2', 0, '2025-01-24 14:15:59', '2025-01-27 09:38:54', 1, NULL),
-(48, 609, 2, 'azeqsdwxc', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'commentaire proposition', '1', 0, '2025-01-27 10:19:32', '2025-01-27 10:31:39', 1, NULL),
-(49, 609, 1, 'qsdwxc', '2025-01-30', '2025-01-31', NULL, NULL, '2025-01-30', '2025-01-31', NULL, '1', 0, '2025-01-27 10:28:09', '2025-01-27 10:31:18', 1, NULL),
-(50, 609, 1, 'qqqqqqqqqqqq', '2025-01-30', '2025-01-31', '2025-01-29', '2025-01-30', NULL, NULL, '456', '2', 0, '2025-01-27 10:32:12', '2025-01-27 10:32:51', 1, NULL),
-(53, 609, 2, 'aaaaaaaaaaaaa', '2025-01-28', '2025-01-30', NULL, NULL, '2025-01-28', '2025-01-30', NULL, '1', 0, '2025-01-28 16:39:16', '2025-01-28 16:56:18', 1, 3),
-(54, 609, 2, 'qwwwwwwwwwwwwwwwwwwwwwwwww', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'aazeaze', '1', 0, '2025-01-28 16:55:33', '2025-01-28 17:05:44', 1, 2),
-(55, 609, 3, 'xxxxxxxxxxxxxxxxxxxxx', '2025-01-28', '2025-01-31', '2025-01-28', '2025-01-30', '2025-01-28', '2025-01-30', 'zzzzzzzzzzzzzzzzzzzzzz', '1', 0, '2025-01-28 16:55:53', '2025-01-28 17:03:53', 1, 3),
-(56, 609, 2, '', '2025-01-30', '2025-01-31', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', '', '1', 0, '2025-01-28 17:07:39', '2025-01-28 17:09:05', 1, 2),
-(57, 609, 2, 'aaaaaaaaaaaaa', '2025-01-28', '2025-01-31', NULL, NULL, '2025-01-28', '2025-01-31', NULL, '1', 0, '2025-01-28 17:15:28', '2025-01-28 17:15:45', 1, 4),
-(58, 609, 2, 'aaaaaaaaaaaaaa', '2025-01-28', '2025-01-31', '2025-01-28', '2025-01-30', '2025-01-28', '2025-01-30', 'aaaaaaaaaaaaa', '1', 0, '2025-01-28 17:16:05', '2025-01-28 17:16:51', 1, 3),
-(59, 609, 2, 'ssssssssssssssssss', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'sssssssss', '1', 0, '2025-01-28 17:17:11', '2025-01-28 17:17:51', 1, 2),
-(60, 609, 3, 'qqqqqqqqqqqqqq', '2025-01-30', '2025-01-31', '2025-02-10', '2025-02-11', '2025-02-10', '2025-02-11', '', '3', 0, '2025-01-29 14:15:06', '2025-01-30 15:37:31', 1, 2),
-(61, 609, 3, 'qqqqqqqqqqqqqq', '2025-01-29', '2025-01-31', '2025-02-19', '2025-02-20', '2025-02-19', '2025-02-20', '', '1', 0, '2025-01-29 14:16:22', '2025-01-30 13:37:34', 1, 2),
-(62, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-06', '2025-02-17', NULL, NULL, '2025-02-06', '2025-02-17', NULL, '1', 0, '2025-01-29 17:27:37', '2025-01-30 16:45:22', 1, 8),
-(63, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-06', '2025-02-17', NULL, NULL, '2025-02-06', '2025-02-17', NULL, '1', 0, '2025-01-29 17:27:37', '2025-01-30 15:35:08', 1, 8),
-(64, 609, 1, 'aaaaaaaaaaaaaaaa', '2025-02-07', '2025-02-11', NULL, NULL, '2025-02-07', '2025-02-11', NULL, '3', 0, '2025-01-30 10:06:26', '2025-01-30 16:57:26', 1, 3),
-(65, 609, 1, 'aaaaaaaaaaaaaaaa', '2025-02-07', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '3', 0, '2025-01-30 10:06:26', '2025-01-30 15:38:15', NULL, 3),
-(66, 609, 2, 'aaaaaaaa', '2025-02-07', '2025-02-13', NULL, NULL, '2025-02-07', '2025-02-13', NULL, '1', 0, '2025-01-30 16:58:10', '2025-01-30 16:58:20', 1, 5),
-(67, 609, 2, '', '2025-02-07', '2025-02-13', NULL, NULL, '2025-02-07', '2025-02-13', NULL, '1', 0, '2025-01-30 16:59:55', '2025-01-30 17:00:02', 1, 5),
-(68, 609, 2, 'aaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '3', 0, '2025-01-31 08:18:25', '2025-01-31 09:44:54', 1, 2),
-(69, 609, 2, 'aaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 09:48:59', '2025-01-31 09:49:26', 1, 3),
-(70, 609, 2, 'aaaaaaaaaaaaaaa', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 09:58:52', '2025-01-31 09:59:11', 1, 3),
-(71, 609, 2, 'aaaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:01:42', '2025-01-31 10:01:52', 1, 2),
-(72, 609, 2, 'aaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:02:19', '2025-01-31 10:02:32', 1, 2),
-(73, 609, 2, 'aaaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:04:37', '2025-01-31 10:04:51', 1, 2),
-(74, 609, 2, 'qqqqqqqqqqqqqqqqqqqqqq', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:08:08', '2025-01-31 10:08:26', 1, 2),
-(75, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-20', '2025-02-21', NULL, NULL, '2025-02-20', '2025-02-21', NULL, '1', 0, '2025-01-31 10:10:24', '2025-01-31 10:10:34', 1, 2),
-(76, 609, 2, 'aaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:11:23', '2025-01-31 10:11:39', 1, 2),
-(77, 609, 2, 'fffffffffffffffffff', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 10:14:28', '2025-01-31 10:14:43', 1, 3),
-(78, 1, 2, 'qqqqqqqqqqqqqq', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 10:23:28', '2025-01-31 10:25:44', 609, 3),
-(79, 1, 2, 'ccccccccccccccc', '2025-02-10', '2025-02-12', '2025-02-10', '2025-02-11', NULL, NULL, 'xxxxxxxxxxxxxxx', '0', 0, '2025-01-31 10:28:25', '2025-01-31 10:28:40', 609, 3),
-(80, 609, 2, 'wwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 10:45:21', '2025-01-31 10:45:21', NULL, 2),
-(81, 609, 2, 'wwwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-12', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 10:46:27', '2025-01-31 10:46:27', NULL, 3),
-(82, 609, 2, 'wwwwwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 10:47:17', '2025-01-31 10:47:17', NULL, 2),
-(83, 609, 2, 'wwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 11:13:33', '2025-01-31 11:13:33', NULL, 2),
-(84, 609, 2, 'wwwwwwwwwwwwwwwwwffffffffffwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 11:13:53', '2025-01-31 11:35:41', NULL, 2),
-(85, 609, 2, 'wwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:25:30', '2025-01-31 12:25:30', NULL, 2),
-(86, 609, 2, 'ccccccccccccccccccccc', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:29:37', '2025-01-31 12:29:37', NULL, 2),
-(87, 609, 2, 'xxxxxxxxxxxxxxxxaaaa', '2025-02-10', '2025-03-05', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:34:58', '2025-01-31 14:33:59', NULL, 18);
+INSERT INTO `wbcc_demandesconge` (`idDemande`, `idUtilisateurF`, `idTypeCongeF`, `motif`, `dateDebutDeCongeSouhaite`, `dateFinDeCongeSouhaite`, `dateDebutDeCongePropose`, `dateFinDeCongePropose`, `dateDebutDeCongeReelle`, `dateFinDeCongeReelle`, `commentaire`, `statut`, `quotasRestant`, `dateCreation`, `dateModification`, `idTraiteF`, `jours`, `joursCumule`, `joursRestant`) VALUES
+(1, 609, 1, 'motif123123', '2024-08-08', '2024-08-16', NULL, NULL, '2024-08-07', '2024-08-10', '', '1', 0, NULL, '2025-01-23 17:51:16', 1, NULL, 0, 0),
+(2, 611, 1, 'bb', '2024-09-11', '2024-09-28', NULL, NULL, NULL, NULL, 'vvv', '0', 0, '2024-09-17 02:38:50', '2025-01-23 17:48:50', 2, NULL, 0, 0),
+(8, 609, 3, 'ttt', '2024-09-20', '2024-09-28', '2025-01-25', '2025-01-26', NULL, NULL, 'azer', '2', 0, '2024-09-17 02:38:50', '2025-01-24 14:14:38', 1, NULL, 0, 0),
+(9, 609, 3, 'sddssd', '2024-09-01', '2024-09-30', NULL, NULL, NULL, NULL, NULL, '1', 0, '2024-09-27 01:32:49', '2025-01-22 14:08:25', 609, NULL, 0, 0),
+(10, 611, 1, '', '2024-09-07', '2024-09-29', NULL, NULL, '2024-08-21', '2024-08-23', NULL, '1', 0, '2024-09-27 01:33:49', '2025-01-23 17:49:15', 1, NULL, 0, 0),
+(31, 609, 2, 'azeazeazeazeazeazeqqqqqqqqqqqqqqqqqqqqqqq', '2025-01-22', '2025-01-24', '2025-01-25', '2025-01-31', '2025-01-25', '2025-01-31', 'zzzzzzzzzzzzzzzzzzzzzz', '1', 0, '2025-01-21 15:57:20', '2025-01-23 10:57:24', 1, NULL, 0, 0),
+(32, 1, 3, 'pppppppppppppppppppppppp', '2025-01-24', '2025-01-26', NULL, NULL, NULL, NULL, NULL, '2', 0, '2025-01-21 15:57:56', '2025-01-23 17:49:46', 1, NULL, 0, 0),
+(33, 1, 2, 'qsdqsdqsdqs', '2025-01-23', '2025-01-28', NULL, NULL, '2025-01-23', '2025-01-28', NULL, '1', 0, '2025-01-21 15:58:56', '2025-01-23 17:35:27', 1, NULL, 0, 0),
+(34, 1, 3, '1231234564', '2025-01-30', '2025-01-31', '2025-01-25', '2025-01-26', NULL, NULL, 'commentaire', '0', 0, '2025-01-21 15:59:56', '2025-01-24 14:13:27', 1, NULL, 0, 0),
+(41, 609, 2, '111111111111111', '2025-01-24', '2025-01-25', NULL, NULL, NULL, NULL, NULL, '2', 0, '2025-01-23 11:07:14', '2025-01-23 11:16:36', 1, NULL, 0, 0),
+(42, 609, 1, 'azeazeaze', '2025-01-29', '2025-01-31', NULL, NULL, '2025-01-29', '2025-01-31', NULL, '1', 0, '2025-01-23 11:12:39', '2025-01-23 11:17:09', 1, NULL, 0, 0),
+(43, 609, 3, '4\r\n45\r\n4', '2025-01-25', '2025-01-27', '2025-01-30', '2025-01-31', '2025-01-22', '2025-01-31', 'azeaze', '1', 0, '2025-01-23 11:17:37', '2025-01-23 11:18:49', 1, NULL, 0, 0),
+(44, 609, 1, 'sdfgsdfg', '2025-01-23', '2025-01-26', '2025-01-24', '2025-01-26', NULL, NULL, '456', '3', 0, '2025-01-23 11:19:25', '2025-01-24 14:15:14', 1, NULL, 0, 0),
+(45, 609, 2, '123456789', '2025-01-24', '2025-01-28', NULL, NULL, '2025-01-24', '2025-01-28', NULL, '1', 0, '2025-01-23 14:53:51', '2025-01-23 17:49:39', 1, NULL, 0, 0),
+(46, 609, 2, '1111111111111111111111', '2025-01-24', '2025-01-27', '2025-01-24', '2025-01-25', '2025-01-24', '2025-01-25', 'azeaze', '1', 0, '2025-01-24 12:25:52', '2025-01-24 12:36:37', 1, NULL, 0, 0),
+(47, 609, 1, 'motif2', '2025-01-25', '2025-01-28', NULL, NULL, NULL, NULL, 'Raison rejet: azerazerazer', '2', 0, '2025-01-24 14:15:59', '2025-01-27 09:38:54', 1, NULL, 0, 0),
+(48, 609, 2, 'azeqsdwxc', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'commentaire proposition', '1', 0, '2025-01-27 10:19:32', '2025-01-27 10:31:39', 1, NULL, 0, 0),
+(49, 609, 1, 'qsdwxc', '2025-01-30', '2025-01-31', NULL, NULL, '2025-01-30', '2025-01-31', NULL, '1', 0, '2025-01-27 10:28:09', '2025-01-27 10:31:18', 1, NULL, 0, 0),
+(50, 609, 1, 'qqqqqqqqqqqq', '2025-01-30', '2025-01-31', '2025-01-29', '2025-01-30', NULL, NULL, '456', '2', 0, '2025-01-27 10:32:12', '2025-01-27 10:32:51', 1, NULL, 0, 0),
+(53, 609, 2, 'aaaaaaaaaaaaa', '2025-01-28', '2025-01-30', NULL, NULL, '2025-01-28', '2025-01-30', NULL, '1', 0, '2025-01-28 16:39:16', '2025-01-28 16:56:18', 1, 3, 0, 0),
+(54, 609, 2, 'qwwwwwwwwwwwwwwwwwwwwwwwww', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'aazeaze', '1', 0, '2025-01-28 16:55:33', '2025-01-28 17:05:44', 1, 2, 0, 0),
+(55, 609, 3, 'xxxxxxxxxxxxxxxxxxxxx', '2025-01-28', '2025-01-31', '2025-01-28', '2025-01-30', '2025-01-28', '2025-01-30', 'zzzzzzzzzzzzzzzzzzzzzz', '1', 0, '2025-01-28 16:55:53', '2025-01-28 17:03:53', 1, 3, 0, 0),
+(56, 609, 2, '', '2025-01-30', '2025-01-31', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', '', '1', 0, '2025-01-28 17:07:39', '2025-01-28 17:09:05', 1, 2, 0, 0),
+(57, 609, 2, 'aaaaaaaaaaaaa', '2025-01-28', '2025-01-31', NULL, NULL, '2025-01-28', '2025-01-31', NULL, '1', 0, '2025-01-28 17:15:28', '2025-01-28 17:15:45', 1, 4, 0, 0),
+(58, 609, 2, 'aaaaaaaaaaaaaa', '2025-01-28', '2025-01-31', '2025-01-28', '2025-01-30', '2025-01-28', '2025-01-30', 'aaaaaaaaaaaaa', '1', 0, '2025-01-28 17:16:05', '2025-01-28 17:16:51', 1, 3, 0, 0),
+(59, 609, 2, 'ssssssssssssssssss', '2025-01-28', '2025-01-29', '2025-01-29', '2025-01-30', '2025-01-29', '2025-01-30', 'sssssssss', '1', 0, '2025-01-28 17:17:11', '2025-01-28 17:17:51', 1, 2, 0, 0),
+(60, 609, 3, 'qqqqqqqqqqqqqq', '2025-01-30', '2025-01-31', '2025-02-10', '2025-02-11', '2025-02-10', '2025-02-11', '', '3', 0, '2025-01-29 14:15:06', '2025-01-30 15:37:31', 1, 2, 0, 0),
+(61, 609, 3, 'qqqqqqqqqqqqqq', '2025-01-29', '2025-01-31', '2025-02-19', '2025-02-20', '2025-02-19', '2025-02-20', '', '1', 0, '2025-01-29 14:16:22', '2025-01-30 13:37:34', 1, 2, 0, 0),
+(62, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-06', '2025-02-17', NULL, NULL, '2025-02-06', '2025-02-17', NULL, '1', 0, '2025-01-29 17:27:37', '2025-01-30 16:45:22', 1, 8, 0, 0),
+(63, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-06', '2025-02-17', NULL, NULL, '2025-02-06', '2025-02-17', NULL, '1', 0, '2025-01-29 17:27:37', '2025-01-30 15:35:08', 1, 8, 0, 0),
+(64, 609, 1, 'aaaaaaaaaaaaaaaa', '2025-02-07', '2025-02-11', NULL, NULL, '2025-02-07', '2025-02-11', NULL, '3', 0, '2025-01-30 10:06:26', '2025-01-30 16:57:26', 1, 3, 0, 0),
+(65, 609, 1, 'aaaaaaaaaaaaaaaa', '2025-02-07', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '3', 0, '2025-01-30 10:06:26', '2025-01-30 15:38:15', NULL, 3, 0, 0),
+(66, 609, 2, 'aaaaaaaa', '2025-02-07', '2025-02-13', NULL, NULL, '2025-02-07', '2025-02-13', NULL, '1', 0, '2025-01-30 16:58:10', '2025-01-30 16:58:20', 1, 5, 0, 0),
+(67, 609, 2, '', '2025-02-07', '2025-02-13', NULL, NULL, '2025-02-07', '2025-02-13', NULL, '1', 0, '2025-01-30 16:59:55', '2025-01-30 17:00:02', 1, 5, 0, 0),
+(68, 609, 2, 'aaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '3', 0, '2025-01-31 08:18:25', '2025-01-31 09:44:54', 1, 2, 0, 0),
+(69, 609, 2, 'aaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 09:48:59', '2025-01-31 09:49:26', 1, 3, 0, 0),
+(70, 609, 2, 'aaaaaaaaaaaaaaa', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 09:58:52', '2025-01-31 09:59:11', 1, 3, 0, 0),
+(71, 609, 2, 'aaaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:01:42', '2025-01-31 10:01:52', 1, 2, 0, 0),
+(72, 609, 2, 'aaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:02:19', '2025-01-31 10:02:32', 1, 2, 0, 0),
+(73, 609, 2, 'aaaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:04:37', '2025-01-31 10:04:51', 1, 2, 0, 0),
+(74, 609, 2, 'qqqqqqqqqqqqqqqqqqqqqq', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:08:08', '2025-01-31 10:08:26', 1, 2, 0, 0),
+(75, 609, 2, 'aaaaaaaaaaaaaaaaaaaaaaaa', '2025-02-20', '2025-02-21', NULL, NULL, '2025-02-20', '2025-02-21', NULL, '1', 0, '2025-01-31 10:10:24', '2025-01-31 10:10:34', 1, 2, 0, 0),
+(76, 609, 2, 'aaaaaaaaaaaaaaaaaaa', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '1', 0, '2025-01-31 10:11:23', '2025-01-31 10:11:39', 1, 2, 0, 0),
+(77, 609, 2, 'fffffffffffffffffff', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 10:14:28', '2025-01-31 10:14:43', 1, 3, 0, 0),
+(78, 1, 2, 'qqqqqqqqqqqqqq', '2025-02-10', '2025-02-12', NULL, NULL, '2025-02-10', '2025-02-12', NULL, '1', 0, '2025-01-31 10:23:28', '2025-01-31 10:25:44', 609, 3, 0, 0),
+(79, 1, 2, 'ccccccccccccccc', '2025-02-10', '2025-02-12', '2025-02-10', '2025-02-11', NULL, NULL, 'xxxxxxxxxxxxxxx', '0', 0, '2025-01-31 10:28:25', '2025-01-31 10:28:40', 609, 3, 0, 0),
+(80, 609, 2, 'wwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, '2025-02-10', '2025-02-11', NULL, '3', 0, '2025-01-31 10:45:21', '2025-02-02 11:24:21', 1, 2, 2, 0),
+(81, 609, 2, 'wwwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-12', '2025-02-11', '2025-02-13', '2025-02-11', '2025-02-13', '', '1', 0, '2025-01-31 10:46:27', '2025-02-02 12:05:49', 1, 3, 3, 0),
+(82, 609, 2, 'wwwwwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', '2025-02-12', '2025-02-13', '2025-02-12', '2025-02-13', '', '3', 0, '2025-01-31 10:47:17', '2025-02-02 12:09:03', 1, 2, 1, 1),
+(83, 609, 2, 'wwwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 11:13:33', '2025-01-31 11:13:33', NULL, 2, 0, 0),
+(84, 609, 2, 'wwwwwwwwwwwwwwwwwffffffffffwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 11:13:53', '2025-01-31 11:35:41', NULL, 2, 0, 0),
+(85, 609, 2, 'wwwwwwwwwwwwwwww', '2025-02-10', '2025-02-11', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-01-31 12:25:30', '2025-01-31 12:25:30', NULL, 2, 0, 0),
+(86, 609, 2, 'ccccccccccccccccccccc', '2025-02-10', '2025-02-11', '2025-02-10', '2025-02-10', '2025-02-10', '2025-02-10', '', '1', 0, '2025-01-31 12:29:37', '2025-02-02 12:21:21', 1, 1, 1, 0),
+(87, 609, 2, 'xxxxxxxxxxxxxxxxaaaa', '2025-02-10', '2025-03-05', NULL, NULL, '2025-02-10', '2025-03-05', NULL, '3', 0, '2025-01-31 12:34:58', '2025-02-02 11:26:28', 1, 18, 10, 8),
+(88, 609, 2, 'wwwwwwwwwww', '2025-02-10', '2025-02-10', NULL, NULL, NULL, NULL, NULL, '0', 0, '2025-02-02 11:40:18', '2025-02-02 11:40:18', NULL, 1, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_document`
+-- Table structure for table `wbcc_document`
 --
 
 CREATE TABLE `wbcc_document` (
@@ -460,10 +463,10 @@ CREATE TABLE `wbcc_document` (
   `auteur` varchar(255) DEFAULT NULL,
   `publie` int(11) NOT NULL DEFAULT 1,
   `isDeleted` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_document`
+-- Dumping data for table `wbcc_document`
 --
 
 INSERT INTO `wbcc_document` (`idDocument`, `numeroDocument`, `nomDocument`, `urlDocument`, `commentaire`, `createDate`, `editDate`, `etatDocument`, `idUtilisateurF`, `guidNote`, `guidActivity`, `guidHistory`, `typeFichier`, `size`, `guidUser`, `source`, `auteur`, `publie`, `isDeleted`) VALUES
@@ -516,17 +519,17 @@ INSERT INTO `wbcc_document` (`idDocument`, `numeroDocument`, `nomDocument`, `url
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_document_conge`
+-- Table structure for table `wbcc_document_conge`
 --
 
 CREATE TABLE `wbcc_document_conge` (
   `idDocumentConge` int(11) NOT NULL,
   `idDocumentF` int(11) NOT NULL,
   `idDemandeF` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `wbcc_document_conge`
+-- Dumping data for table `wbcc_document_conge`
 --
 
 INSERT INTO `wbcc_document_conge` (`idDocumentConge`, `idDocumentF`, `idDemandeF`) VALUES
@@ -547,7 +550,7 @@ INSERT INTO `wbcc_document_conge` (`idDocumentConge`, `idDocumentF`, `idDemandeF
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_document_pointage`
+-- Table structure for table `wbcc_document_pointage`
 --
 
 CREATE TABLE `wbcc_document_pointage` (
@@ -558,10 +561,10 @@ CREATE TABLE `wbcc_document_pointage` (
   `isArrive` tinyint(1) DEFAULT NULL,
   `associationDate` timestamp NOT NULL DEFAULT current_timestamp(),
   `isAbsent` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `wbcc_document_pointage`
+-- Dumping data for table `wbcc_document_pointage`
 --
 
 INSERT INTO `wbcc_document_pointage` (`id`, `idDocumentF`, `idPointageF`, `nomDocument`, `isArrive`, `associationDate`, `isAbsent`) VALUES
@@ -779,7 +782,7 @@ INSERT INTO `wbcc_document_pointage` (`id`, `idDocumentF`, `idPointageF`, `nomDo
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_document_requis`
+-- Table structure for table `wbcc_document_requis`
 --
 
 CREATE TABLE `wbcc_document_requis` (
@@ -789,12 +792,12 @@ CREATE TABLE `wbcc_document_requis` (
   `createDate` varchar(25) DEFAULT current_timestamp(),
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `idAuteur` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_document_requis_subvention`
+-- Table structure for table `wbcc_document_requis_subvention`
 --
 
 CREATE TABLE `wbcc_document_requis_subvention` (
@@ -804,12 +807,12 @@ CREATE TABLE `wbcc_document_requis_subvention` (
   `etatDocumentRequisSubvention` int(11) DEFAULT NULL COMMENT 'Obligatoire ou Facultatif',
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `createDate` varchar(25) DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_encaissement`
+-- Table structure for table `wbcc_encaissement`
 --
 
 CREATE TABLE `wbcc_encaissement` (
@@ -839,10 +842,10 @@ CREATE TABLE `wbcc_encaissement` (
   `mntIrreguraliteDiffere` varchar(100) DEFAULT NULL,
   `idCompteBancaireF` int(5) DEFAULT NULL,
   `numeroCompteBancaire` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_encaissement`
+-- Dumping data for table `wbcc_encaissement`
 --
 
 INSERT INTO `wbcc_encaissement` (`idEncaissement`, `numeroEncaissement`, `dateEncaissement`, `dateEnreg`, `typeEncaissement`, `montantEncaissement`, `tireur`, `donneurOrdre`, `artisan`, `idOPEncaissement`, `nameOPEncaissement`, `typeReglement`, `montantAEncaisser`, `idAuteurEncaissement`, `auteurEncaissement`, `modeReglement`, `commentaireEncaissement`, `journalFile`, `idDevisF`, `idChequeF`, `irregulariteImmediat`, `mntIrreguraliteImmediat`, `irregulariteDiffere`, `mntIrreguraliteDiffere`, `idCompteBancaireF`, `numeroCompteBancaire`) VALUES
@@ -856,7 +859,7 @@ INSERT INTO `wbcc_encaissement` (`idEncaissement`, `numeroEncaissement`, `dateEn
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_historique`
+-- Table structure for table `wbcc_historique`
 --
 
 CREATE TABLE `wbcc_historique` (
@@ -867,10 +870,10 @@ CREATE TABLE `wbcc_historique` (
   `heureAction` datetime DEFAULT NULL,
   `idUtilisateurF` int(11) NOT NULL,
   `idOpportunityF` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_historique`
+-- Dumping data for table `wbcc_historique`
 --
 
 INSERT INTO `wbcc_historique` (`idHistorique`, `action`, `nomComplet`, `dateAction`, `heureAction`, `idUtilisateurF`, `idOpportunityF`) VALUES
@@ -1211,12 +1214,13 @@ INSERT INTO `wbcc_historique` (`idHistorique`, `action`, `nomComplet`, `dateActi
 (335, 'Déconnexion', 'Jawher BALTI', '2025-01-31 09:29:58', NULL, 1, NULL),
 (336, 'Connexion', 'Jawher BALTI', '2025-01-31 09:30:03', NULL, 1, NULL),
 (337, 'Déconnexion', 'Hamza DRIDI', '2025-01-31 09:30:07', NULL, 609, NULL),
-(338, 'Connexion', 'Hamza DRIDI', '2025-01-31 09:30:13', NULL, 609, NULL);
+(338, 'Connexion', 'Hamza DRIDI', '2025-01-31 09:30:13', NULL, 609, NULL),
+(339, 'Connexion', 'Jawher BALTI', '2025-02-02 09:16:19', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_immeuble`
+-- Table structure for table `wbcc_immeuble`
 --
 
 CREATE TABLE `wbcc_immeuble` (
@@ -1270,10 +1274,10 @@ CREATE TABLE `wbcc_immeuble` (
   `idGardien` int(11) DEFAULT NULL,
   `idCourtier` int(11) DEFAULT NULL,
   `idCompagnieAssurance` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_immeuble`
+-- Dumping data for table `wbcc_immeuble`
 --
 
 INSERT INTO `wbcc_immeuble` (`idImmeuble`, `numeroImmeuble`, `codeImmeuble`, `typeImmeuble`, `adresse`, `codePostal`, `ville`, `nomDO`, `idDO`, `guidDO`, `idProprietaire`, `nomProprietaire`, `guidProprietaire`, `typeProprietaire`, `createDate`, `idUserF`, `editDate`, `photoImmeuble`, `etatImmeuble`, `codeWBCC`, `codeImmeubleDO`, `nomImmeubleSyndic`, `idSyndic`, `guidSyndic`, `adresse2`, `departement`, `digicode1`, `digicode2`, `region`, `pays`, `nomInterphone`, `codeDO`, `refCourtier`, `numPolice`, `dateEffetContrat`, `dateEcheanceContrat`, `copieContrat`, `codeFiche`, `commentaire`, `nbreBatiment`, `libelleBatiment`, `nomPCS`, `nomGardien`, `nomCourtier`, `nomCompagnieAssurance`, `idChefSecteur`, `nomChefSecteur`, `idGardien`, `idCourtier`, `idCompagnieAssurance`) VALUES
@@ -1283,7 +1287,7 @@ INSERT INTO `wbcc_immeuble` (`idImmeuble`, `numeroImmeuble`, `codeImmeuble`, `ty
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_module`
+-- Table structure for table `wbcc_module`
 --
 
 CREATE TABLE `wbcc_module` (
@@ -1291,10 +1295,10 @@ CREATE TABLE `wbcc_module` (
   `nomModule` varchar(255) DEFAULT NULL,
   `lieu` varchar(255) DEFAULT NULL,
   `etatModule` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_module`
+-- Dumping data for table `wbcc_module`
 --
 
 INSERT INTO `wbcc_module` (`idModule`, `nomModule`, `lieu`, `etatModule`) VALUES
@@ -1312,7 +1316,7 @@ INSERT INTO `wbcc_module` (`idModule`, `nomModule`, `lieu`, `etatModule`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_notification`
+-- Table structure for table `wbcc_notification`
 --
 
 CREATE TABLE `wbcc_notification` (
@@ -1323,10 +1327,10 @@ CREATE TABLE `wbcc_notification` (
   `message` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `is_read` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `wbcc_notification`
+-- Dumping data for table `wbcc_notification`
 --
 
 INSERT INTO `wbcc_notification` (`idNotification`, `idUtilisateur`, `idPointage`, `title`, `message`, `created_at`, `is_read`) VALUES
@@ -1916,7 +1920,7 @@ INSERT INTO `wbcc_notification` (`idNotification`, `idUtilisateur`, `idPointage`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_parametres`
+-- Table structure for table `wbcc_parametres`
 --
 
 CREATE TABLE `wbcc_parametres` (
@@ -1933,10 +1937,10 @@ CREATE TABLE `wbcc_parametres` (
   `numeroFactureProvisoire` int(11) DEFAULT NULL,
   `numeroClient` int(11) DEFAULT NULL,
   `numeroLotOP` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_parametres`
+-- Dumping data for table `wbcc_parametres`
 --
 
 INSERT INTO `wbcc_parametres` (`id`, `numeroDemandeCloture`, `numeroDemandeValidation`, `numeroOpProvisoire`, `numeroBordereau`, `numeroOP`, `numeroOPamo`, `numeroBordereauCheque`, `numeroJournal`, `numeroFacture`, `numeroFactureProvisoire`, `numeroClient`, `numeroLotOP`) VALUES
@@ -1945,7 +1949,7 @@ INSERT INTO `wbcc_parametres` (`id`, `numeroDemandeCloture`, `numeroDemandeValid
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_pointage`
+-- Table structure for table `wbcc_pointage`
 --
 
 CREATE TABLE `wbcc_pointage` (
@@ -1994,10 +1998,10 @@ CREATE TABLE `wbcc_pointage` (
   `motifAbsent` text DEFAULT NULL,
   `typeTraiteAbsent` enum('Définitif','Temporaire') DEFAULT NULL,
   `raisonRejetAbsence` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_pointage`
+-- Dumping data for table `wbcc_pointage`
 --
 
 INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `heureDebutPointage`, `adressePointage`, `heureDebutJour`, `heureFinJour`, `marge`, `adresseProgramme`, `anomalieDebutJour`, `nbMinuteRetard`, `retard`, `absent`, `motifRetard`, `motifRetardDepart`, `traite`, `idTraiteF`, `auteurTraite`, `dateTraite`, `resultatTraite`, `heureFinPointage`, `nbMinuteDepart`, `traiteDepart`, `idTraiteDepartF`, `auteurTraiteDepart`, `dateTraiteDepart`, `resultatTraiteDepart`, `adresseFinPointage`, `adresseProgrammeFin`, `anomalieFinJour`, `idUserF`, `idDocumentF`, `auteur`, `typeTraite`, `raisonRejet`, `typeTraiteDepart`, `raisonRejetDepart`, `traiteAbsent`, `idTraiteAbsentF`, `auteurTraiteAbsent`, `dateTraiteAbsent`, `resultatTraiteAbsent`, `motifAbsent`, `typeTraiteAbsent`, `raisonRejetAbsence`) VALUES
@@ -2234,7 +2238,7 @@ INSERT INTO `wbcc_pointage` (`idPointage`, `numeroPointage`, `datePointage`, `he
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_projet`
+-- Table structure for table `wbcc_projet`
 --
 
 CREATE TABLE `wbcc_projet` (
@@ -2244,10 +2248,10 @@ CREATE TABLE `wbcc_projet` (
   `createDate` varchar(25) DEFAULT NULL,
   `idImmeuble` int(11) DEFAULT NULL,
   `idApp` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_projet`
+-- Dumping data for table `wbcc_projet`
 --
 
 INSERT INTO `wbcc_projet` (`idProjet`, `nomProjet`, `descriptionProjet`, `createDate`, `idImmeuble`, `idApp`) VALUES
@@ -2262,7 +2266,7 @@ INSERT INTO `wbcc_projet` (`idProjet`, `nomProjet`, `descriptionProjet`, `create
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_roles`
+-- Table structure for table `wbcc_roles`
 --
 
 CREATE TABLE `wbcc_roles` (
@@ -2271,10 +2275,10 @@ CREATE TABLE `wbcc_roles` (
   `etatRole` tinyint(1) NOT NULL DEFAULT 1,
   `accessibilite` text NOT NULL,
   `visibleInscription` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_roles`
+-- Dumping data for table `wbcc_roles`
 --
 
 INSERT INTO `wbcc_roles` (`idRole`, `libelleRole`, `etatRole`, `accessibilite`, `visibleInscription`) VALUES
@@ -2309,7 +2313,7 @@ INSERT INTO `wbcc_roles` (`idRole`, `libelleRole`, `etatRole`, `accessibilite`, 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_role_sous_module`
+-- Table structure for table `wbcc_role_sous_module`
 --
 
 CREATE TABLE `wbcc_role_sous_module` (
@@ -2318,10 +2322,10 @@ CREATE TABLE `wbcc_role_sous_module` (
   `idRoleF` int(11) NOT NULL,
   `idSousModuleF` int(11) NOT NULL,
   `etatRoleSousModule` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_role_sous_module`
+-- Dumping data for table `wbcc_role_sous_module`
 --
 
 INSERT INTO `wbcc_role_sous_module` (`idRoleSousModule`, `numeroRoleSousModule`, `idRoleF`, `idSousModuleF`, `etatRoleSousModule`) VALUES
@@ -3355,7 +3359,7 @@ INSERT INTO `wbcc_role_sous_module` (`idRoleSousModule`, `numeroRoleSousModule`,
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_site`
+-- Table structure for table `wbcc_site`
 --
 
 CREATE TABLE `wbcc_site` (
@@ -3363,10 +3367,10 @@ CREATE TABLE `wbcc_site` (
   `numeroSite` varchar(50) DEFAULT NULL,
   `nomSite` varchar(255) DEFAULT NULL,
   `etatSite` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_site`
+-- Dumping data for table `wbcc_site`
 --
 
 INSERT INTO `wbcc_site` (`idSite`, `numeroSite`, `nomSite`, `etatSite`) VALUES
@@ -3379,7 +3383,7 @@ INSERT INTO `wbcc_site` (`idSite`, `numeroSite`, `nomSite`, `etatSite`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_solde_conge`
+-- Table structure for table `wbcc_solde_conge`
 --
 
 CREATE TABLE `wbcc_solde_conge` (
@@ -3388,27 +3392,36 @@ CREATE TABLE `wbcc_solde_conge` (
   `annee` int(11) DEFAULT NULL,
   `soldeCumule` int(11) DEFAULT NULL,
   `soldeRestant` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `wbcc_solde_conge`
+-- Dumping data for table `wbcc_solde_conge`
 --
 
 INSERT INTO `wbcc_solde_conge` (`idSoldeConge`, `idUtilisateurF`, `annee`, `soldeCumule`, `soldeRestant`) VALUES
-(1, 1, 2025, 10, 10),
-(2, 2, 2025, 6, 6),
-(3, 605, 2025, 6, 6),
-(4, 609, 2025, 20, 20),
-(5, 611, 2025, 6, 6),
-(6, 3, 2025, 6, 6),
-(7, 613, 2025, 6, 6),
-(8, 614, 2025, 6, 6),
-(9, 607, 2025, 6, 6);
+(10, 1, 2025, 0, 22),
+(11, 2, 2025, 0, 22),
+(12, 605, 2025, 0, 22),
+(13, 609, 2025, 0, 3),
+(14, 611, 2025, 0, 22),
+(15, 3, 2025, 0, 22),
+(16, 613, 2025, 0, 22),
+(17, 614, 2025, 0, 22),
+(18, 607, 2025, 0, 22),
+(37, 1, 2026, 22, 4),
+(38, 2, 2026, 22, 4),
+(39, 605, 2026, 22, 4),
+(40, 609, 2026, 4, 4),
+(41, 611, 2026, 22, 4),
+(42, 3, 2026, 22, 4),
+(43, 613, 2026, 22, 4),
+(44, 614, 2026, 22, 4),
+(45, 607, 2026, 22, 4);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_sous_module`
+-- Table structure for table `wbcc_sous_module`
 --
 
 CREATE TABLE `wbcc_sous_module` (
@@ -3420,10 +3433,10 @@ CREATE TABLE `wbcc_sous_module` (
   `icon` varchar(255) DEFAULT NULL,
   `etatSousModule` int(11) DEFAULT 1,
   `idModuleF` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_sous_module`
+-- Dumping data for table `wbcc_sous_module`
 --
 
 INSERT INTO `wbcc_sous_module` (`idSousModule`, `nomSousModule`, `numeroSousModule`, `controller`, `function`, `icon`, `etatSousModule`, `idModuleF`) VALUES
@@ -3473,7 +3486,7 @@ INSERT INTO `wbcc_sous_module` (`idSousModule`, `nomSousModule`, `numeroSousModu
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_subvention`
+-- Table structure for table `wbcc_subvention`
 --
 
 CREATE TABLE `wbcc_subvention` (
@@ -3489,10 +3502,10 @@ CREATE TABLE `wbcc_subvention` (
   `editDate` varchar(25) DEFAULT NULL,
   `idAuteur` int(11) DEFAULT NULL,
   `etatSubvention` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_subvention`
+-- Dumping data for table `wbcc_subvention`
 --
 
 INSERT INTO `wbcc_subvention` (`idSubvention`, `numeroSubvention`, `titreSubvention`, `montantSubvention`, `taux`, `natureTravaux`, `natureAide`, `idOrganisme`, `createDate`, `editDate`, `idAuteur`, `etatSubvention`) VALUES
@@ -3508,7 +3521,7 @@ INSERT INTO `wbcc_subvention` (`idSubvention`, `numeroSubvention`, `titreSubvent
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_type_condition`
+-- Table structure for table `wbcc_type_condition`
 --
 
 CREATE TABLE `wbcc_type_condition` (
@@ -3520,12 +3533,12 @@ CREATE TABLE `wbcc_type_condition` (
   `editDate` varchar(25) DEFAULT current_timestamp(),
   `idAuteur` int(11) DEFAULT NULL,
   `etatTypeCondition` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_type_conge`
+-- Table structure for table `wbcc_type_conge`
 --
 
 CREATE TABLE `wbcc_type_conge` (
@@ -3535,10 +3548,10 @@ CREATE TABLE `wbcc_type_conge` (
   `politique` varchar(255) DEFAULT NULL,
   `createDate` varchar(25) DEFAULT NULL,
   `editDate` varchar(25) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `wbcc_type_conge`
+-- Dumping data for table `wbcc_type_conge`
 --
 
 INSERT INTO `wbcc_type_conge` (`idTypeConge`, `type`, `quotas`, `politique`, `createDate`, `editDate`) VALUES
@@ -3550,7 +3563,7 @@ INSERT INTO `wbcc_type_conge` (`idTypeConge`, `type`, `quotas`, `politique`, `cr
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_user_access`
+-- Table structure for table `wbcc_user_access`
 --
 
 CREATE TABLE `wbcc_user_access` (
@@ -3559,12 +3572,12 @@ CREATE TABLE `wbcc_user_access` (
   `idUserF` int(11) DEFAULT NULL,
   `nomUser` varchar(255) DEFAULT NULL,
   `dateAccess` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wbcc_utilisateur`
+-- Table structure for table `wbcc_utilisateur`
 --
 
 CREATE TABLE `wbcc_utilisateur` (
@@ -3618,10 +3631,10 @@ CREATE TABLE `wbcc_utilisateur` (
   `isPointageInterne` tinyint(1) NOT NULL DEFAULT 1,
   `photo` varchar(255) DEFAULT NULL,
   `typePointage` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `wbcc_utilisateur`
+-- Dumping data for table `wbcc_utilisateur`
 --
 
 INSERT INTO `wbcc_utilisateur` (`idUtilisateur`, `login`, `mdp`, `email`, `matricule`, `role`, `etatUser`, `idContactF`, `firstConnection`, `isVerified`, `token`, `tokenPwd`, `valideCompte`, `jourTravail`, `horaireTravail`, `margeTravail`, `cpZoneRV`, `villeZoneRV`, `adresseZoneRV`, `typeZoneRV`, `codeDepartement`, `commentaireConfig`, `moyenTransport`, `idGuidWbccGroup`, `jourTravailB2C`, `horaireTravailB2C`, `margeTravailB2C`, `commentaireConfigB2C`, `nbOpPrevuB2C`, `nbVisitePrevuB2C`, `nbGardienB2C`, `cpZoneB2C`, `villeZoneB2C`, `typeZoneB2C`, `codeDepartementB2C`, `dateDesactivation`, `isExpert`, `isAdmin`, `isCommercial`, `isDirecteurCommercial`, `isGestionnaire`, `isFormateur`, `idSiteF`, `isInterne`, `typeUser`, `isServiceTechnique`, `isAccessAllOP`, `isPointageInterne`, `photo`, `typePointage`) VALUES
@@ -3636,11 +3649,11 @@ INSERT INTO `wbcc_utilisateur` (`idUtilisateur`, `login`, `mdp`, `email`, `matri
 (614, 'oueslatihend@wbcc.fr', 'b5103fcf2b47213b852e9004c5ba76a03656c0d0', 'oueslatihend@wbcc.fr', 'hend', 33, 1, 8466, 1, 1, '', NULL, 1, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '09:00-18:00;09:00-18:00;09:00-18:00;09:00-18:00;09:00-18:00;10:00-18:00', '', '', '', '', NULL, '', '', 'voiture', NULL, 'Lundi;Mardi;Mercredi;Jeudi;Vendredi;Samedi', '16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00;16:00-20:00', NULL, NULL, '5', '40', NULL, '', '', 'Ville', '', NULL, 0, 1, 0, 0, 0, 0, 3, 1, NULL, 0, 0, 1, NULL, NULL);
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `wbcc_appartement`
+-- Indexes for table `wbcc_appartement`
 --
 ALTER TABLE `wbcc_appartement`
   ADD PRIMARY KEY (`idApp`),
@@ -3651,7 +3664,7 @@ ALTER TABLE `wbcc_appartement`
   ADD KEY `idOccupant` (`idOccupant`);
 
 --
--- Index pour la table `wbcc_appartement_contact`
+-- Indexes for table `wbcc_appartement_contact`
 --
 ALTER TABLE `wbcc_appartement_contact`
   ADD PRIMARY KEY (`idAppCon`),
@@ -3659,7 +3672,7 @@ ALTER TABLE `wbcc_appartement_contact`
   ADD KEY `idContactF` (`idContactF`);
 
 --
--- Index pour la table `wbcc_company`
+-- Indexes for table `wbcc_company`
 --
 ALTER TABLE `wbcc_company`
   ADD PRIMARY KEY (`idCompany`),
@@ -3668,7 +3681,7 @@ ALTER TABLE `wbcc_company`
   ADD KEY `getCompaniesBySuperArtisan` (`idArtisanDevisF`);
 
 --
--- Index pour la table `wbcc_condition`
+-- Indexes for table `wbcc_condition`
 --
 ALTER TABLE `wbcc_condition`
   ADD PRIMARY KEY (`idCondition`),
@@ -3676,7 +3689,7 @@ ALTER TABLE `wbcc_condition`
   ADD KEY `idTypeConditionF` (`idTypeConditionF`);
 
 --
--- Index pour la table `wbcc_condition_critere`
+-- Indexes for table `wbcc_condition_critere`
 --
 ALTER TABLE `wbcc_condition_critere`
   ADD PRIMARY KEY (`idConditionCritere`),
@@ -3685,14 +3698,14 @@ ALTER TABLE `wbcc_condition_critere`
   ADD KEY `idAuteur` (`idAuteur`);
 
 --
--- Index pour la table `wbcc_contact`
+-- Indexes for table `wbcc_contact`
 --
 ALTER TABLE `wbcc_contact`
   ADD PRIMARY KEY (`idContact`),
   ADD KEY `idContactFContact` (`idContactFContact`);
 
 --
--- Index pour la table `wbcc_contact_company`
+-- Indexes for table `wbcc_contact_company`
 --
 ALTER TABLE `wbcc_contact_company`
   ADD PRIMARY KEY (`idContactCompany`),
@@ -3700,14 +3713,14 @@ ALTER TABLE `wbcc_contact_company`
   ADD KEY `idCompanyF` (`idCompanyF`);
 
 --
--- Index pour la table `wbcc_critere`
+-- Indexes for table `wbcc_critere`
 --
 ALTER TABLE `wbcc_critere`
   ADD PRIMARY KEY (`idCritere`),
   ADD KEY `idAuteur` (`idAuteur`);
 
 --
--- Index pour la table `wbcc_critere_subvention`
+-- Indexes for table `wbcc_critere_subvention`
 --
 ALTER TABLE `wbcc_critere_subvention`
   ADD PRIMARY KEY (`idCritereSubvention`),
@@ -3716,7 +3729,7 @@ ALTER TABLE `wbcc_critere_subvention`
   ADD KEY `idCritereF` (`idCritereF`);
 
 --
--- Index pour la table `wbcc_demandesconge`
+-- Indexes for table `wbcc_demandesconge`
 --
 ALTER TABLE `wbcc_demandesconge`
   ADD PRIMARY KEY (`idDemande`),
@@ -3724,14 +3737,14 @@ ALTER TABLE `wbcc_demandesconge`
   ADD KEY `fk_idTypeConge` (`idTypeCongeF`);
 
 --
--- Index pour la table `wbcc_document`
+-- Indexes for table `wbcc_document`
 --
 ALTER TABLE `wbcc_document`
   ADD PRIMARY KEY (`idDocument`),
   ADD KEY `idUserF` (`idUtilisateurF`);
 
 --
--- Index pour la table `wbcc_document_conge`
+-- Indexes for table `wbcc_document_conge`
 --
 ALTER TABLE `wbcc_document_conge`
   ADD PRIMARY KEY (`idDocumentConge`),
@@ -3739,13 +3752,13 @@ ALTER TABLE `wbcc_document_conge`
   ADD KEY `idDemandeF` (`idDemandeF`);
 
 --
--- Index pour la table `wbcc_document_requis`
+-- Indexes for table `wbcc_document_requis`
 --
 ALTER TABLE `wbcc_document_requis`
   ADD PRIMARY KEY (`idDocumentRequis`);
 
 --
--- Index pour la table `wbcc_document_requis_subvention`
+-- Indexes for table `wbcc_document_requis_subvention`
 --
 ALTER TABLE `wbcc_document_requis_subvention`
   ADD PRIMARY KEY (`idDocumentRequisSubvention`),
@@ -3753,40 +3766,40 @@ ALTER TABLE `wbcc_document_requis_subvention`
   ADD KEY `idSubventionF` (`idSubventionF`);
 
 --
--- Index pour la table `wbcc_historique`
+-- Indexes for table `wbcc_historique`
 --
 ALTER TABLE `wbcc_historique`
   ADD PRIMARY KEY (`idHistorique`),
   ADD KEY `idUtilsateur` (`idUtilisateurF`);
 
 --
--- Index pour la table `wbcc_immeuble`
+-- Indexes for table `wbcc_immeuble`
 --
 ALTER TABLE `wbcc_immeuble`
   ADD PRIMARY KEY (`idImmeuble`),
   ADD KEY `idUserF` (`idUserF`);
 
 --
--- Index pour la table `wbcc_module`
+-- Indexes for table `wbcc_module`
 --
 ALTER TABLE `wbcc_module`
   ADD PRIMARY KEY (`idModule`);
 
 --
--- Index pour la table `wbcc_notification`
+-- Indexes for table `wbcc_notification`
 --
 ALTER TABLE `wbcc_notification`
   ADD PRIMARY KEY (`idNotification`),
   ADD KEY `idUtilisateur` (`idUtilisateur`);
 
 --
--- Index pour la table `wbcc_parametres`
+-- Indexes for table `wbcc_parametres`
 --
 ALTER TABLE `wbcc_parametres`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `wbcc_pointage`
+-- Indexes for table `wbcc_pointage`
 --
 ALTER TABLE `wbcc_pointage`
   ADD PRIMARY KEY (`idPointage`),
@@ -3794,7 +3807,7 @@ ALTER TABLE `wbcc_pointage`
   ADD KEY `idTraiteF` (`idTraiteF`);
 
 --
--- Index pour la table `wbcc_projet`
+-- Indexes for table `wbcc_projet`
 --
 ALTER TABLE `wbcc_projet`
   ADD PRIMARY KEY (`idProjet`),
@@ -3802,13 +3815,13 @@ ALTER TABLE `wbcc_projet`
   ADD KEY `wbcc_projet_ibfk_2` (`idApp`);
 
 --
--- Index pour la table `wbcc_roles`
+-- Indexes for table `wbcc_roles`
 --
 ALTER TABLE `wbcc_roles`
   ADD PRIMARY KEY (`idRole`);
 
 --
--- Index pour la table `wbcc_role_sous_module`
+-- Indexes for table `wbcc_role_sous_module`
 --
 ALTER TABLE `wbcc_role_sous_module`
   ADD PRIMARY KEY (`idRoleSousModule`),
@@ -3816,13 +3829,13 @@ ALTER TABLE `wbcc_role_sous_module`
   ADD KEY `idRoleF` (`idRoleF`);
 
 --
--- Index pour la table `wbcc_site`
+-- Indexes for table `wbcc_site`
 --
 ALTER TABLE `wbcc_site`
   ADD PRIMARY KEY (`idSite`);
 
 --
--- Index pour la table `wbcc_solde_conge`
+-- Indexes for table `wbcc_solde_conge`
 --
 ALTER TABLE `wbcc_solde_conge`
   ADD PRIMARY KEY (`idSoldeConge`),
@@ -3830,14 +3843,14 @@ ALTER TABLE `wbcc_solde_conge`
   ADD KEY `idSoldeConge` (`idSoldeConge`,`idUtilisateurF`,`annee`,`soldeCumule`,`soldeRestant`);
 
 --
--- Index pour la table `wbcc_sous_module`
+-- Indexes for table `wbcc_sous_module`
 --
 ALTER TABLE `wbcc_sous_module`
   ADD PRIMARY KEY (`idSousModule`),
   ADD KEY `idModule` (`idModuleF`);
 
 --
--- Index pour la table `wbcc_subvention`
+-- Indexes for table `wbcc_subvention`
 --
 ALTER TABLE `wbcc_subvention`
   ADD PRIMARY KEY (`idSubvention`),
@@ -3845,27 +3858,27 @@ ALTER TABLE `wbcc_subvention`
   ADD KEY `idOrganisme` (`idOrganisme`);
 
 --
--- Index pour la table `wbcc_type_condition`
+-- Indexes for table `wbcc_type_condition`
 --
 ALTER TABLE `wbcc_type_condition`
   ADD PRIMARY KEY (`idTypeCondition`),
   ADD KEY `idAuteur` (`idAuteur`);
 
 --
--- Index pour la table `wbcc_type_conge`
+-- Indexes for table `wbcc_type_conge`
 --
 ALTER TABLE `wbcc_type_conge`
   ADD PRIMARY KEY (`idTypeConge`);
 
 --
--- Index pour la table `wbcc_user_access`
+-- Indexes for table `wbcc_user_access`
 --
 ALTER TABLE `wbcc_user_access`
   ADD PRIMARY KEY (`idUserAccess`),
   ADD KEY `idUserF` (`idUserF`);
 
 --
--- Index pour la table `wbcc_utilisateur`
+-- Indexes for table `wbcc_utilisateur`
 --
 ALTER TABLE `wbcc_utilisateur`
   ADD PRIMARY KEY (`idUtilisateur`),
@@ -3873,306 +3886,306 @@ ALTER TABLE `wbcc_utilisateur`
   ADD KEY `idEmployeF` (`idContactF`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `wbcc_appartement`
+-- AUTO_INCREMENT for table `wbcc_appartement`
 --
 ALTER TABLE `wbcc_appartement`
   MODIFY `idApp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_appartement_contact`
+-- AUTO_INCREMENT for table `wbcc_appartement_contact`
 --
 ALTER TABLE `wbcc_appartement_contact`
   MODIFY `idAppCon` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_company`
+-- AUTO_INCREMENT for table `wbcc_company`
 --
 ALTER TABLE `wbcc_company`
   MODIFY `idCompany` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_condition`
+-- AUTO_INCREMENT for table `wbcc_condition`
 --
 ALTER TABLE `wbcc_condition`
   MODIFY `idCondition` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_condition_critere`
+-- AUTO_INCREMENT for table `wbcc_condition_critere`
 --
 ALTER TABLE `wbcc_condition_critere`
   MODIFY `idConditionCritere` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_contact`
+-- AUTO_INCREMENT for table `wbcc_contact`
 --
 ALTER TABLE `wbcc_contact`
   MODIFY `idContact` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8467;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_contact_company`
+-- AUTO_INCREMENT for table `wbcc_contact_company`
 --
 ALTER TABLE `wbcc_contact_company`
   MODIFY `idContactCompany` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_critere`
+-- AUTO_INCREMENT for table `wbcc_critere`
 --
 ALTER TABLE `wbcc_critere`
   MODIFY `idCritere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_critere_subvention`
+-- AUTO_INCREMENT for table `wbcc_critere_subvention`
 --
 ALTER TABLE `wbcc_critere_subvention`
   MODIFY `idCritereSubvention` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_demandesconge`
+-- AUTO_INCREMENT for table `wbcc_demandesconge`
 --
 ALTER TABLE `wbcc_demandesconge`
-  MODIFY `idDemande` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `idDemande` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_document`
+-- AUTO_INCREMENT for table `wbcc_document`
 --
 ALTER TABLE `wbcc_document`
   MODIFY `idDocument` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49896;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_document_conge`
+-- AUTO_INCREMENT for table `wbcc_document_conge`
 --
 ALTER TABLE `wbcc_document_conge`
   MODIFY `idDocumentConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_document_requis`
+-- AUTO_INCREMENT for table `wbcc_document_requis`
 --
 ALTER TABLE `wbcc_document_requis`
   MODIFY `idDocumentRequis` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_document_requis_subvention`
+-- AUTO_INCREMENT for table `wbcc_document_requis_subvention`
 --
 ALTER TABLE `wbcc_document_requis_subvention`
   MODIFY `idDocumentRequisSubvention` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_historique`
+-- AUTO_INCREMENT for table `wbcc_historique`
 --
 ALTER TABLE `wbcc_historique`
-  MODIFY `idHistorique` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=339;
+  MODIFY `idHistorique` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=340;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_immeuble`
+-- AUTO_INCREMENT for table `wbcc_immeuble`
 --
 ALTER TABLE `wbcc_immeuble`
   MODIFY `idImmeuble` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2458;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_module`
+-- AUTO_INCREMENT for table `wbcc_module`
 --
 ALTER TABLE `wbcc_module`
   MODIFY `idModule` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_notification`
+-- AUTO_INCREMENT for table `wbcc_notification`
 --
 ALTER TABLE `wbcc_notification`
   MODIFY `idNotification` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=725;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_parametres`
+-- AUTO_INCREMENT for table `wbcc_parametres`
 --
 ALTER TABLE `wbcc_parametres`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_pointage`
+-- AUTO_INCREMENT for table `wbcc_pointage`
 --
 ALTER TABLE `wbcc_pointage`
   MODIFY `idPointage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=531;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_projet`
+-- AUTO_INCREMENT for table `wbcc_projet`
 --
 ALTER TABLE `wbcc_projet`
   MODIFY `idProjet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_roles`
+-- AUTO_INCREMENT for table `wbcc_roles`
 --
 ALTER TABLE `wbcc_roles`
   MODIFY `idRole` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_role_sous_module`
+-- AUTO_INCREMENT for table `wbcc_role_sous_module`
 --
 ALTER TABLE `wbcc_role_sous_module`
   MODIFY `idRoleSousModule` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1027;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_site`
+-- AUTO_INCREMENT for table `wbcc_site`
 --
 ALTER TABLE `wbcc_site`
   MODIFY `idSite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_solde_conge`
+-- AUTO_INCREMENT for table `wbcc_solde_conge`
 --
 ALTER TABLE `wbcc_solde_conge`
-  MODIFY `idSoldeConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `idSoldeConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_sous_module`
+-- AUTO_INCREMENT for table `wbcc_sous_module`
 --
 ALTER TABLE `wbcc_sous_module`
   MODIFY `idSousModule` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_subvention`
+-- AUTO_INCREMENT for table `wbcc_subvention`
 --
 ALTER TABLE `wbcc_subvention`
   MODIFY `idSubvention` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_type_condition`
+-- AUTO_INCREMENT for table `wbcc_type_condition`
 --
 ALTER TABLE `wbcc_type_condition`
   MODIFY `idTypeCondition` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_type_conge`
+-- AUTO_INCREMENT for table `wbcc_type_conge`
 --
 ALTER TABLE `wbcc_type_conge`
   MODIFY `idTypeConge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_user_access`
+-- AUTO_INCREMENT for table `wbcc_user_access`
 --
 ALTER TABLE `wbcc_user_access`
   MODIFY `idUserAccess` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `wbcc_utilisateur`
+-- AUTO_INCREMENT for table `wbcc_utilisateur`
 --
 ALTER TABLE `wbcc_utilisateur`
   MODIFY `idUtilisateur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6092;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `wbcc_appartement`
+-- Constraints for table `wbcc_appartement`
 --
 ALTER TABLE `wbcc_appartement`
   ADD CONSTRAINT `wbcc_appartement_ibfk_1` FOREIGN KEY (`idImmeubleF`) REFERENCES `wbcc_immeuble` (`idImmeuble`);
 
 --
--- Contraintes pour la table `wbcc_appartement_contact`
+-- Constraints for table `wbcc_appartement_contact`
 --
 ALTER TABLE `wbcc_appartement_contact`
   ADD CONSTRAINT `wbcc_appartement_contact_ibfk_1` FOREIGN KEY (`idAppartementF`) REFERENCES `wbcc_appartement` (`idApp`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `wbcc_appartement_contact_ibfk_2` FOREIGN KEY (`idContactF`) REFERENCES `wbcc_contact` (`idContact`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_condition`
+-- Constraints for table `wbcc_condition`
 --
 ALTER TABLE `wbcc_condition`
   ADD CONSTRAINT `wbcc_condition_ibfk_1` FOREIGN KEY (`idTypeConditionF`) REFERENCES `wbcc_condition` (`idCondition`);
 
 --
--- Contraintes pour la table `wbcc_condition_critere`
+-- Constraints for table `wbcc_condition_critere`
 --
 ALTER TABLE `wbcc_condition_critere`
   ADD CONSTRAINT `wbcc_condition_critere_ibfk_1` FOREIGN KEY (`idConditionF`) REFERENCES `wbcc_condition` (`idCondition`),
   ADD CONSTRAINT `wbcc_condition_critere_ibfk_2` FOREIGN KEY (`idCritereF`) REFERENCES `wbcc_critere` (`idCritere`);
 
 --
--- Contraintes pour la table `wbcc_contact_company`
+-- Constraints for table `wbcc_contact_company`
 --
 ALTER TABLE `wbcc_contact_company`
   ADD CONSTRAINT `wbcc_contact_company_ibfk_1` FOREIGN KEY (`idContactF`) REFERENCES `wbcc_contact` (`idContact`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `wbcc_contact_company_ibfk_2` FOREIGN KEY (`idCompanyF`) REFERENCES `wbcc_company` (`idCompany`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_critere_subvention`
+-- Constraints for table `wbcc_critere_subvention`
 --
 ALTER TABLE `wbcc_critere_subvention`
   ADD CONSTRAINT `wbcc_critere_subvention_ibfk_1` FOREIGN KEY (`idCritereF`) REFERENCES `wbcc_critere` (`idCritere`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `wbcc_critere_subvention_ibfk_2` FOREIGN KEY (`idSubventionF`) REFERENCES `wbcc_subvention` (`idSubvention`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_demandesconge`
+-- Constraints for table `wbcc_demandesconge`
 --
 ALTER TABLE `wbcc_demandesconge`
   ADD CONSTRAINT `fk_idTypeConge` FOREIGN KEY (`idTypeCongeF`) REFERENCES `wbcc_type_conge` (`idTypeConge`),
   ADD CONSTRAINT `fk_idUtilisateur` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
 
 --
--- Contraintes pour la table `wbcc_document`
+-- Constraints for table `wbcc_document`
 --
 ALTER TABLE `wbcc_document`
   ADD CONSTRAINT `wbcc_document_ibfk_1` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
 
 --
--- Contraintes pour la table `wbcc_document_conge`
+-- Constraints for table `wbcc_document_conge`
 --
 ALTER TABLE `wbcc_document_conge`
   ADD CONSTRAINT `wbcc_document_conge_ibfk_1` FOREIGN KEY (`idDocumentF`) REFERENCES `wbcc_document` (`idDocument`) ON DELETE CASCADE,
   ADD CONSTRAINT `wbcc_document_conge_ibfk_2` FOREIGN KEY (`idDemandeF`) REFERENCES `wbcc_demandesconge` (`idDemande`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_document_requis_subvention`
+-- Constraints for table `wbcc_document_requis_subvention`
 --
 ALTER TABLE `wbcc_document_requis_subvention`
   ADD CONSTRAINT `wbcc_document_requis_subvention_ibfk_1` FOREIGN KEY (`idDocumentRequisF`) REFERENCES `wbcc_document_requis` (`idDocumentRequis`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `wbcc_document_requis_subvention_ibfk_2` FOREIGN KEY (`idSubventionF`) REFERENCES `wbcc_subvention` (`idSubvention`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_historique`
+-- Constraints for table `wbcc_historique`
 --
 ALTER TABLE `wbcc_historique`
   ADD CONSTRAINT `wbcc_historique_ibfk_1` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_notification`
+-- Constraints for table `wbcc_notification`
 --
 ALTER TABLE `wbcc_notification`
   ADD CONSTRAINT `wbcc_notification_ibfk_1` FOREIGN KEY (`idUtilisateur`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
 
 --
--- Contraintes pour la table `wbcc_projet`
+-- Constraints for table `wbcc_projet`
 --
 ALTER TABLE `wbcc_projet`
   ADD CONSTRAINT `wbcc_projet_ibfk_1` FOREIGN KEY (`idImmeuble`) REFERENCES `wbcc_immeuble` (`idImmeuble`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `wbcc_projet_ibfk_2` FOREIGN KEY (`idApp`) REFERENCES `wbcc_appartement` (`idApp`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `wbcc_role_sous_module`
+-- Constraints for table `wbcc_role_sous_module`
 --
 ALTER TABLE `wbcc_role_sous_module`
   ADD CONSTRAINT `wbcc_role_sous_module_ibfk_1` FOREIGN KEY (`idRoleF`) REFERENCES `wbcc_roles` (`idRole`),
   ADD CONSTRAINT `wbcc_role_sous_module_ibfk_2` FOREIGN KEY (`idSousModuleF`) REFERENCES `wbcc_sous_module` (`idSousModule`);
 
 --
--- Contraintes pour la table `wbcc_solde_conge`
+-- Constraints for table `wbcc_solde_conge`
 --
 ALTER TABLE `wbcc_solde_conge`
   ADD CONSTRAINT `wbcc_solde_conge_ibfk_1` FOREIGN KEY (`idUtilisateurF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`);
 
 --
--- Contraintes pour la table `wbcc_sous_module`
+-- Constraints for table `wbcc_sous_module`
 --
 ALTER TABLE `wbcc_sous_module`
   ADD CONSTRAINT `wbcc_sous_module_ibfk_1` FOREIGN KEY (`idModuleF`) REFERENCES `wbcc_module` (`idModule`);
 
 --
--- Contraintes pour la table `wbcc_user_access`
+-- Constraints for table `wbcc_user_access`
 --
 ALTER TABLE `wbcc_user_access`
   ADD CONSTRAINT `wbcc_user_access_ibfk_1` FOREIGN KEY (`idUserF`) REFERENCES `wbcc_utilisateur` (`idUtilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
