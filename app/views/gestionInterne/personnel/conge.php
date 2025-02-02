@@ -701,7 +701,7 @@ function formatDate($date)
             <div class="col-md-3 accordion-body">
                 <div class="card bg-white text-black mb-4">
                     <div class="card-body">
-                        <h1 class="card-text"><?=$solde->soldeRestant?></h1>
+                        <h1 class="card-text" id="soldeRestant"><?=$solde->soldeRestant?></h1>
                         <p class="mb-0">Solde restant</p>
                     </div>
                 </div>
@@ -1123,16 +1123,6 @@ function formatDate($date)
                     endDate = null
                 }
 
-                // Mise à jour de la justification d'arrivée si nécessaire
-                // if (arriveeStatus !== null) {
-                //     updateJustification(
-                //         'updateJustification',
-                //         { idPointage: selectid, idTraiteF: userId, resultatTraite: arriveeStatus },
-                //         `Le résultat de la justification d'arrivée est : ${arriveeStatus}`
-                //     );
-                // }
-
-                // Mise à jour de la justification de départ si nécessaire
                 if (acceptProposition || refuseProposition) {
                     updateDemandeConge(
                         'updateCongeDatePropose', {
@@ -1257,9 +1247,9 @@ function formatDate($date)
                     );
                 }
                 // // Optionnel : Rafraîchir la page après un délai pour attendre la fin des requêtes AJAX
-                // setTimeout(function() {
-                //     window.location.reload();
-                // }, 500);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 500);
             });
 
             function formatDate(dateString) {
@@ -1843,12 +1833,13 @@ function formatDate($date)
 
                         //Récuperer le quota du type sélectionné
                         const selectedQuotas = document.querySelector("#selectedQuota").innerHTML
-                        //Récuperer le solde cumulé
+                        //Récuperer le solde cumulé et restant
                         const soldeCumule = document.querySelector("#soldeCumule").innerHTML
+                        const soldeRestant = document.querySelector("#soldeRestant").innerHTML
                         //Récuperer le nombre de jours de congé
                         const nbrJours = calculDays(startDate, endDate)
 
-                        if(nbrJours > soldeCumule) {
+                        if(nbrJours > soldeCumule + soldeRestant) {
                             const msgError = document.getElementById("msgError")
                             msgError.innerHTML = "Votre solde est insuffisant"
                             $('#errorOperation').modal('show');                            
@@ -1914,12 +1905,13 @@ function formatDate($date)
 
                         //Récuperer le quota du type sélectionné
                         const selectedQuotas = document.querySelector("#selectedQuotaEdit").innerHTML
-                        //Récuperer le solde cumulé
+                        //Récuperer le solde cumulé et restant
                         const soldeCumule = document.querySelector("#soldeCumule").innerHTML
+                        const soldeRestant = document.querySelector("#soldeRestant").innerHTML
                         //Récuperer le nombre de jours de congé
                         const nbrJours = calculDays(startDate, endDate)
 
-                        if(nbrJours > soldeCumule) {
+                        if(nbrJours > soldeCumule + soldeRestant) {
                             const msgError = document.getElementById("msgError")
                             msgError.innerHTML = "Votre solde est insuffisant"
                             $('#errorOperation').modal('show');
