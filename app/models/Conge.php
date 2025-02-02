@@ -127,14 +127,40 @@ class Conge extends Model
 
         //L'employé accepte la proposition
         if($choix == "true") {
-            // Calculer le nombre de jours souhaités
+            //Obtenir le solde cumulé et restant
+            $soldeCongeQuery = "SELECT soldeCumule, soldeRestant FROM wbcc_solde_conge WHERE idUtilisateurF = :idUtilisateur AND annee = $anneeEnCours";
+            $this->db->query($soldeCongeQuery);
+            $this->db->bind(":idUtilisateur", $employeId);
+            $soldeCongeResult = $this->db->single();
+            // Calculer le nombre de jours de congé
             $nbrJours = $this->calculDays($date_debut, $date_fin);
+            $joursRestant = 0; //Jours à deduire du solde restant
+            $joursCumule = 0; //Jours à deduire du solde cumulé
+
+
+            $totalSolde = $soldeCongeResult->soldeCumule + $soldeCongeResult->soldeRestant;
+
+            // Vérifier si la somme des deux soldes est suffisante
+            if($totalSolde < $nbrJours) {
+                $response['success'] = false;
+                $response['message'] = "Solde insuffisant";
+            } 
+            // Calcul du nombre de jours à déduire de chaque solde
+            else if($soldeCongeResult->soldeCumule > $nbrJours) {
+                $joursRestant = 0;
+                $joursCumule = $nbrJours;
+            } else {
+                $joursRestant = $nbrJours - $soldeCongeResult->soldeCumule;
+                $joursCumule = $soldeCongeResult->soldeCumule;
+            }
 
             $updateDateSql ="UPDATE wbcc_demandesconge 
             SET dateDebutDeCongeReelle = :date_debut_propose, 
                 dateFinDeCongeReelle = :date_fin_propose,
                 statut = '1',
                 jours = :jours,
+                joursCumule = :joursCumule,
+                joursRestant = :joursRestant,
                 dateModification = :date_modification 
             WHERE idDemande = :id";
             $this->db->query($updateDateSql);
@@ -143,30 +169,16 @@ class Conge extends Model
             $this->db->bind(":date_debut_propose",$dateDebutPropose);
             $this->db->bind(":date_fin_propose",$dateFinPropose);
             $this->db->bind(":jours",$nbrJours);
+            $this->db->bind(":joursRestant", $joursRestant);
+            $this->db->bind(":joursCumule", $joursCumule);
             $this->db->bind(":date_modification", date("Y-m-d H:i:s"));
-
+    
             $result = $this->db->execute();
 
             if ($result) {
                 // Récuperer le soldeRestant et soldeCumule de wbcc_solde_conge
-                $sql = "SELECT soldeRestant, soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
-                $this->db->query($sql);
-                $this->db->bind(":idUtilisateur", $employeId);
-                $this->db->bind(":annee", $anneeEnCours);
-                $solde = $this->db->single();
-            
-                $soldeRestant = $solde->soldeRestant;
-                $soldeCumule = $solde->soldeCumule;
-                $newSoldeRestant = "";
-                $newSoldeCumule = "";
-                // Modifier soldeRestant et soldeCumule en se basant sur soldeRestant
-                if ($soldeRestant > 0) {
-                    $newSoldeRestant = max(0, $soldeRestant - $nbrJours); // S'assurer que soldeRestant est tjrs > 0
-                    $newSoldeCumule = $soldeCumule - $nbrJours;
-                } else {
-                    $newSoldeRestant = $soldeRestant; //Si soldeRestant = 0, on ne le change pas
-                    $newSoldeCumule = $soldeCumule - $nbrJours;
-                }
+                $newSoldeRestant = $soldeCongeResult->soldeRestant - $joursRestant;
+                $newSoldeCumule = $soldeCongeResult->soldeCumule - $joursCumule;
                 
                 // Update the wbcc_solde_conge table
                 $updateSql = "UPDATE wbcc_solde_conge 
@@ -183,6 +195,7 @@ class Conge extends Model
 
                 $result = $this->db->execute();
             }
+
             // Create an associative array to represent the response
             $response = array();
         
@@ -217,7 +230,7 @@ class Conge extends Model
             }
         } // Le responsable propose une date
         else if ($choix == "") {
-            $idTraiteF =$userId;
+            $idTraiteF = $userId;
                 $this->db->query("UPDATE wbcc_demandesconge 
                 SET dateDebutDeCongePropose = :date_debut_propose, 
                     dateFinDeCongePropose = :date_fin_propose,
@@ -274,64 +287,75 @@ class Conge extends Model
         }
         // Cas 2 : Statut = 1 (Approuvé)
         else if ($statut == '1') {
-            // Calculer le nombre de jours
+            //Obtenir le solde cumulé et restant
+            $soldeCongeQuery = "SELECT soldeCumule, soldeRestant FROM wbcc_solde_conge WHERE idUtilisateurF = :idUtilisateur AND annee = $anneeEnCours";
+            $this->db->query($soldeCongeQuery);
+            $this->db->bind(":idUtilisateur", $employeId);
+            $soldeCongeResult = $this->db->single();
+            // Calculer le nombre de jours de congé
             $nbrJours = $this->calculDays($startDate, $endDate);
+            $joursRestant = 0; //Jours à deduire du solde restant
+            $joursCumule = 0; //Jours à deduire du solde cumulé
 
-            $this->db->query("UPDATE wbcc_demandesconge 
-                SET statut = :statut, 
-                    idTraiteF = :id_traite,
-                    dateDebutDeCongeReelle = :start_date,
-                    dateFinDeCongeReelle = :end_date,
-                    dateModification = :date_modification,
-                    jours = :jours
-                WHERE idDemande = :id");
-    
-            $this->db->bind(":id", $id);
-            $this->db->bind(":id_traite", $idTraiteF);
-            $this->db->bind(":start_date", $startDate);
-            $this->db->bind(":end_date", $endDate);
-            $this->db->bind(":statut", $statut);
-            $this->db->bind(":jours", $nbrJours);
-            $this->db->bind(":date_modification", date("Y-m-d H:i:s"));
-            
-            $result = $this->db->execute();
 
-            if ($result) {
-                // Récuperer le soldeRestant et soldeCumule de wbcc_solde_conge
-                $sql = "SELECT soldeRestant, soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
-                $this->db->query($sql);
-                $this->db->bind(":idUtilisateur", $employeId);
-                $this->db->bind(":annee", $anneeEnCours);
-                $solde = $this->db->single();
-            
-                $soldeRestant = $solde->soldeRestant;
-                $soldeCumule = $solde->soldeCumule;
-                $newSoldeRestant = "";
-                $newSoldeCumule = "";
-                // Modifier soldeRestant et soldeCumule en se basant sur soldeRestant
-                if ($soldeRestant > 0) {
-                    $newSoldeRestant = max(0, $soldeRestant - $nbrJours); // S'assurer que soldeRestant est tjrs > 0
-                    $newSoldeCumule = $soldeCumule - $nbrJours;
-                } else {
-                    $newSoldeRestant = $soldeRestant; //Si soldeRestant = 0, on ne le change pas
-                    $newSoldeCumule = $soldeCumule - $nbrJours;
-                }
-                
-                // Update the wbcc_solde_conge table
-                $updateSql = "UPDATE wbcc_solde_conge 
-                        SET soldeRestant = :soldeRestant, 
-                        soldeCumule = :soldeCumule 
-                        WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
+            $totalSolde = $soldeCongeResult->soldeCumule + $soldeCongeResult->soldeRestant;
 
-                $this->db->query($updateSql);
-
-                $this->db->bind(":soldeRestant", $newSoldeRestant);
-                $this->db->bind(":soldeCumule", $newSoldeCumule);
-                $this->db->bind(":idUtilisateur", $employeId);
-                $this->db->bind(":annee", $anneeEnCours); // Assuming you have the user ID
-
-                $result = $this->db->execute();
+            // Vérifier si la somme des deux soldes est suffisante
+            if($totalSolde < $nbrJours) {
+                $response['success'] = false;
+                $response['message'] = "Solde insuffisant";
+            } 
+            // Calcul du nombre de jours à déduire de chaque solde
+            else if($soldeCongeResult->soldeCumule > $nbrJours) {
+                $joursRestant = 0;
+                $joursCumule = $nbrJours;
+            } else {
+                $joursRestant = $nbrJours - $soldeCongeResult->soldeCumule;
+                $joursCumule = $soldeCongeResult->soldeCumule;
             }
+                $this->db->query("UPDATE wbcc_demandesconge 
+                    SET statut = :statut, 
+                        idTraiteF = :id_traite,
+                        dateDebutDeCongeReelle = :start_date,
+                        dateFinDeCongeReelle = :end_date,
+                        dateModification = :date_modification,
+                        jours = :jours,
+                        joursCumule = :joursCumule,
+                        joursRestant = :joursRestant
+                    WHERE idDemande = :id");
+        
+                $this->db->bind(":id", $id);
+                $this->db->bind(":id_traite", $idTraiteF);
+                $this->db->bind(":start_date", $startDate);
+                $this->db->bind(":end_date", $endDate);
+                $this->db->bind(":statut", $statut);
+                $this->db->bind(":jours", $nbrJours);
+                $this->db->bind(":joursRestant", $joursRestant);
+                $this->db->bind(":joursCumule", $joursCumule);
+                $this->db->bind(":date_modification", date("Y-m-d H:i:s"));
+                
+                $result = $this->db->execute();
+
+                if ($result) {
+                    // Récuperer le soldeRestant et soldeCumule de wbcc_solde_conge
+                    $newSoldeRestant = $soldeCongeResult->soldeRestant - $joursRestant;
+                    $newSoldeCumule = $soldeCongeResult->soldeCumule - $joursCumule;
+                    
+                    // Update the wbcc_solde_conge table
+                    $updateSql = "UPDATE wbcc_solde_conge 
+                            SET soldeRestant = :soldeRestant, 
+                            soldeCumule = :soldeCumule 
+                            WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
+
+                    $this->db->query($updateSql);
+
+                    $this->db->bind(":soldeRestant", $newSoldeRestant);
+                    $this->db->bind(":soldeCumule", $newSoldeCumule);
+                    $this->db->bind(":idUtilisateur", $employeId);
+                    $this->db->bind(":annee", $anneeEnCours); // Assuming you have the user ID
+
+                    $result = $this->db->execute();
+                }
         }
         // Cas 3 : Statut = 3 (Annulé)
         else if ($statut == '3') {
@@ -347,32 +371,44 @@ class Conge extends Model
             $result = $this->db->execute();
             //Si l'utilisateur annule et le statut actuel est 'approuvé', rajouter le nbr de jours au solde 
             if ($statutActuel == '1') {
-                // Récuperer le soldeRestant et soldeCumule de wbcc_solde_conge
-                $sql = "SELECT soldeRestant, soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
-                $this->db->query($sql);
-                $this->db->bind(":idUtilisateur", $employeId);
-                $this->db->bind(":annee", $anneeEnCours);
-                $solde = $this->db->single();
+                $demandeQuery = "SELECT joursCumule, joursRestant FROM wbcc_demandesconge 
+                                WHERE idDemande = :id";
+                $this->db->query($demandeQuery);
+                $this->db->bind(":id", $id);
+                $demandeQueryResult = $this->db->single();
+                if($demandeQueryResult) {
+                    //Récuperer les jours cumulés et restants à rajouter au solde
+                    $joursCumule = $demandeQueryResult->joursCumule;
+                    $joursRestant = $demandeQueryResult->joursRestant;
 
-                $soldeRestant = $solde->soldeRestant;
-                $soldeCumule = $solde->soldeCumule;
-                $newSoldeRestant = $soldeRestant + $nbrJoursActuel;
-                $newSoldeCumule = $soldeCumule + $nbrJoursActuel;
+                    // Récuperer le soldeRestant et soldeCumule de wbcc_solde_conge
+                    $sql = "SELECT soldeRestant, soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
+                    $this->db->query($sql);
+                    $this->db->bind(":idUtilisateur", $employeId);
+                    $this->db->bind(":annee", $anneeEnCours);
+                    $solde = $this->db->single();
 
-                // Update the wbcc_solde_conge table
-                $updateSql = "UPDATE wbcc_solde_conge 
-                        SET soldeRestant = :soldeRestant, 
-                        soldeCumule = :soldeCumule 
-                        WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
+                    $soldeRestant = $solde->soldeRestant;
+                    $soldeCumule = $solde->soldeCumule;
+                    $newSoldeRestant = $soldeRestant + $joursRestant;
+                    $newSoldeCumule = $soldeCumule + $joursCumule;
 
-                $this->db->query($updateSql);
+                    // Update the wbcc_solde_conge table
+                    $updateSql = "UPDATE wbcc_solde_conge 
+                            SET soldeRestant = :soldeRestant, 
+                            soldeCumule = :soldeCumule 
+                            WHERE idUtilisateurF = :idUtilisateur AND annee = :annee";
 
-                $this->db->bind(":soldeRestant", $newSoldeRestant);
-                $this->db->bind(":soldeCumule", $newSoldeCumule);
-                $this->db->bind(":idUtilisateur", $employeId);
-                $this->db->bind(":annee", $anneeEnCours); // Assuming you have the user ID
+                    $this->db->query($updateSql);
 
-                $result = $this->db->execute();
+                    $this->db->bind(":soldeRestant", $newSoldeRestant);
+                    $this->db->bind(":soldeCumule", $newSoldeCumule);
+                    $this->db->bind(":idUtilisateur", $employeId);
+                    $this->db->bind(":annee", $anneeEnCours); // Assuming you have the user ID
+
+                    $result = $this->db->execute();
+
+                }
             }
         }
     
@@ -609,10 +645,10 @@ class Conge extends Model
 
         return $this->db->resultSet();
     }
-
     public function batchConge() {
-        $anneeEnCours = date('Y');
+        $anneeEnCours = 2026;
     
+        // Récupérer tous les utilisateurs
         $utilisateursQuery = "SELECT idUtilisateur FROM wbcc_utilisateur";
         $this->db->query($utilisateursQuery);
         $utilisateursResult = $this->db->resultSet();
@@ -620,35 +656,85 @@ class Conge extends Model
         foreach ($utilisateursResult as $res) {
             $idUtilisateur = $res->idUtilisateur;
     
-            // Récupérer le solde cumulé de l'année précédente
+            // Récupérer le solde restant de l'année précédente (s'il existe)
             $anneePrecedente = $anneeEnCours - 1;
-            $soldePrecedentQuery = "SELECT soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = $idUtilisateur AND annee = $anneePrecedente";
+            $soldePrecedentQuery = "SELECT soldeRestant, soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = $idUtilisateur AND annee = $anneePrecedente";
             $this->db->query($soldePrecedentQuery);
             $soldePrecedentResult = $this->db->single();
     
-            $soldeReporte = 0;
-            if ($soldePrecedentResult) {
-                $soldeReporte = $soldePrecedentResult->soldeCumule;
-            }
+            // Si aucune donnée n'existe, on part sur 0
+            $soldeCumule = ($soldePrecedentResult) ? $soldePrecedentResult->soldeRestant + $soldePrecedentResult->soldeCumule : 0;
     
             // Vérifier si un enregistrement existe pour l'utilisateur et l'année en cours
             $soldeQuery = "SELECT * FROM wbcc_solde_conge WHERE idUtilisateurF = $idUtilisateur AND annee = $anneeEnCours";
             $this->db->query($soldeQuery);
-            $exec = $this->db->single();
+            $existant = $this->db->single();
     
-            if ($exec) {
-                // Mettre à jour le solde cumulé et restant
-                $updateQuery = "UPDATE wbcc_solde_conge SET soldeCumule = soldeCumule + 2, soldeRestant = soldeRestant + 2 WHERE idUtilisateurF = $idUtilisateur AND annee = $anneeEnCours";
+            if ($existant) {
+                // Calcul du nouveau soldeRestant en ajoutant 2, sans dépasser 22
+                $nouveauSoldeRestant = $existant->soldeRestant + 2;
+                if ($nouveauSoldeRestant > 22) {
+                    $nouveauSoldeRestant = 22;
+                }
+                
+                // Mettre à jour le soldeRestant avec la valeur calculée
+                $updateQuery = "UPDATE wbcc_solde_conge 
+                                SET soldeRestant = $nouveauSoldeRestant 
+                                WHERE idUtilisateurF = $idUtilisateur AND annee = $anneeEnCours";
                 $this->db->query($updateQuery);
                 $this->db->execute();
             } else {
-                // Insérer un nouvel enregistrement en tenant compte du solde reporté
-                $insertQuery = "INSERT INTO wbcc_solde_conge (idUtilisateurF, annee, soldeCumule, soldeRestant) VALUES ($idUtilisateur, $anneeEnCours, $soldeReporte + 2, 2)";
+                // Insérer un nouvel enregistrement :
+                // - soldeCumule est égal au soldeRestant de l'année précédente (ou 0 s'il n'existe pas)
+                // - soldeRestant est fixé à 2
+                $insertQuery = "INSERT INTO wbcc_solde_conge (idUtilisateurF, annee, soldeCumule, soldeRestant) 
+                                VALUES ($idUtilisateur, $anneeEnCours, $soldeCumule, 2)";
                 $this->db->query($insertQuery);
                 $this->db->execute();
             }
         }
     }
+    
+    
+    // public function batchConge() {
+    //     $anneeEnCours = date('Y');
+    
+    //     $utilisateursQuery = "SELECT idUtilisateur FROM wbcc_utilisateur";
+    //     $this->db->query($utilisateursQuery);
+    //     $utilisateursResult = $this->db->resultSet();
+    
+    //     foreach ($utilisateursResult as $res) {
+    //         $idUtilisateur = $res->idUtilisateur;
+    
+    //         // Récupérer le solde cumulé de l'année précédente
+    //         $anneePrecedente = $anneeEnCours - 1;
+    //         $soldePrecedentQuery = "SELECT soldeCumule FROM wbcc_solde_conge WHERE idUtilisateurF = $idUtilisateur AND annee = $anneePrecedente";
+    //         $this->db->query($soldePrecedentQuery);
+    //         $soldePrecedentResult = $this->db->single();
+    
+    //         $soldeReporte = 0;
+    //         if ($soldePrecedentResult) {
+    //             $soldeReporte = $soldePrecedentResult->soldeCumule;
+    //         }
+    
+    //         // Vérifier si un enregistrement existe pour l'utilisateur et l'année en cours
+    //         $soldeQuery = "SELECT * FROM wbcc_solde_conge WHERE idUtilisateurF = $idUtilisateur AND annee = $anneeEnCours";
+    //         $this->db->query($soldeQuery);
+    //         $exec = $this->db->single();
+    
+    //         if ($exec) {
+    //             // Mettre à jour le solde cumulé et restant
+    //             $updateQuery = "UPDATE wbcc_solde_conge SET soldeCumule = soldeCumule + 2, soldeRestant = soldeRestant + 2 WHERE idUtilisateurF = $idUtilisateur AND annee = $anneeEnCours";
+    //             $this->db->query($updateQuery);
+    //             $this->db->execute();
+    //         } else {
+    //             // Insérer un nouvel enregistrement en tenant compte du solde reporté
+    //             $insertQuery = "INSERT INTO wbcc_solde_conge (idUtilisateurF, annee, soldeCumule, soldeRestant) VALUES ($idUtilisateur, $anneeEnCours, $soldeReporte + 2, 2)";
+    //             $this->db->query($insertQuery);
+    //             $this->db->execute();
+    //         }
+    //     }
+    // }
 
     public function getSolde($idUtilisateur, $annee) {
         $anneeEnCours = date('Y');
