@@ -349,7 +349,7 @@ if (isset($_GET['action'])) {
                             $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
     
                             // Validate file extension
-                            if (!in_array($fileExtension, ['pdf', 'mp4', 'jpg', 'jpeg', 'png'])) {
+                            if (!in_array($fileExtension, ['pdf', 'mp4', 'jpg', 'jpeg', 'png', 'PNG'])) {
                                 $errorMessages[] = "Unsupported file type for $originalFileName";
                                 continue;
                             }
