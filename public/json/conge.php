@@ -414,16 +414,15 @@ if (isset($_GET['action'])) {
     }
 
     if ($action == 'updateCongeDatePropose') {
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
+        $inputData = json_decode(file_get_contents('php://input'), true) ?? $_POST;
 
-        $congeId = isset($data['congeId']) ? $data['congeId'] : '';
-        $employeId = isset($data['employeId']) ? $data['employeId'] : '';
-        $userId = isset($data['userId']) ? $data['userId'] : '';
-        $commentaire = isset($data['commentaire']) ? $data['commentaire'] : '';
-        $startDate = isset($data['startDate']) ? $data['startDate'] : '';
-        $endDate = isset($data['endDate']) ? $data['endDate'] : '';
-        $choix = isset($data['choix']) ? $data['choix'] : '';
+        $congeId = isset($inputData['congeId']) ? $inputData['congeId'] : '';
+        $employeId = isset($inputData['employeId']) ? $inputData['employeId'] : '';
+        $userId = isset($inputData['userId']) ? $inputData['userId'] : '';
+        $commentaire = isset($inputData['commentaire']) ? $inputData['commentaire'] : '';
+        $startDate = isset($inputData['startDate']) ? $inputData['startDate'] : '';
+        $endDate = isset($inputData['endDate']) ? $inputData['endDate'] : '';
+        $choix = isset($inputData['choix']) ? $inputData['choix'] : '';
         $conge->updateCongeDatePropose($congeId, $userId, $employeId, $commentaire, $startDate, $endDate, $choix);
     }
 
