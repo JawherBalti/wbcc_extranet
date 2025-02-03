@@ -828,53 +828,57 @@ function formatDate($date)
         $('.select3').select2();
     });
 
+    // Lors de la création de la demande de congé, ajouter les champs "nom du document" et "commentaire" pour 
+    // chaque document sélectionné
     document.getElementById('attachments').addEventListener('change', function (event) {
-    const files = event.target.files;
-    const fileDetailsContainer = document.getElementById('fileDetails');
-    fileDetailsContainer.innerHTML = ''; // Effacer les champs précédents
+        const files = event.target.files;
+        const fileDetailsContainer = document.getElementById('fileDetails');
+        fileDetailsContainer.innerHTML = ''; // Effacer les champs précédents
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
 
-        // Créer un conteneur pour chaque fichier
-        const fileContainer = document.createElement('div');
-        fileContainer.className = 'file-container mb-3 p-3 border rounded';
+            // Créer un conteneur pour chaque fichier
+            const fileContainer = document.createElement('div');
+            fileContainer.className = 'file-container mb-3 p-3 border rounded';
 
-        // Afficher le nom du fichier
-        const fileName = document.createElement('div');
-        fileName.textContent = `Fichier : ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
-        fileName.className = 'mb-2';
-        fileContainer.appendChild(fileName);
+            // Afficher le nom du fichier
+            const fileName = document.createElement('div');
+            fileName.textContent = `Fichier : ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            fileName.className = 'mb-2';
+            fileContainer.appendChild(fileName);
 
-        // Ajouter un champ pour le nom du document
-        const nomDocumentLabel = document.createElement('label');
-        nomDocumentLabel.textContent = 'Nom du document :';
-        nomDocumentLabel.className = 'form-label';
-        const nomDocumentInput = document.createElement('input');
-        nomDocumentInput.type = 'text';
-        nomDocumentInput.name = 'nomDocument[]';
-        nomDocumentInput.className = 'form-control mb-2';
-        nomDocumentInput.required = true;
-        nomDocumentInput.placeholder = 'Entrez le nom du document';
-        fileContainer.appendChild(nomDocumentLabel);
-        fileContainer.appendChild(nomDocumentInput);
+            // Ajouter un champ pour le nom du document
+            const nomDocumentLabel = document.createElement('label');
+            nomDocumentLabel.textContent = 'Nom du document :';
+            nomDocumentLabel.className = 'form-label';
+            const nomDocumentInput = document.createElement('input');
+            nomDocumentInput.type = 'text';
+            nomDocumentInput.name = 'nomDocument[]';
+            nomDocumentInput.className = 'form-control mb-2';
+            nomDocumentInput.required = true;
+            nomDocumentInput.placeholder = 'Entrez le nom du document';
+            fileContainer.appendChild(nomDocumentLabel);
+            fileContainer.appendChild(nomDocumentInput);
 
-        // Ajouter un champ pour le commentaire
-        const commentLabel = document.createElement('label');
-        commentLabel.textContent = 'Commentaire :';
-        commentLabel.className = 'form-label';
-        const commentInput = document.createElement('input');
-        commentInput.type = 'text';
-        commentInput.name = 'comments[]';
-        commentInput.className = 'form-control mb-2';
-        commentInput.placeholder = 'Entrez un commentaire';
-        fileContainer.appendChild(commentLabel);
-        fileContainer.appendChild(commentInput);
+            // Ajouter un champ pour le commentaire
+            const commentLabel = document.createElement('label');
+            commentLabel.textContent = 'Commentaire :';
+            commentLabel.className = 'form-label';
+            const commentInput = document.createElement('input');
+            commentInput.type = 'text';
+            commentInput.name = 'comments[]';
+            commentInput.className = 'form-control mb-2';
+            commentInput.placeholder = 'Entrez un commentaire';
+            fileContainer.appendChild(commentLabel);
+            fileContainer.appendChild(commentInput);
 
-        // Ajouter le conteneur au formulaire
-        fileDetailsContainer.appendChild(fileContainer);
-    }
-});
+            // Ajouter le conteneur au formulaire
+            fileDetailsContainer.appendChild(fileContainer);
+        }
+    });
+
+    //Lors du choix de la date de début de congé, la date valide la plus proche est aujourd'hui + 8 jours
     document.addEventListener('DOMContentLoaded', function() {
         const startDateInput = document.getElementById('startDateConge');
 
@@ -885,6 +889,11 @@ function formatDate($date)
         startDate.setDate(today.getDate() + 8);
         const startDateISO = startDate.toISOString().split('T')[0];
 
+        // Calculer la date min 8 jours à partir d'aujourd'hui
+        const minDate = new Date(today);
+        minDate.setDate(today.getDate() + 8);
+        const minDateISO = minDate.toISOString().split('T')[0];
+
         const maxDate = new Date(today);
         maxDate.setFullYear(today.getFullYear() + 1);
         const maxDateISO = maxDate.toISOString().split('T')[0];
@@ -892,6 +901,7 @@ function formatDate($date)
         startDateInput.min = startDateISO;
         startDateInput.max = maxDateISO;
 
+        //Si l'utilisateur choisit une date du calendrier
         startDateInput.addEventListener('change', function() {
             const selectedDate = new Date(this.value);
             const dayOfWeek = selectedDate.getDay();
@@ -900,77 +910,41 @@ function formatDate($date)
                 const msgError = document.getElementById("msgError")
                 msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
                 $('#errorOperation').modal('show');
-                this.value = ""; // Clear the invalid input
+                this.value = "";
             }
         });
 
-
-        // Add event listener for manual input (if the user types a date)
-        startDateInput.addEventListener('input', function() {
-            const enteredDate = this.value; // Get the entered date string
-
-            if (enteredDate) { // If the user has entered something
-                const selectedDate = new Date(enteredDate);
-                const dayOfWeek = selectedDate.getDay();
-
-                if (dayOfWeek === 0 || dayOfWeek === 6) {
-                    const msgError = document.getElementById("msgError")
-                    msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
-                    $('#errorOperation').modal('show');
-                    this.value = ""; // Clear the invalid input
-                }
-            }
-
+        // Empêcher l'entrée manuelle de dates
+        startDateInput.addEventListener('keydown', function(event) {
+            event.preventDefault(); // Empêcher la saisie au clavier
         });
+
 
         const endDateInput = document.getElementById('endDateConge');
-        endDateInput.disabled = true; // Disable the input
+        endDateInput.disabled = true; // Désactiver l'input de date fin
 
-        // Add event listener for manual input (if the user types a date)
-        endDateInput.addEventListener('input', function() {
-            const enteredDate = this.value; // Get the entered date string
-            if (enteredDate) { // If the user has entered something
-                const selectedDate = new Date(enteredDate);
-                const dayOfWeek = selectedDate.getDay();
-
-                if (dayOfWeek === 0 || dayOfWeek === 6) {
-                    const msgError = document.getElementById("msgError")
-                    msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
-                    $('#errorOperation').modal('show');
-                    this.value = ""; // Clear the invalid input
-                }
-            }
+        // Empêcher l'entrée manuelle de dates
+        endDateInput.addEventListener('keydown', function(event) {
+            event.preventDefault(); // Empêcher la saisie au clavier
         });
 
-        endDateInput.setAttribute('min', today);
+        endDateInput.setAttribute('min', today); //La date de fin min est la date de début sélectionné
 
+        // Lorsqu'on choisit une date de début
         startDateInput.addEventListener('change', function() {
-            endDateInput.disabled = false; // Disable the input
+            endDateInput.disabled = false; // Activer l'input de date fin
 
-            // Clear previous min date on end date input
+            // Mettre la date fin min à la date début sélectionnée
             endDateInput.removeAttribute('min');
-
-            // Set minimum date for end date input to selected start date
             endDateInput.setAttribute('min', this.value);
 
-            //Check if the end date was before the start date if so reset it to the start date
+            // Si la date fin est antérieure à la date début, mettre date fin à date début
             if (endDateInput.value && endDateInput.value < this.value) {
                 endDateInput.value = this.value;
             }
         });
 
-        //Prevent manual entry of date before min date on the start date input
-        startDateInput.addEventListener('input', function() {
-            if (this.value < today) {
-                this.value = today;
-            }
-        });
 
-        endDateInput.addEventListener('input', function() {
-            if (startDateInput.value && this.value < startDateInput.value) {
-                this.value = startDateInput.value;
-            }
-        });
     });
 
     // Fonction utilitaire pour récupérer le statut sélectionné dans un groupe de boutons radio
@@ -1171,7 +1145,6 @@ function formatDate($date)
         }, 500);
     });
 
-    //*************************************************************************************** */
     $('#confirmCongeStatutSubmit').on('click', function() {
         // Récupération des ID nécessaires
         var congeId = $('#modalCongeId').val();
@@ -1279,6 +1252,7 @@ function formatDate($date)
         }, 500);
     });
 
+    // Formater la date
     function formatDate(dateString) {
         if (!dateString) return '-';
 
@@ -1315,22 +1289,22 @@ function formatDate($date)
                 let justificationLinks = '-'; // Default value
 
                 if (response.documents && response.documents.length > 0) {
-                    // Filter documents where isArrive is equal to 1 (for Arrivé)
+                    // Obtenir les documents relatifs à la demande
                     const filteredDocs = response.documents;
 
                     if (filteredDocs.length > 0) {
-                        // Map the filtered documents to create HTML links
+                        // Créer un lien pour chaque document
                         justificationLinks = filteredDocs
                             .map(doc =>
                                 `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/conge/justification/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
                             )
                             .join('<br>'); // Add an HTML line break between the links
                     } else {
-                        // No documents found for isArrive === 1
+                        // Pas de documents dans la demande
                         justificationLinks = 'Aucun document associé.';
                     }
                 } else {
-                    // No documents available in the response
+                    // Pas de documents dans la reponse
                     justificationLinks = 'Aucun document trouvé.';
                 }
 
@@ -1368,53 +1342,27 @@ function formatDate($date)
                     }
                 });
 
-                // Add event listener for manual input (if the user types a date)
-                startDateInput.addEventListener('input', function() {
-                    const enteredDate = this.value; // Get the entered date string
-
-                    if (enteredDate) { // If the user has entered something
-                        const selectedDate = new Date(enteredDate);
-                        const dayOfWeek = selectedDate.getDay();
-
-                        if (dayOfWeek === 0 || dayOfWeek === 6) {
-                            const msgError = document.getElementById("msgError")
-                            msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
-                            $('#errorOperation').modal('show');
-                            this.value = ""; // Clear the invalid input
-                        }
-                    }
-                });
-
                 const endDateInput = document.getElementById('endDate');
+                // Empêcher l'entrée manuelle de dates
+                startDateInput.addEventListener('keydown', function(event) {
+                    event.preventDefault(); // Empêcher la saisie au clavier
+                });                
+                endDateInput.addEventListener('keydown', function(event) {
+                    event.preventDefault(); // Empêcher la saisie au clavier
+                });                
                 endDateInput.disabled = true; // Disable the input
-                // Add event listener for manual input (if the user types a date)
-                endDateInput.addEventListener('input', function() {
-                    const enteredDate = this.value; // Get the entered date string
-                    if (enteredDate) { // If the user has entered something
-                        const selectedDate = new Date(enteredDate);
-                        const dayOfWeek = selectedDate.getDay();
-
-                        if (dayOfWeek === 0 || dayOfWeek === 6) {
-                            const msgError = document.getElementById("msgError")
-                            msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
-                            $('#errorOperation').modal('show');
-                            this.value = ""; // Clear the invalid input
-                        }
-                    }
-                });
 
                 endDateInput.setAttribute('min', today);
 
+                // Lorsqu'on choisit une date de début
                 startDateInput.addEventListener('change', function() {
-                    endDateInput.disabled = false; // Disable the input
+                    endDateInput.disabled = false; // Activer l'input de date fin
 
-                    // Clear previous min date on end date input
+                    // Mettre la date fin min à la date début sélectionnée
                     endDateInput.removeAttribute('min');
-
-                    // Set minimum date for end date input to selected start date
                     endDateInput.setAttribute('min', this.value);
 
-                    //Check if the end date was before the start date if so reset it to the start date
+                    // Si la date fin est antérieure à la date début, mettre date fin à date début
                     if (endDateInput.value && endDateInput.value < this.value) {
                         endDateInput.value = this.value;
                     }
@@ -1438,6 +1386,7 @@ function formatDate($date)
                 let commentaireRejetMsg = document.querySelector("#commentaireRejetMsg")
                 let commentaireRejetMsgContainer = document.querySelector(".commentaireRejetMsgContainer")
 
+                //Si la demande est rejetée, afficher la raison du rejet
                 if (commentaireRejetMsgContainer) {
                     commentaireRejetMsgContainer.classList.add("hidden")
                     commentaireRejetMsg.innerHTML = ""
@@ -1447,7 +1396,7 @@ function formatDate($date)
                     }
                 }
 
-
+                //Si le responsable propose une date, afficher la section pour accepter ou refuser la proposition
                 if (confirmPropositionConge) {
                     confirmPropositionConge.classList.add('hidden')
 
@@ -1708,42 +1657,14 @@ function formatDate($date)
                     }
                 });
 
-
-                // Add event listener for manual input (if the user types a date)
-                startDateInput.addEventListener('input', function() {
-                    const enteredDate = this.value; // Get the entered date string
-
-                    if (enteredDate) { // If the user has entered something
-                        const selectedDate = new Date(enteredDate);
-                        const dayOfWeek = selectedDate.getDay();
-
-                        if (dayOfWeek === 0 || dayOfWeek === 6) {
-                            const msgError = document.getElementById("msgError")
-                            msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
-                            $('#errorOperation').modal('show');
-                            this.value = ""; // Clear the invalid input
-                        }
-                    }
-
-                });
-
                 const endDateInput = document.getElementById('endDateCongeEdit');
-
-                // Add event listener for manual input (if the user types a date)
-                endDateInput.addEventListener('input', function() {
-                    const enteredDate = this.value; // Get the entered date string
-                    if (enteredDate) { // If the user has entered something
-                        const selectedDate = new Date(enteredDate);
-                        const dayOfWeek = selectedDate.getDay();
-
-                        if (dayOfWeek === 0 || dayOfWeek === 6) {
-                            const msgError = document.getElementById("msgError")
-                            msgError.innerHTML = "Vous ne pouvez pas choisir un weekend."
-                            $('#errorOperation').modal('show');
-                            this.value = ""; // Clear the invalid input
-                        }
-                    }
-                });
+                
+                startDateInput.addEventListener('keydown', function(event) {
+                    event.preventDefault(); // Empêcher la saisie au clavier
+                });                
+                endDateInput.addEventListener('keydown', function(event) {
+                    event.preventDefault(); // Empêcher la saisie au clavier
+                });   
 
                 endDateInput.setAttribute('min', today);
 
