@@ -1407,35 +1407,43 @@ function formatDate($date)
                     }
                 }
 
+                //Traitement pour la section 'Proposer une date' (Responsable)
                 if (confirmDatePropose && confirmDateProposeBtn && confirmDateProposeMsg) {
 
                     confirmDatePropose.classList.remove("hidden")
                     confirmDateProposeBtn.classList.remove("hidden")
                     confirmDateProposeMsg.innerHTML = ''
-
+                    //Demande en attente avec une date proposée
                     if (response.statut == "0" && response.dateDebutDeCongePropose && response.dateFinDeCongePropose) {
                         confirmDatePropose.classList.add("hidden")
                         confirmDateProposeBtn.classList.add("hidden")
                         confirmDateProposeMsg.innerHTML = `${response.nomTraite} propose d'avoir le congé du ${formatDate(response.dateDebutDeCongePropose)} au ${formatDate(response.dateFinDeCongePropose)}`
                         modalCommentaire.innerHTML = response.commentaire
-                    } else if (response.statut == "1") {
+                    } //Demande validée 
+                    else if (response.statut == "1") {
                         confirmDatePropose.classList.add("hidden")
                         confirmDateProposeBtn.classList.add("hidden")
+                        //Utiliser la date réelle dans le message
                         if (response.dateDebutDeCongeReelle && response.dateFinDeCongeReelle) {
                             confirmDateProposeMsg.innerHTML = `${response.nomTraite} a validé le congé du ${formatDate(response.dateDebutDeCongeReelle)} au ${formatDate(response.dateFinDeCongeReelle)}`
-                        } else if (response.dateDebutDeCongePropose && response.dateFinDeCongePropose) {
+                        }//Utiliser la date proposée dans le message
+                        else if (response.dateDebutDeCongePropose && response.dateFinDeCongePropose) {
                             confirmDateProposeMsg.innerHTML = `${response.nomTraite} a validé le congé du ${formatDate(response.dateDebutDeCongePropose)} au ${formatDate(response.dateFinDeCongePropose)}`
                         }
-                    } else if (response.statut == "2") {
+                    } //Demande rejetée
+                    else if (response.statut == "2") {
                         confirmDatePropose.classList.add("hidden")
                         confirmDateProposeBtn.classList.add("hidden")
                         confirmDateProposeMsg.innerHTML = `${response.nomTraite} a rejeté cette demande`
-                    } else if (response.statut == "3") {
+                    }//Demande annulée
+                    else if (response.statut == "3") {
                         confirmDatePropose.classList.add("hidden")
                         confirmDateProposeBtn.classList.add("hidden")
                         confirmDateProposeMsg.innerHTML = `Cette demande a été annulé`
                     }
-                } else if (confirmDateProposeMsg) {
+                }
+                //Traitement pour la section 'Proposer une date' (Employé)
+                else if (confirmDateProposeMsg) {
                     confirmDateProposeMsg.innerHTML = ''
                     if (response.statut == "0" && response.dateDebutDeCongePropose && response.dateFinDeCongePropose) {
                         confirmDateProposeMsg.innerHTML = `${response.nomTraite} propose d'avoir votre congé du ${formatDate(response.dateDebutDeCongePropose)} au ${formatDate(response.dateFinDeCongePropose)}`
@@ -1454,39 +1462,51 @@ function formatDate($date)
                     }
                 }
 
+                //Traitement pour la section 'Valider le congé' (Responsable)
                 if (confirmDemandeConge) {
+                    //Demande validée
                     if (response.statut === '1') {
                         confirmDemandeConge.classList.add('hidden')
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande validée par ${response.nomTraite}`
-                    } else if (response.statut === '2') {
+                    }//Demande rejetée
+                    else if (response.statut === '2') {
                         confirmDemandeConge.classList.add('hidden')
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande rejetée par ${response.nomTraite}`
-                    } else if (response.statut === '3') {
+                    }//Demande annulée
+                    else if (response.statut === '3') {
                         confirmDemandeConge.classList.add('hidden')
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande annulée`
-                    } else if (response.statut == "0" && response.dateDebutDeCongePropose && response.dateFinDeCongePropose) {
+                    }//Demande en attente avec date de proposition
+                    else if (response.statut == "0" && response.dateDebutDeCongePropose && response.dateFinDeCongePropose) {
                         confirmDemandeConge.classList.add("hidden")
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande en cours de traitement`
-                    } else {
+                    }//Demande en attente sans date de proposition
+                    else {
                         confirmDemandeConge.classList.remove('hidden')
                         confirmDemandeMsg.classList.add("hidden")
                         confirmDemandeMsg.innerHTML = ``
                     }
-                } else {
+                }
+                //Traitement pour la section 'Valider le congé' (Employé)
+                else {
+                    //Demande validée
                     if (response.statut === '1') {
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande validée par ${response.nomTraite}`
-                    } else if (response.statut === '2') {
+                    }//Demande rejetée
+                    else if (response.statut === '2') {
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande rejetée par ${response.nomTraite}`
-                    } else if (response.statut === '3') {
+                    }//Demande annulée
+                    else if (response.statut === '3') {
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande annulée`
-                    } else {
+                    }//Demande en attente
+                    else {
                         confirmDemandeMsg.classList.remove("hidden")
                         confirmDemandeMsg.innerHTML = `Demande en cours de traitement`
                     }
