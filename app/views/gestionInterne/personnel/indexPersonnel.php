@@ -11,56 +11,124 @@ $role = $user->idRole;
             </span> GESTION PERSONNEL
         </h2>
     </div>
-    <div class="<?= $role != 1 && $role != 2 && $role !=25 ? "main-content " : "main-content hidden" ?>">
-        <div class="container-fluid">
-            <div class="row justify-content-center text-center flex-wrap">
-                <div class="col-6 col-md-3 mb-3 mb-md-2">
-                    <a href="<?= $data['dashbord'] ?>" type="button"
-                        class="emp-btn btn btn-primary btn-round waves-effect btn-block">
-                        1- Tableau de bord
-                    </a>
-                </div>
-                <div class="col-6 col-md-3 mb-3 mb-md-2">
-                    <a href="<?= $data['gerepresence'] ?>" type="button"
-                        class="emp-btn btn btn-primary btn-round waves-effect btn-block">
-                        2- Présences
-                    </a>
-                </div>
-                <div class="col-6 col-md-3 mb-3 mb-md-2">
-                    <a href="<?= $data['gererConges'] ?>" type="button"
-                        class="emp-btn btn btn-primary btn-round waves-effect btn-block">
-                        3- Congés
-                    </a>
-                </div>
-                <div class="col-6 col-md-3 mb-3 mb-md-2">
-                    <a href="<?= $data['avertir'] ?>" type="button"
-                        class="emp-btn btn btn-primary btn-round waves-effect btn-block">
-                        4- Avertissements
-                    </a>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Earnings (Monthly) Card Example -->
+            <div
+                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <a href="<?= $data['gerepresence'] ?>">
+                                    <div class=" row text-lg font-weight-bold text-info text-uppercase mb-1">
+                                        <div href="#" class="btn btn-info btn-circle">
+                                            1
+                                        </div><span class="mt-2"> &nbsp; POINTAGE </span>
+                                    </div>
+                                    <hr>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0 Absence</div>
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x text-danger-300"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+            <!-- Earnings (Monthly) Card Example -->
+            <div
+                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <a  href="<?= $data['gererConges'] ?>">
+                                    <div class="text-lg font-weight-bold text-success text-uppercase mb-1">
+                                        <div class="btn btn-success btn-circle">
+                                            2
+                                        </div><span class="mt-2"> &nbsp; CONGE </span>
+                                    </div>
+                                    <hr>
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="progress progress-sm mr-2">
+                                                <div class="progress-bar bg-success" role="progressbar"
+                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-danger-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="<?= $role == 1 || $role == 2 || $role ==25 ? "" : "main-content hidden" ?>">
-        <div class="d-flex justify-content-between">
-            <span class="col-md-2 ml-2 "><a href="<?= $data['tbdPresence'] ?>" type="button"
-                    class="w-100 btn btn-primary btn-round waves-effect btn-sm">1- Tableau de bord</a></span>
-            <span class="col-md-2 ml-2 "><a href="<?= $data['gerepresence']  ?>" type="button"
-                    class="w-100 btn btn-primary btn-round waves-effect btn-sm">2- Présences</a></span>
-            <span class="col-md-2 ml-2 "><a href="<?= $data['gererConges'] ?>" type="button"
-                    class="w-100 btn btn-primary btn-round waves-effect btn-sm">3- Congés</a></span>
-            <span class="col-md-2 ml-2 "><a href="<?= $data['genererAvertissement'] ?>" type="button"
-                    class="w-100 btn btn-primary btn-round waves-effect btn-sm">4- Avertissements</a></span>
-            <span class="col-md-2 ml-2 "><a href="<?= $data['gererPaie'] ?>" type="button"
-                    class="w-100 btn btn-primary btn-round waves-effect btn-sm">5- Exportation de Paie</a></span>
+            <!-- Earnings (Monthly) Card Example -->
+            <div
+                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <a href="#">
+                                    <div class="text-lg font-weight-bold text-success text-danger mb-1">
+                                        <div class="btn btn-danger btn-circle">
+                                            3
+                                        </div><span class="mt-2"> &nbsp; AVERTISSEMENT </span>
+                                    </div>
+                                    <hr>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-danger-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div
+                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <a href="#">
+                                    <div class="text-lg font-weight-bold text-warning text-uppercase mb-1">
+                                        <div class="btn btn-warning btn-circle">
+                                            4
+                                        </div><span class="mt-2"> &nbsp; PAIEMNENT </span>
+                                    </div>
+                                    <hr>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-euro-sign fa-2x text-danger-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <?php
-if ($role == "1" || $role == "2" || $role =="25") {
+if ($role == "1" || $role == "2" || $role == "25") {
 ?>
     <!-- DataTales Example -->
     <div class="card shadow mt-3">
@@ -72,14 +140,16 @@ if ($role == "1" || $role == "2" || $role =="25") {
                     </font>
                 </h3>
                 <div class="float-right col-md-2">
-                    <button onclick="onClickAdd()" type="button" rel="tooltip" title="Ajouter"
-                        class="btn btn btn-sm btn-red  ml-1" data-toggle="modal" data-target="#personnelModal">
-                        <i class="fas fa-user-plus" style="color: #ffffff"></i>
-                        Ajouter un utilisateur
-                    </button>
+                    <?php
+                    if ($role == 1 || $role == 2) { ?>
+                        <button onclick="onClickAdd()" type="button" rel="tooltip" title="Ajouter"
+                            class="btn btn btn-sm btn-red  ml-1" data-toggle="modal" data-target="#personnelModal">
+                            <i class="fas fa-user-plus" style="color: #ffffff"></i>
+                            Ajouter un utilisateur
+                        </button>
+                    <?php } ?>
                 </div>
             </div>
-
         </div>
 
         <div class="card-body">

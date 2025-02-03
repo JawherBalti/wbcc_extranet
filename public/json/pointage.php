@@ -7,12 +7,10 @@ require_once "../../app/libraries/PHPMailer.php";
 require_once "../../app/libraries/Role.php";
 require_once "../../app/libraries/Utils.php";
 
-
-$db = new Database();
-
 if (isset($_GET['action'])) {
+    $db = new Database();
     $action = $_GET['action'];
-    
+
     if ($action == "getPointagePersonnel") {
         $date = "";
         if (isset($_GET['date']) && $_GET['date'] != "") {
@@ -165,9 +163,21 @@ if (isset($_GET['action'])) {
         }
 
         $result = [
-            "usersJ" => $datasJ, "nbVisitesJ" => $nbVisitesTJ, "nbSinistresObtenusJ" => $nbSinistresObtenusTJ, "nbAbsencesJ" => $nbAbsencesJ, "nbRetardsJ" => $nbRetardsJ,
-            "usersM" => $datasM, "nbVisitesM" => $nbVisitesTM, "nbSinistresObtenusM" => $nbSinistresObtenusTM, "nbAbsencesM" => $nbAbsencesM, "nbRetardsM" => $nbRetardsM,
-            "usersA" => $datasA, "nbVisitesA" => $nbVisitesTA, "nbSinistresObtenusA" => $nbSinistresObtenusTA, "nbAbsencesA" => $nbAbsencesA, "nbRetardsA" => $nbRetardsA,
+            "usersJ" => $datasJ,
+            "nbVisitesJ" => $nbVisitesTJ,
+            "nbSinistresObtenusJ" => $nbSinistresObtenusTJ,
+            "nbAbsencesJ" => $nbAbsencesJ,
+            "nbRetardsJ" => $nbRetardsJ,
+            "usersM" => $datasM,
+            "nbVisitesM" => $nbVisitesTM,
+            "nbSinistresObtenusM" => $nbSinistresObtenusTM,
+            "nbAbsencesM" => $nbAbsencesM,
+            "nbRetardsM" => $nbRetardsM,
+            "usersA" => $datasA,
+            "nbVisitesA" => $nbVisitesTA,
+            "nbSinistresObtenusA" => $nbSinistresObtenusTA,
+            "nbAbsencesA" => $nbAbsencesA,
+            "nbRetardsA" => $nbRetardsA,
             "mois" => $moisEnLettre
         ];
         echo json_encode($result);
@@ -175,14 +185,14 @@ if (isset($_GET['action'])) {
 
     //CRON FOR ABSENCE PAP AND RAPPORT
     if ($action == "getAbsenceAndGenerateRapport") {
-        $db->query("SELECT * FROM  wbcc_contact, wbcc_utilisateur, wbcc_roles WHERE idContact=idContactF AND role=idRole AND (libelleRole='Commercial' OR isCommercial = 1) AND etatUser=1");
+        $db->query("SELECT * FROM  wbcc_contact, wbcc_utilisateur, wbcc_roles WHERE idContact=idContactF AND role=idRole AND (isPointageInterne=1 OR isPointageExterne = 1) AND etatUser=1");
         $datas = $db->resultSet();
         foreach ($datas as $key => $user) {
             $date = date("Y-m-d");
             // $date = date("2024-05-10");
             //SEARCH IF WORK DAY
             $jour = my_dateEnFrancais($date, 'd');
-            $jours = explode(';', trim($user->jourTravailB2C));
+            $jours = $user->jourTravailB2C != null && $user->jourTravailB2C != "" ? explode(';', trim($user->jourTravailB2C)) : [];
             $index = array_search(ucfirst($jour), $jours);
             if ($index >= 0) {
                 //SEARCH IF COMMERCIAL POINTED
@@ -224,7 +234,7 @@ if (isset($_GET['action'])) {
 
     if ($action == "getPointageRetardNonTraite") {
         $date = $_GET['date'];
-        $db->query("SELECT * FROM wbcc_pointage, wbcc_contact, wbcc_utilisateur WHERE idContact=idContactF AND idUtilisateur=idUserF AND datePointage = :date AND traite=0 LIMIT 1");
+        $db->query("SELECT * FROM wbcc_pointage, wbcc_contact, wbcc_utilisateur WHERE idContact=idContactF AND idUtilisateur=idUserF AND datePointage = :date AND traite=0 AND isPointageExterne  = 1 LIMIT 1");
         $db->bind("date", $date, null);
         $data = $db->single();
         if ($data) {
@@ -234,7 +244,6 @@ if (isset($_GET['action'])) {
         }
     }
 
-   
     if ($action == "savePointage") {
         $_POST = json_decode(file_get_contents('php://input'), true);
         extract($_POST);
@@ -257,13 +266,12 @@ if (isset($_GET['action'])) {
         }
         //CALCUL NB MINUTES RETARD
         $nbMinuteRetard = strtotime($datePointage .  ' ' . $heurePointage) - strtotime($datePointage .  ' ' . $heureDebut) - ($user->margeTravailB2C == '' || $user->margeTravailB2C == null ? 0 : $user->margeTravailB2C);
-        $db->query("INSERT INTO wbcc_pointage(numeroPointage, datePointage, heureDebutPointage, adressePointage, heureDebutJour,heureFinJour, marge,adresseProgramme, nbMinuteRetard, retard, absent, anomalieDebutJour, idUserF, auteur) VALUE(:numeroPointage, :datePointage, :heureDebutPointage, :adressePointage, :heureDebutJour,:heureFinJour, :marge, :adresseProgramme, :nbMinuteRetard, :retard, :absent, :anomalieDebutJour, :idUser, :auteur)");
+        $db->query("INSERT INTO wbcc_pointage(numeroPointage, datePointage, heureDebutPointage, adressePointage, heureDebutJour, marge,adresseProgramme, nbMinuteRetard, retard, absent, anomalieDebutJour, idUserF, auteur) VALUE(:numeroPointage, :datePointage, :heureDebutPointage, :adressePointage, :heureDebutJour, :marge, :adresseProgramme, :nbMinuteRetard, :retard, :absent, :anomalieDebutJour, :idUser, :auteur)");
         $db->bind("numeroPointage", $numero, null);
         $db->bind("datePointage", $datePointage, null);
         $db->bind("heureDebutPointage", $heurePointage, null);
         $db->bind("adressePointage", $adresseEnregistre, null);
         $db->bind("heureDebutJour", $heureDebut, null);
-        $db->bind("heureFinJour", $heureFin, null);
         $db->bind("marge", $user->margeTravailB2C, null);
         $db->bind("adresseProgramme", $adresseProgrammee, null);
         $db->bind("nbMinuteRetard", $nbMinuteRetard / 60 < 0 ? 0 : $nbMinuteRetard / 60, null);
@@ -286,20 +294,6 @@ if (isset($_GET['action'])) {
         $id = $pointage['idPointage'];
         $db->query("UPDATE wbcc_pointage SET motifRetard=:commentaire WHERE idPointage=:id");
         $db->bind("commentaire", $commentaireRetard, null);
-        $db->bind("id", $id, null);
-        if ($db->execute()) {
-            echo json_encode(findItemByValue("wbcc_pointage", "idPointage", $id));
-        } else {
-            echo json_encode("0");
-        }
-    }
-     
-    if ($action == "saveCommentaireDepart") {
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        extract($_POST);
-        $id = $pointage['idPointage'];
-        $db->query("UPDATE wbcc_pointage SET motifRetardDepart=:commentaire WHERE idPointage=:id");
-        $db->bind("commentaire", $commentaireDepart, null);
         $db->bind("id", $id, null);
         if ($db->execute()) {
             echo json_encode(findItemByValue("wbcc_pointage", "idPointage", $id));
@@ -339,100 +333,98 @@ if (isset($_GET['action'])) {
         }
     }
 
+
     //DEBUT NABILA
     {
-        
+
 
         if ($action == 'getPointageById') {
-            
             if (isset($_POST['idPointage'])) {
                 $idPointage = $_POST['idPointage'];
-        
+
                 // Step 1: Query to get the specific pointage details
-                $db->query("SELECT wp.*, c.fullName, u.matricule,u.email, s.nomSite 
-                                FROM wbcc_pointage wp
-                                JOIN wbcc_utilisateur u ON wp.idUserF = u.idUtilisateur
-                                LEFT JOIN wbcc_contact c ON c.idContact = u.idContactF
-                                LEFT JOIN wbcc_site s ON s.idSite = u.idSiteF
-                                WHERE wp.idPointage = :idPointage;
-                                ;");
-        
+                $db->query("SELECT wp.*, c.fullName, u.matricule, u.email, s.nomSite 
+                            FROM wbcc_pointage wp
+                            JOIN wbcc_utilisateur u ON wp.idUserF = u.idUtilisateur
+                            LEFT JOIN wbcc_contact c ON c.idContact = u.idContactF
+                            LEFT JOIN wbcc_site s ON s.idSite = u.idSiteF
+                            WHERE wp.idPointage = :idPointage");
+
                 // Bind the pointage ID
                 $db->bind(":idPointage", $idPointage);
-        
+
                 // Fetch the pointage data
                 $pointageData = $db->single();
-        
+
                 if ($pointageData) {
-                    // Convert the pointage data from an object to an associative array
-                    $pointageArray = (array) $pointageData;
-        
                     // Step 2: Query to get all associated urlDocument entries for the given idPointage
-                    $db->query("SELECT wbp.urlDocument , wbp.nomDocument , wdp.isArrive
+                    $db->query("SELECT wbp.urlDocument, wbp.nomDocument, wdp.isArrive, wbp.commentaire
                                 FROM wbcc_document_pointage wdp
                                 JOIN wbcc_document wbp ON wdp.idDocumentF = wbp.idDocument
                                 WHERE wdp.idPointageF = :idPointage");
-        
+
                     // Bind the pointage ID again for the second query
                     $db->bind(":idPointage", $idPointage);
-        
+
                     // Fetch all associated urlDocument entries
                     $documents = $db->resultSet();
-        
+
                     // Extract urlDocument values into a list
-                    $documentList = array_map(function($doc) {
+                    $documentList = array_map(function ($doc) {
                         return [
                             'nomDocument' => $doc->nomDocument,
                             'urlDocument' => $doc->urlDocument,
-                            'isArrive' => $doc->isArrive
+                            'isArrive' => $doc->isArrive,
+                            'commentaire' => $doc->commentaire
                         ]; // Access property directly since $doc is an object
                     }, $documents);
-        
-                    // Step 3: Add the urlDocuments list to the pointage data array
-                    $pointageArray['documents'] = $documentList;
-        
+
+                    // Step 3: Add the urlDocuments list to the pointage data
+                    $pointageData->documents = $documentList;
+
                     // Step 4: Return the complete response with pointage data and the list of urlDocuments
-                    echo json_encode($pointageArray);
+                    echo json_encode($pointageData);
                 } else {
                     // Return an error message if no pointage data is found
-                    echo json_encode(['error' => 'No pointage found for this ID.']);
+                    echo json_encode("0");
                 }
             } else {
-                echo json_encode(['error' => 'Missing idPointage parameter.']);
+                echo json_encode("0");
             }
         }
+
 
         if ($action == 'getAllPointages') {
             // Retrieve the user ID from POST or GET
             $idUser = $_POST['userId'] ?? $_GET['userId'] ?? null;
-        
+
             if ($idUser === null) {
                 echo json_encode(['error' => 'User ID is required.']);
                 exit;
             }
-        
+
             // Admin check query to filter by site if needed
             $sqlAdminCheck = "
-                SELECT u.idSiteF, u.isAdmin, u.role, s.nomSite 
+                SELECT u.idSiteF, u.isAdmin, u.role, s.adresseSite 
                 FROM wbcc_utilisateur u 
                 LEFT JOIN wbcc_site s ON u.idSiteF = s.idSite 
                 WHERE u.idUtilisateur = :userId";
-            
+
             $db->query($sqlAdminCheck);
             $db->bind(':userId', $idUser);
             $adminData = $db->single();
-        
-            if ($adminData && $adminData->isAdmin == 1 && $adminData->role == 33) {
+
+            if ($adminData && ($adminData->role == 25 || $adminData->role == 1 || $adminData->role == 2)) {
                 // If admin, filter by site
-                $nomSite = $adminData->nomSite;
+                $nomSite = $adminData->adresseSite;
                 $sql = "
                     SELECT P.*, c.fullName, u.matricule, u.jourTravail, u.horaireTravail 
                     FROM wbcc_pointage P 
                     JOIN wbcc_utilisateur u ON P.idUserF = u.idUtilisateur 
                     LEFT JOIN wbcc_contact c ON c.idContact = u.idContactF 
-                    WHERE P.adressePointage LIKE :nomSite
+                    WHERE P.adresseProgramme LIKE :nomSite
                     ORDER BY P.datePointage DESC";
-                
+
                 $db->query($sql);
                 $db->bind(':nomSite', '%' . $nomSite . '%');
             } else {
@@ -444,18 +436,18 @@ if (isset($_GET['action'])) {
                     LEFT JOIN wbcc_contact c ON c.idContact = u.idContactF 
                     ORDER BY P.datePointage DESC");
             }
-        
+
             // Execute query and fetch results
             $results = $db->resultSet();
-        
+
             // Process each record to calculate daily work hours
             foreach ($results as &$pointage) {
                 $jourSemaine = date('N', strtotime($pointage->datePointage)) - 1; // Lundi=0, Mardi=1, etc.
-        
+
                 // Convert jourTravail and horaireTravail to arrays
                 $jours = explode(';', $pointage->jourTravail);
                 $horaires = explode(';', $pointage->horaireTravail);
-        
+
                 // Check if there is a schedule for this day
                 if (isset($horaires[$jourSemaine])) {
                     list($heureDebut, $heureFin) = explode('-', $horaires[$jourSemaine]);
@@ -466,19 +458,20 @@ if (isset($_GET['action'])) {
                     $pointage->heureFinJour = null;
                 }
             }
-        
+
             // Return results as JSON
             if ($results) {
                 echo json_encode($results);
             } else {
-                echo json_encode(['error' => 'Aucun pointage trouvé.']);
+                echo json_encode("0");
             }
         }
-        
+
+
         if ($action == 'getAllWithidUser') {
             // Retrieve $idUser from POST or GET data
             $idUser = $_POST['idUser'] ?? $_GET['idUser'] ?? null;
-        
+
             // Check if $idUser is set
             if ($idUser) {
                 $db->query("
@@ -488,56 +481,59 @@ if (isset($_GET['action'])) {
                     WHERE p.idUserF = :idUser
                     ORDER BY p.datePointage DESC
                 ");
-            
+
                 // Bind the user ID
                 $db->bind(':idUser', $idUser);
-            
+
                 // Execute the query and get results
                 $results = $db->resultSet();
-                 // Process each record to calculate daily work hours
-            foreach ($results as &$pointage) {
-                $jourSemaine = date('N', strtotime($pointage->datePointage)) - 1; // Lundi=0, Mardi=1, etc.
-        
-                // Convert jourTravail and horaireTravail to arrays
-                $jours = explode(';', $pointage->jourTravail);
-                $horaires = explode(';', $pointage->horaireTravail);
-        
-                // Check if there is a schedule for this day
-                if (isset($horaires[$jourSemaine])) {
-                    list($heureDebut, $heureFin) = explode('-', $horaires[$jourSemaine]);
-                    $pointage->heureDebutJour = $heureDebut;
-                    $pointage->heureFinJour = $heureFin;
-                } else {
-                    $pointage->heureDebutJour = null;
-                    $pointage->heureFinJour = null;
+
+                // Process each record to calculate daily work hours
+                foreach ($results as &$pointage) {
+                    $jourSemaine = date('N', strtotime($pointage->datePointage)) - 1; // Lundi=0, Mardi=1, etc.
+
+                    // Convert jourTravail and horaireTravail to arrays
+                    $jours = explode(';', $pointage->jourTravail);
+                    $horaires = explode(';', $pointage->horaireTravail);
+
+                    // Check if there is a schedule for this day
+                    if (isset($horaires[$jourSemaine])) {
+                        list($heureDebut, $heureFin) = explode('-', $horaires[$jourSemaine]);
+                        $pointage->heureDebutJour = $heureDebut;
+                        $pointage->heureFinJour = $heureFin;
+                    } else {
+                        $pointage->heureDebutJour = null;
+                        $pointage->heureFinJour = null;
+                    }
                 }
-            }
-                // Return results or an error message as JSON
+
+                // Return results as JSON or an error message if no results
                 if ($results) {
                     echo json_encode($results);
                 } else {
-                    echo json_encode(['error' => 'Aucun pointage trouvé.']);
+                    echo json_encode("0");
                 }
             } else {
                 // Return error if $idUser is not provided
                 echo json_encode(['error' => 'idUser is required.']);
             }
         }
-        
+
         if ($action == 'getManager') {
-            // Retrieve the site ID from the path or GET parameters
+            // Récupérer l'ID du site depuis les paramètres GET
             $idSite = $_GET['idSite'] ?? null;
-        
-            // Log the received ID for debugging
-            error_log("Received idSite: " . json_encode($idSite));
-        
-            // Validate the `idSite` parameter
+
+            // Log pour débogage
+            // error_log("Received idSite: " . json_encode($idSite));
+
+            // Validation de l'ID du site
             if ($idSite === null) {
-                echo json_encode(['error' => 'Site ID is required.', 'received_idSite' => $idSite]);
+                // Retourner une erreur si l'ID du site est absent
+                echo json_encode("0");
                 exit;
             }
-        
-            // Query to retrieve managers based on the provided `idSite`
+
+            // Requête pour récupérer les responsables en fonction de l'ID du site
             $sql = "
                 SELECT
                     u.idUtilisateur,
@@ -549,126 +545,294 @@ if (isset($_GET['action'])) {
                     wbcc_utilisateur u
                 LEFT JOIN wbcc_site s ON
                     u.idSiteF = s.idSite
-                WHERE u.role = 33 AND s.idSite = :idSite
+                WHERE u.role = 25 AND s.idSite = :idSite 
             ";
-        
-            // Prepare and execute the query
+
+            // Préparer et exécuter la requête
             $db->query($sql);
             $db->bind(':idSite', $idSite);
-        
-            // Fetch the results
+
+            // Récupérer les résultats
             $results = $db->resultSet();
-        
-            // Return the results as JSON
+
+            // Vérifier si des résultats ont été trouvés
             if ($results) {
+                // Retourner les résultats sous forme de JSON
                 echo json_encode($results);
             } else {
-                echo json_encode([
-                    'error' => 'No managers found for the provided Site ID.',
-                    'idSite' => $idSite,
-                    'query' => $sql
-                ]);
-            }
-        }
-        if ($action == 'getManagerForAdmin') {
-            // Retrieve the site ID from the path or GET parameters
-            $idSite = $_GET['idSite'] ?? null;
-        
-            // Log the received ID for debugging
-            error_log("Received idSite: " . json_encode($idSite));
-        
-            // Validate the `idSite` parameter
-            if ($idSite === null) {
-                echo json_encode(['error' => 'Site ID is required.', 'received_idSite' => $idSite]);
-                exit;
-            }
-            // Query to retrieve managers based on the provided `idSite`
-            $sql = "
-                SELECT
-                    u.idUtilisateur,
-                    u.idSiteF,
-                    u.isAdmin,
-                    u.role,
-                    s.nomSite
-                FROM
-                    wbcc_utilisateur u
-                LEFT JOIN wbcc_site s ON
-                    u.idSiteF = s.idSite
-                WHERE u.role = 1
-            ";
-        
-            // Prepare and execute the query
-            $db->query($sql);
-        
-            // Fetch the results
-            $results = $db->resultSet();
-        
-            // Return the results as JSON
-            if ($results) {
-                echo json_encode($results);
-            } else {
-                echo json_encode([
-                    'error' => 'No managers found for the provided Site ID.',
-                    'idSite' => $idSite,
-                    'query' => $sql
-                ]);
+                // Retourner "0" si aucun responsable n'est trouvé
+                echo json_encode("0");
             }
         }
 
-        if ($action == "getUsersM") {
-            $idSite = $_POST['idSite'] ?? $_GET['idSite'] ?? null;
-        
-            if ($idSite !== null) {
-                $db->query("SELECT c.idContact, u.idUtilisateur, c.fullName, u.matricule, u.photo
-                            FROM wbcc_contact c, wbcc_utilisateur u 
-                            WHERE u.idContactF = c.idContact AND u.idSiteF = :idSite AND u.typePointage = 'INTERNE'");
-                $db->bind(':idSite', $idSite);
-            } else {
-                echo json_encode(['error' => 'idSite parameter is missing']);
+        if ($action == 'getManagerForAdmin') {
+            // Récupérer l'ID du site depuis les paramètres GET
+            $idSite = $_GET['idSite'] ?? null;
+
+            // Log pour débogage
+            // error_log("Received idSite: " . json_encode($idSite));
+
+            // Validation de l'ID du site
+            if ($idSite === null) {
+                // Retourner une erreur si l'ID du site est absent
+                echo json_encode("0");
                 exit;
             }
-        
-            $data = $db->resultSet();
-            echo json_encode($data);
-        }
-        if ($action == "getDocumentByPointage") {
-            $idPointage = $_POST['idPointage'] ?? $_GET['idPointage'] ?? null;
-        
-            if ($idPointage !== null) {
-                try {
-                    // Step 1: Query to get all idDocumentF from wbcc_document_pointage
-                    $db->query("SELECT idDocumentF FROM wbcc_document_pointage WHERE idPointageF = :idPointage");
-                    $db->bind(':idPointage', $idPointage);
-                    $documentPointageData = $db->resultSet();
-        
-                    if ($documentPointageData) {
-                        $documentIds = array_column($documentPointageData, 'idDocumentF');
-        
-                        // Step 2: Query to get all document details from wbcc_document
-                        $placeholders = implode(',', array_fill(0, count($documentIds), '?'));
-                        $query = "SELECT * FROM wbcc_document WHERE idDocument IN ($placeholders)";
-                        $db->query($query);
-                        foreach ($documentIds as $index => $idDocumentF) {
-                            $db->bind($index + 1, $idDocumentF); // Bind values dynamically
-                        }
-                        $documents = $db->resultSet();
-        
-                        if ($documents) {
-                            echo json_encode($documents);
-                        } else {
-                            echo json_encode(['error' => 'No documents found']);
-                        }
-                    } else {
-                        echo json_encode(['error' => 'No associated documents found for the provided idPointage']);
-                    }
-                } catch (Exception $e) {
-                    echo json_encode(['error' => $e->getMessage()]);
-                }
+
+            // Requête pour récupérer les responsables en fonction de l'ID du site
+            $sql = "
+                SELECT
+                    u.idUtilisateur,
+                    u.idSiteF,
+                    u.isAdmin,
+                    u.role,
+                    s.nomSite
+                FROM
+                    wbcc_utilisateur u
+                LEFT JOIN wbcc_site s ON
+                    u.idSiteF = s.idSite
+                WHERE (u.role = 1 OR u.role = 2)
+            ";
+
+            // Préparer et exécuter la requête
+            $db->query($sql);
+
+            // Récupérer les résultats
+            $results = $db->resultSet();
+
+            // Vérifier si des résultats ont été trouvés
+            if ($results) {
+                // Retourner les résultats sous forme de JSON
+                echo json_encode($results);
             } else {
-                echo json_encode(['error' => 'idPointage parameter is missing']);
+                // Retourner "0" si aucun responsable n'est trouvé
+                echo json_encode("0");
             }
         }
-        
+
+
+        // if ($action == "getUsersM") {
+        //     $idSite = $_POST['idSite'] ?? $_GET['idSite'] ?? null;
+
+        //     if ($idSite !== null) {
+        //         $db->query("SELECT c.idContact, u.idUtilisateur, c.fullName, u.matricule, u.photo
+        //                     FROM wbcc_contact c, wbcc_utilisateur u 
+        //                     WHERE u.idContactF = c.idContact AND u.idSiteF = :idSite AND u.typePointage = 'INTERNE'");
+        //         $db->bind(':idSite', $idSite);
+        //     } else {
+        //         echo json_encode(['error' => 'idSite parameter is missing']);
+        //         exit;
+        //     }
+
+        //     $data = $db->resultSet();
+        //     echo json_encode($data);
+        // }
+        if ($action == "getDocumentByPointage") {
+            // Récupérer l'ID du pointage depuis les paramètres POST ou GET
+            $idPointage = $_POST['idPointage'] ?? $_GET['idPointage'] ?? null;
+
+            if ($idPointage !== null) {
+                // Étape 1: Requête pour récupérer tous les idDocumentF dans wbcc_document_pointage où isArrive == true
+                $db->query("SELECT idDocumentF FROM wbcc_document_pointage WHERE idPointageF = :idPointage AND isArrive = true");
+                $db->bind(':idPointage', $idPointage);
+                $documentPointageData = $db->resultSet();
+
+                if (sizeof($documentPointageData) != 0) {
+                    $documentIds = array_column($documentPointageData, 'idDocumentF');
+
+                    // Étape 2: Requête pour récupérer les détails des documents à partir de wbcc_document
+                    $placeholders = implode(',', array_fill(0, count($documentIds), '?'));
+                    $query = "SELECT * FROM wbcc_document WHERE idDocument IN ($placeholders)";
+                    $db->query($query);
+
+                    // Lier les valeurs des ID de document dynamiquement
+                    foreach ($documentIds as $index => $idDocumentF) {
+                        $db->bind($index + 1, $idDocumentF);
+                    }
+
+                    $documents = $db->resultSet();
+
+                    // Vérifier si des documents ont été trouvés et retourner les résultats
+                    if ($documents) {
+                        echo json_encode($documents);
+                    } else {
+                        // Aucun document trouvé
+                        echo json_encode("0");
+                    }
+                } else {
+                    // Aucun document associé trouvé pour le pointage donné
+                    echo json_encode("0");
+                }
+            } else {
+                // L'ID du pointage est manquant
+                echo json_encode("0");
+            }
+        }
+
+
+
+        if ($action == "getDocumentByPointageDepart") {
+            // Récupérer l'ID du pointage depuis les paramètres POST ou GET
+            $idPointage = $_POST['idPointage'] ?? $_GET['idPointage'] ?? null;
+
+            if ($idPointage !== null) {
+                // Étape 1: Requête pour récupérer tous les idDocumentF dans wbcc_document_pointage où isArrive == false
+                $db->query("SELECT idDocumentF FROM wbcc_document_pointage WHERE idPointageF = :idPointage AND isArrive = false");
+                $db->bind(':idPointage', $idPointage);
+                $documentPointageData = $db->resultSet();
+
+                if (sizeof($documentPointageData) != 0) {
+                    $documentIds = array_column($documentPointageData, 'idDocumentF');
+
+                    // Étape 2: Requête pour récupérer les détails des documents à partir de wbcc_document
+                    $placeholders = implode(',', array_fill(0, count($documentIds), '?'));
+                    $query = "SELECT * FROM wbcc_document WHERE idDocument IN ($placeholders)";
+                    $db->query($query);
+
+                    // Lier les valeurs des ID de document dynamiquement
+                    foreach ($documentIds as $index => $idDocumentF) {
+                        $db->bind($index + 1, $idDocumentF);
+                    }
+
+                    $documents = $db->resultSet();
+
+                    // Vérifier si des documents ont été trouvés et retourner les résultats
+                    if ($documents) {
+                        echo json_encode($documents);
+                    } else {
+                        // Aucun document trouvé
+                        echo json_encode("0");
+                    }
+                } else {
+                    // Aucun document associé trouvé pour le pointage donné
+                    echo json_encode("0");
+                }
+            } else {
+                // L'ID du pointage est manquant
+                echo json_encode("0");
+            }
+        }
+        if ($action == "getDocumentByPointageAbsence") {
+            // Récupérer l'ID du pointage depuis les paramètres POST ou GET
+            $idPointage = $_POST['idPointage'] ?? $_GET['idPointage'] ?? null;
+
+            if ($idPointage !== null) {
+                // Étape 1: Requête pour récupérer tous les idDocumentF dans wbcc_document_pointage où isArrive == false
+                $db->query("SELECT idDocumentF FROM wbcc_document_pointage WHERE idPointageF = :idPointage AND isAbsent = true");
+                $db->bind(':idPointage', $idPointage);
+                $documentPointageData = $db->resultSet();
+
+                if (sizeof($documentPointageData) != 0) {
+                    $documentIds = array_column($documentPointageData, 'idDocumentF');
+
+                    // Étape 2: Requête pour récupérer les détails des documents à partir de wbcc_document
+                    $placeholders = implode(',', array_fill(0, count($documentIds), '?'));
+                    $query = "SELECT * FROM wbcc_document WHERE idDocument IN ($placeholders)";
+                    $db->query($query);
+
+                    // Lier les valeurs des ID de document dynamiquement
+                    foreach ($documentIds as $index => $idDocumentF) {
+                        $db->bind($index + 1, $idDocumentF);
+                    }
+
+                    $documents = $db->resultSet();
+
+                    // Vérifier si des documents ont été trouvés et retourner les résultats
+                    if ($documents) {
+                        echo json_encode($documents);
+                    } else {
+                        // Aucun document trouvé
+                        echo json_encode("0");
+                    }
+                } else {
+                    // Aucun document associé trouvé pour le pointage donné
+                    echo json_encode("0");
+                }
+            } else {
+                // L'ID du pointage est manquant
+                echo json_encode("0");
+            }
+        }
+
+
+        if ($action == 'updateCommentaire') {
+            if (isset($_POST['idDocument']) && isset($_POST['commentaire'])) {
+                // Retrieve the required parameters from the POST request
+                $idDocument = $_POST['idDocument'];
+                $commentaire = $_POST['commentaire'];
+                $editDate = date('Y-m-d H:i:s'); // Current date and time
+
+                // Step 1: Check if the document exists
+                $db->query("SELECT idDocument FROM wbcc_document WHERE idDocument = :idDocument");
+                $db->bind(":idDocument", $idDocument);
+                $documentResult = $db->single();
+
+                if ($documentResult) {
+                    // Step 2: Update the commentaire and editDate fields in the wbcc_document table
+                    $db->query("UPDATE wbcc_document 
+                                SET commentaire = :commentaire, 
+                                    editDate = :editDate 
+                                WHERE idDocument = :idDocument");
+
+                    // Bind the parameters to the query
+                    $db->bind(":commentaire", $commentaire);
+                    $db->bind(":editDate", $editDate);
+                    $db->bind(":idDocument", $idDocument);
+
+                    // Execute the query
+                    if ($db->execute()) {
+                        echo json_encode(['success' => 'Commentaire mis à jour avec succès.']);
+                    } else {
+                        echo json_encode("0");
+                    }
+                } else {
+                    // Return error message if the document is not found
+                    echo json_encode("0");
+                }
+            } else {
+                // Return an error message if parameters are missing
+                echo json_encode("0");
+            }
+        }
+
+        if ($action == 'updatenomDocument') {
+            if (isset($_POST['idDocument']) && isset($_POST['nomDocument'])) {
+                $idDocument = $_POST['idDocument'];
+                $nomDocument = $_POST['nomDocument'];
+                $editDate = date('Y-m-d H:i:s'); // Current date and time
+
+                // Step 1: Check if the document exists
+                $db->query("SELECT idDocument FROM wbcc_document WHERE idDocument = :idDocument");
+                $db->bind(":idDocument", $idDocument);
+                $documentResult = $db->single();
+
+                if ($documentResult) {
+                    // Step 2: Update the nomDocument and editDate fields in the wbcc_document table
+                    $db->query("UPDATE wbcc_document 
+                                SET nomDocument = :nomDocument, 
+                                    editDate = :editDate 
+                                WHERE idDocument = :idDocument");
+
+                    // Bind the parameters to the query
+                    $db->bind(":nomDocument", $nomDocument);
+                    $db->bind(":editDate", $editDate);
+                    $db->bind(":idDocument", $idDocument);
+
+                    // Execute the query
+                    if ($db->execute()) {
+                        echo json_encode(['success' => 'nomDocument mis à jour avec succès.']);
+                    } else {
+                        echo json_encode("0");
+                    }
+                } else {
+                    echo json_encode("0");
+                }
+            } else {
+                echo json_encode("0");
+            }
+        }
+
+
 
         if ($action == 'updateJustification') {
             if (isset($_POST['idPointage']) && isset($_POST['idTraiteF']) && isset($_POST['resultatTraite'])) {
@@ -677,23 +841,23 @@ if (isset($_GET['action'])) {
                 $idTraiteF = $_POST['idTraiteF'];
                 $resultatTraite = $_POST['resultatTraite'];
                 $dateTraite = date('Y-m-d H:i:s');  // Current date and time
-        
+
                 // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
                 $db->query("SELECT idContactF FROM wbcc_utilisateur WHERE idUtilisateur = :idTraiteF");
                 $db->bind(":idTraiteF", $idTraiteF);
                 $idContactResult = $db->single();
-                
+
                 if ($idContactResult) {
                     $idContactF = $idContactResult->idContactF; // Access as an object property
-        
+
                     // Step 2: Get fullName from wbcc_contact using idContactF
                     $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
                     $db->bind(":idContactF", $idContactF);
                     $contactResult = $db->single();
-        
+
                     if ($contactResult) {
                         $auteurTraite = $contactResult->fullName; // Access as an object property
-        
+
                         // Step 3: Update the wbcc_pointage table with the appropriate values
                         $db->query("UPDATE wbcc_pointage 
                                     SET traite = 1, 
@@ -702,95 +866,28 @@ if (isset($_GET['action'])) {
                                         dateTraite = :dateTraite, 
                                         resultatTraite = :resultatTraite 
                                     WHERE idPointage = :idPointage");
-        
+
                         // Bind the parameters to the query
                         $db->bind(":idTraiteF", $idTraiteF);
                         $db->bind(":auteurTraite", $auteurTraite);
                         $db->bind(":dateTraite", $dateTraite);
                         $db->bind(":resultatTraite", $resultatTraite);
                         $db->bind(":idPointage", $idPointage);
-        
+
                         // Execute the query
                         if ($db->execute()) {
-                            // Return success message
                             echo json_encode(['success' => 'Justification mise à jour avec succès.']);
                         } else {
-                            // Return error message in case of failure
-                            echo json_encode(['error' => 'Échec de la mise à jour de la justification.']);
+                            echo json_encode("0");
                         }
                     } else {
-                        // Return error message if contact is not found
-                        echo json_encode(['error' => 'Aucun contact trouvé pour cet utilisateur.']);
+                        echo json_encode("0");
                     }
                 } else {
-                    // Return error message if user is not found
-                    echo json_encode(['error' => 'Aucun utilisateur trouvé avec cet ID.']);
+                    echo json_encode("0");
                 }
             } else {
-                // Return an error message if parameters are missing
-                echo json_encode(['error' => 'Paramètres manquants.']);
-            }
-        }
-        if ($action == 'updateJustificationsAbsence') {
-            if (isset($_POST['idPointage']) && isset($_POST['idTraiteDepartF']) && isset($_POST['resultatTraiteDepart'])) {
-                // Récupérer les paramètres nécessaires depuis la requête POST
-                $idPointage = $_POST['idPointage'];
-                $idTraiteDepartF = $_POST['idTraiteDepartF'];
-                $resultatTraiteDepart = $_POST['resultatTraiteDepart'];
-                $dateTraiteDepart = date('Y-m-d H:i:s');  // Date et heure actuelle
-        
-                    // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
-                $db->query("SELECT idContactF FROM wbcc_utilisateur WHERE idUtilisateur = :idTraiteDepartF");
-                $db->bind(":idTraiteDepartF", $idTraiteDepartF);
-                $idContactResult = $db->single();
-        
-                if ($idContactResult) {
-                    $idContactF = $idContactResult->idContactF; // Accéder à la propriété de l'objet
-        
-                      // Step 2: Get fullName from wbcc_contact using idContactF
-                      $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
-                      $db->bind(":idContactF", $idContactF);
-                      $contactResult = $db->single();
-          
-        
-                    if ($contactResult) {
-                        $auteurTraiteDepart = $contactResult->fullName; // Accéder à la propriété de l'objet
-        
-                        // Étape 3 : Mettre à jour la table wbcc_pointage avec les valeurs appropriées
-                        $db->query("UPDATE wbcc_pointage 
-                                    SET traiteAbsent = 1, 
-                                        idTraiteAbsentF = :idTraiteDepartF, 
-                                        auteurTraiteAbsent = :auteurTraiteDepart,
-                                        dateTraiteAbsent = :dateTraiteDepart, 
-                                        resultatTraiteAbsent = :resultatTraiteDepart 
-                                    WHERE idPointage = :idPointage");
-        
-                        // Lier les paramètres à la requête
-                        $db->bind(":idTraiteDepartF", $idTraiteDepartF);
-                        $db->bind(":auteurTraiteDepart", $auteurTraiteDepart);
-                        $db->bind(":dateTraiteDepart", $dateTraiteDepart);
-                        $db->bind(":resultatTraiteDepart", $resultatTraiteDepart);
-                        $db->bind(":idPointage", $idPointage);
-        
-                        // Exécuter la requête
-                        if ($db->execute()) {
-                            // Retourner un message de succès
-                            echo json_encode(['success' => 'Justification d\'absence mise à jour avec succès.']);
-                        } else {
-                            // Retourner un message d'erreur en cas d'échec
-                            echo json_encode(['error' => 'Échec de la mise à jour de la justification d\'absence.']);
-                        }
-                    } else {
-                        // Retourner un message d'erreur si le contact n'est pas trouvé
-                        echo json_encode(['error' => 'Aucun contact trouvé pour cet utilisateur.']);
-                    }
-                } else {
-                    // Retourner un message d'erreur si l'utilisateur n'est pas trouvé
-                    echo json_encode(['error' => 'Aucun utilisateur trouvé avec cet ID.']);
-                }
-            } else {
-                // Retourner un message d'erreur si les paramètres sont manquants
-                echo json_encode(['error' => 'Paramètres manquants.']);
+                echo json_encode("0");
             }
         }
 
@@ -801,24 +898,23 @@ if (isset($_GET['action'])) {
                 $idTraiteDepartF = $_POST['idTraiteDepartF'];
                 $resultatTraiteDepart = $_POST['resultatTraiteDepart'];
                 $dateTraiteDepart = date('Y-m-d H:i:s');  // Date et heure actuelle
-        
-                    // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
+
+                // Step 1: Get idContactF from wbcc_utilisateur using idTraiteDepartF (idUtilisateur)
                 $db->query("SELECT idContactF FROM wbcc_utilisateur WHERE idUtilisateur = :idTraiteDepartF");
                 $db->bind(":idTraiteDepartF", $idTraiteDepartF);
                 $idContactResult = $db->single();
-        
+
                 if ($idContactResult) {
                     $idContactF = $idContactResult->idContactF; // Accéder à la propriété de l'objet
-        
-                      // Step 2: Get fullName from wbcc_contact using idContactF
-                      $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
-                      $db->bind(":idContactF", $idContactF);
-                      $contactResult = $db->single();
-          
-        
+
+                    // Step 2: Get fullName from wbcc_contact using idContactF
+                    $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
+                    $db->bind(":idContactF", $idContactF);
+                    $contactResult = $db->single();
+
                     if ($contactResult) {
                         $auteurTraiteDepart = $contactResult->fullName; // Accéder à la propriété de l'objet
-        
+
                         // Étape 3 : Mettre à jour la table wbcc_pointage avec les valeurs appropriées
                         $db->query("UPDATE wbcc_pointage 
                                     SET traiteDepart = 1, 
@@ -827,46 +923,41 @@ if (isset($_GET['action'])) {
                                         dateTraiteDepart = :dateTraiteDepart, 
                                         resultatTraiteDepart = :resultatTraiteDepart 
                                     WHERE idPointage = :idPointage");
-        
+
                         // Lier les paramètres à la requête
                         $db->bind(":idTraiteDepartF", $idTraiteDepartF);
                         $db->bind(":auteurTraiteDepart", $auteurTraiteDepart);
                         $db->bind(":dateTraiteDepart", $dateTraiteDepart);
                         $db->bind(":resultatTraiteDepart", $resultatTraiteDepart);
                         $db->bind(":idPointage", $idPointage);
-        
+
                         // Exécuter la requête
                         if ($db->execute()) {
-                            // Retourner un message de succès
                             echo json_encode(['success' => 'Justification de départ mise à jour avec succès.']);
                         } else {
-                            // Retourner un message d'erreur en cas d'échec
-                            echo json_encode(['error' => 'Échec de la mise à jour de la justification de départ.']);
+                            echo json_encode("0");
                         }
                     } else {
-                        // Retourner un message d'erreur si le contact n'est pas trouvé
-                        echo json_encode(['error' => 'Aucun contact trouvé pour cet utilisateur.']);
+                        echo json_encode("0");
                     }
                 } else {
-                    // Retourner un message d'erreur si l'utilisateur n'est pas trouvé
-                    echo json_encode(['error' => 'Aucun utilisateur trouvé avec cet ID.']);
+                    echo json_encode("0");
                 }
             } else {
-                // Retourner un message d'erreur si les paramètres sont manquants
-                echo json_encode(['error' => 'Paramètres manquants.']);
+                echo json_encode("0");
             }
         }
-        
+
         if ($action == 'MupdateJustifications') {
             // Decode the incoming JSON request body
             $input = json_decode(file_get_contents('php://input'), true);
-            
+
             // Check if the JSON decoding was successful
             if (json_last_error() !== JSON_ERROR_NONE) {
-                echo json_encode(['error' => 'Erreur de décodage JSON : ' . json_last_error_msg()]);
+                echo "0";  // Return 0 on JSON decoding error
                 exit;
             }
-            
+
             // Check if required parameters are set
             if (isset($input['idPointage'], $input['idTraiteF'], $input['resultatTraite'], $input['typeTraite'])) {
                 $idPointage = $input['idPointage'];
@@ -875,23 +966,23 @@ if (isset($_GET['action'])) {
                 $typeTraite = $input['typeTraite'];
                 $raisonRejet = $input['raison']; // Assurez-vous que le paramètre 'raison' est bien reçu
                 $dateTraite = date('Y-m-d H:i:s'); // Current date and time
-                
+
                 // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
                 $db->query("SELECT idContactF FROM wbcc_utilisateur WHERE idUtilisateur = :idTraiteF");
                 $db->bind(":idTraiteF", $idTraiteF);
                 $idContactResult = $db->single();
-        
+
                 if ($idContactResult) {
                     $idContactF = $idContactResult->idContactF; // Access as an object property
-                    
+
                     // Step 2: Get fullName from wbcc_contact using idContactF
                     $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
                     $db->bind(":idContactF", $idContactF);
                     $contactResult = $db->single();
-        
+
                     if ($contactResult) {
                         $auteurTraite = $contactResult->fullName; // Access as an object property
-        
+
                         // Step 3: Update the wbcc_pointage table with the appropriate values
                         $db->query("UPDATE wbcc_pointage 
                                     SET traite = 1, 
@@ -902,7 +993,7 @@ if (isset($_GET['action'])) {
                                         typeTraite = :typeTraite,
                                         raisonRejet = :raisonRejet
                                     WHERE idPointage = :idPointage");
-        
+
                         $db->bind(":idTraiteF", $idTraiteF);
                         $db->bind(":auteurTraite", $auteurTraite);
                         $db->bind(":dateTraite", $dateTraite);
@@ -910,29 +1001,30 @@ if (isset($_GET['action'])) {
                         $db->bind(":typeTraite", $typeTraite);
                         $db->bind(":raisonRejet", $raisonRejet); // Bind the rejection reason
                         $db->bind(":idPointage", $idPointage);
-        
+
                         if ($db->execute()) {
                             echo json_encode(['success' => 'Justification mise à jour avec succès.']);
                         } else {
-                            echo json_encode(['error' => 'Échec de la mise à jour de la justification.']);
+                            echo "0";  // Return 0 if update fails
                         }
                     } else {
-                        echo json_encode(['error' => 'Contact non trouvé pour l\'idContactF spécifié.']);
+                        echo "0";  // Return 0 if contact is not found
                     }
                 } else {
-                    echo json_encode(['error' => 'Utilisateur non trouvé pour l\'idTraiteF spécifié.']);
+                    echo "0";  // Return 0 if user is not found
                 }
             } else {
-                echo json_encode(['error' => 'Paramètres manquants.']);
+                echo "0";  // Return 0 if required parameters are missing
             }
         }
-        
+
+
         if ($action == 'MupdateJustificationsDepart') {
             // Decode the incoming JSON request body
             $input = json_decode(file_get_contents('php://input'), true);
-        
+
             // Check if required parameters are set
-            if (isset($input['idPointage'] ,$input['idTraiteDepartF'] ,$input['resultatTraiteDepart'] ,$input['typeTraiteDepart'] )) {
+            if (isset($input['idPointage'], $input['idTraiteDepartF'], $input['resultatTraiteDepart'], $input['typeTraiteDepart'])) {
                 // Retrieve the required parameters from the decoded JSON
                 $idPointage = $input['idPointage'];
                 $idTraiteF = $input['idTraiteDepartF'];
@@ -940,33 +1032,34 @@ if (isset($_GET['action'])) {
                 $typeTraite = $input['typeTraiteDepart'];
                 $raisonRejet = $input['raison']; // Assurez-vous que le paramètre 'raison' est bien reçu
                 $dateTraite = date('Y-m-d H:i:s');  // Current date and time
-          // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
+
+                // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
                 $db->query("SELECT idContactF FROM wbcc_utilisateur WHERE idUtilisateur = :idTraiteF");
                 $db->bind(":idTraiteF", $idTraiteF);
                 $idContactResult = $db->single();
-        
+
                 if ($idContactResult) {
                     $idContactF = $idContactResult->idContactF; // Access as an object property
-        
+
                     // Step 2: Get fullName from wbcc_contact using idContactF
                     $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
                     $db->bind(":idContactF", $idContactF);
                     $contactResult = $db->single();
-        
+
                     if ($contactResult) {
                         $auteurTraite = $contactResult->fullName; // Access as an object property
-        
+
                         // Step 3: Update the wbcc_pointage table with the appropriate values
                         $db->query("UPDATE wbcc_pointage 
                                     SET traiteDepart = 1, 
                                         idTraiteDepartF = :idTraiteF, 
                                         auteurTraiteDepart = :auteurTraite,
                                         dateTraiteDepart = :dateTraite, 
-                                        resultatTraiteDepart = :resultatTraite ,
+                                        resultatTraiteDepart = :resultatTraite,
                                         typeTraiteDepart = :typeTraite,
-                                        raisonRejetDeaprt = :raisonRejet
+                                        raisonRejetDepart = :raisonRejet
                                     WHERE idPointage = :idPointage");
-        
+
                         // Bind the parameters to the query
                         $db->bind(":idTraiteF", $idTraiteF);
                         $db->bind(":auteurTraite", $auteurTraite);
@@ -975,32 +1068,94 @@ if (isset($_GET['action'])) {
                         $db->bind(":typeTraite", $typeTraite);
                         $db->bind(":raisonRejet", $raisonRejet); // Bind the rejection reason
                         $db->bind(":idPointage", $idPointage);
-        
+
                         // Execute the query
                         if ($db->execute()) {
-                            // Return success message
                             echo json_encode(['success' => 'Justification mise à jour avec succès.']);
                         } else {
-                            // Return error message in case of failure
-                            echo json_encode(['error' => 'Échec de la mise à jour de la justification.']);
+                            echo "0";  // Return 0 if update fails
                         }
                     } else {
-                        // Return error message if contact is not found
-                        echo json_encode(['error' => 'Aucun contact trouvé pour cet utilisateur.']);
+                        echo "0";  // Return 0 if contact is not found
                     }
                 } else {
-                    // Return error message if user is not found
-                    echo json_encode(['error' => 'Aucun utilisateur trouvé avec cet ID.']);
+                    echo "0";  // Return 0 if user is not found
                 }
             } else {
-                // Return an error message if parameters are missing
-                echo json_encode(['error' => 'Paramètres manquants.']);
+                echo "0";  // Return 0 if required parameters are missing
             }
         }
- 
+        if ($action == 'MupdateJustificationsAbsence') {
+            // Decode the incoming JSON request body
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            // Check if required parameters are set
+            if (isset($input['idPointage'], $input['idTraiteAbsentF'], $input['resultatTraiteAbsent'], $input['typeTraiteAbsent'])) {
+                // Retrieve the required parameters from the decoded JSON
+                $idPointage = $input['idPointage'];
+                $idTraiteF = $input['idTraiteAbsentF'];
+                $resultatTraite = $input['resultatTraiteAbsent'];
+                $typeTraite = $input['typeTraiteAbsent'];
+                $raisonRejet = $input['raison']; // Assurez-vous que le paramètre 'raison' est bien reçu
+                $dateTraite = date('Y-m-d H:i:s');  // Current date and time
+
+                // Step 1: Get idContactF from wbcc_utilisateur using idTraiteF (idUtilisateur)
+                $db->query("SELECT idContactF FROM wbcc_utilisateur WHERE idUtilisateur = :idTraiteF");
+                $db->bind(":idTraiteF", $idTraiteF);
+                $idContactResult = $db->single();
+
+                if ($idContactResult) {
+                    $idContactF = $idContactResult->idContactF; // Access as an object property
+
+                    // Step 2: Get fullName from wbcc_contact using idContactF
+                    $db->query("SELECT fullName FROM wbcc_contact WHERE idContact = :idContactF");
+                    $db->bind(":idContactF", $idContactF);
+                    $contactResult = $db->single();
+
+                    if ($contactResult) {
+                        $auteurTraite = $contactResult->fullName; // Access as an object property
+
+                        // Step 3: Update the wbcc_pointage table with the appropriate values
+                        $db->query("UPDATE wbcc_pointage 
+                                    SET traiteAbsent = 1, 
+                                        idTraiteAbsentF = :idTraiteF, 
+                                        auteurTraiteAbsent = :auteurTraite,
+                                        dateTraiteAbsent = :dateTraite, 
+                                        resultatTraiteAbsent = :resultatTraite,
+                                        typeTraiteAbsent = :typeTraite,
+                                        raisonRejetAbsence = :raisonRejet
+                                    WHERE idPointage = :idPointage");
+
+                        // Bind the parameters to the query
+                        $db->bind(":idTraiteF", $idTraiteF);
+                        $db->bind(":auteurTraite", $auteurTraite);
+                        $db->bind(":dateTraite", $dateTraite);
+                        $db->bind(":resultatTraite", $resultatTraite);
+                        $db->bind(":typeTraite", $typeTraite);
+                        $db->bind(":raisonRejet", $raisonRejet); // Bind the rejection reason
+                        $db->bind(":idPointage", $idPointage);
+
+                        // Execute the query
+                        if ($db->execute()) {
+                            echo json_encode(['success' => 'Justification mise à jour avec succès.']);
+                        } else {
+                            echo "0";  // Return 0 if update fails
+                        }
+                    } else {
+                        echo "0";  // Return 0 if contact is not found
+                    }
+                } else {
+                    echo "0";  // Return 0 if user is not found
+                }
+            } else {
+                echo "0";  // Return 0 if required parameters are missing
+            }
+        }
+
+
         if ($action == 'filterPointages') {
             // Retrieve filter parameters
-            
+
             $Motifjustification = isset($_POST['Motifjustification']) ? $_POST['Motifjustification'] : '';
             $etat = isset($_POST['etat']) ? $_POST['etat'] : '';
             $periode = isset($_POST['periode']) ? $_POST['periode'] : '';
@@ -1008,16 +1163,16 @@ if (isset($_GET['action'])) {
             $dateDebut = isset($_POST['dateDebut']) ? $_POST['dateDebut'] : ''; // For 'Personnaliser'
             $dateFin = isset($_POST['dateFin']) ? $_POST['dateFin'] : ''; // For 'Personnaliser'
             $userid = isset($_POST['userid']) ? $_POST['userid'] : '';
-        
+
             // Base query for filtering pointages with join
             $sql = "SELECT p.*, u.jourTravail, u.horaireTravail 
                 FROM wbcc_pointage p
                 JOIN wbcc_utilisateur u ON p.idUserF = u.idUtilisateur 
                 WHERE p.idUserF = :userid";
-        
+
             // Array to hold bind parameters
             $bindParams = [':userid' => $userid];
-        
+
             // Apply 'etat' filter
             if ($etat === 'Retard') {
                 $sql .= " AND p.retard = 1";
@@ -1026,22 +1181,21 @@ if (isset($_GET['action'])) {
             } elseif ($etat === 'Present') {
                 $sql .= " AND p.retard = 0 AND p.absent = 0";
             }
-        
+
             // Apply 'Motifjustification' filter
             if ($Motifjustification === 'justifie') {
                 $sql .= " AND p.resultatTraite = 'Accepté'";
             } elseif ($Motifjustification === 'injustifie') {
                 $sql .= " AND p.resultatTraite = 'Refusé'";
-           
             }
-        
+
             // Apply 'periode' filter
             switch ($periode) {
                 case 'today':
                     $sql .= " AND p.datePointage = :today";
                     $bindParams[':today'] = date('Y-m-d');
                     break;
-        
+
                 case '1': // 'A la date du'
                     if ($dateOne) {
                         // Convert the date format if needed (DD-MM-YYYY to YYYY-MM-DD)
@@ -1056,7 +1210,7 @@ if (isset($_GET['action'])) {
                         }
                     }
                     break;
-        
+
                 case '2': // 'Personnaliser'
                     if ($dateDebut && $dateFin) {
                         $dateDebutFormatted = DateTime::createFromFormat('d-m-Y', $dateDebut);
@@ -1072,7 +1226,7 @@ if (isset($_GET['action'])) {
                         }
                     }
                     break;
-        
+
                 case 'semaine':
                 case 'mois':
                 case 'trimestre':
@@ -1083,7 +1237,7 @@ if (isset($_GET['action'])) {
                     $bindParams[':startDate'] = $dateRange['start'];
                     $bindParams[':endDate'] = $dateRange['end'];
                     break;
-        
+
                 default:
                     // No period filter applied
                     break;
@@ -1091,22 +1245,22 @@ if (isset($_GET['action'])) {
             $sql .= " ORDER BY p.datePointage desc";
             // Prepare and execute the query
             $db->query($sql);
-        
+
             // Bind the parameters dynamically
             foreach ($bindParams as $param => $value) {
                 $db->bind($param, $value);
             }
-        
+
             // Fetch the filtered data
             $results = $db->resultset();
-        
+
             foreach ($results as &$pointage) {
                 $jourSemaine = date('N', strtotime($pointage->datePointage)) - 1; // Lundi=0, Mardi=1, ...
-        
+
                 // Convertir jourTravail et horaireTravail en tableaux
                 $jours = explode(';', $pointage->jourTravail);
                 $horaires = explode(';', $pointage->horaireTravail);
-        
+
                 // Vérifier que le jour de la semaine existe dans les horaires
                 if (isset($horaires[$jourSemaine])) {
                     list($heureDebut, $heureFin) = explode('-', $horaires[$jourSemaine]);
@@ -1117,11 +1271,11 @@ if (isset($_GET['action'])) {
                     $pointage->heureFinJour = null;
                 }
             }
-        
+
             // Sortie des résultats en JSON
             echo json_encode($results);
         }
-        
+
         if ($action == 'filterPointagesAdmin') {
             // Retrieve filter parameters
             $Motifjustification = isset($_POST['Motifjustification']) ? $_POST['Motifjustification'] : '';
@@ -1134,17 +1288,17 @@ if (isset($_GET['action'])) {
             $matricule = isset($_POST['matricule']) ? $_POST['matricule'] : '';
             $idUtilisateur = isset($_POST['contact']) ? $_POST['contact'] : ''; // For filtering by user
 
-        
+
             // Base query for filtering pointages with join
             $sql = "SELECT p.*, c.fullName, u.matricule, u.jourTravail , u.horaireTravail 
                     FROM wbcc_pointage p
                     JOIN wbcc_utilisateur u ON p.idUserF = u.idUtilisateur
                     LEFT JOIN wbcc_contact c ON c.idContact = u.idContactF
                     WHERE 1=1";
-        
+
             // Array to hold bind parameters
             $bindParams = [];
-        
+
             // Apply 'etat' filter
             if ($etat === 'Retard') {
                 $sql .= " AND p.retard = 1";
@@ -1153,11 +1307,11 @@ if (isset($_GET['action'])) {
             } elseif ($etat === 'Present') {
                 $sql .= " AND p.retard = 0 AND p.absent = 0";
             }
-        
+
             // Apply 'Motifjustification' filter
             if ($Motifjustification === 'justifie') {
                 $sql .= " AND p.resultatTraite = 'Accepté'";
-            }elseif($Motifjustification === 'injustifie'){
+            } elseif ($Motifjustification === 'injustifie') {
                 $sql .= " AND p.resultatTraite = 'Refusé'";
             }
             if (!empty($matricule)) {
@@ -1168,7 +1322,7 @@ if (isset($_GET['action'])) {
                 $sql .= " AND c.idContact = :idUtilisateur";
                 $bindParams[':idUtilisateur'] = $idUtilisateur;
             }
-        
+
             if (!empty($site)) {
                 $sql .= " AND p.adressePointage LIKE :site";
                 $bindParams[':site'] = '%' . $site . '%'; // Use wildcards for LIKE
@@ -1179,7 +1333,7 @@ if (isset($_GET['action'])) {
                     $sql .= " AND p.datePointage = :today";
                     $bindParams[':today'] = date('Y-m-d');
                     break;
-        
+
                 case '1': // 'A la date du'
                     if ($dateOne) {
                         // Convert the date format if needed (DD-MM-YYYY to YYYY-MM-DD)
@@ -1194,7 +1348,7 @@ if (isset($_GET['action'])) {
                         }
                     }
                     break;
-        
+
                 case '2': // 'Personnaliser'
                     if ($dateDebut && $dateFin) {
                         $dateDebutFormatted = DateTime::createFromFormat('d-m-Y', $dateDebut);
@@ -1210,7 +1364,7 @@ if (isset($_GET['action'])) {
                         }
                     }
                     break;
-        
+
                 case 'semaine':
                 case 'mois':
                 case 'trimestre':
@@ -1221,25 +1375,25 @@ if (isset($_GET['action'])) {
                     $bindParams[':startDate'] = $dateRange['start'];
                     $bindParams[':endDate'] = $dateRange['end'];
                     break;
-        
+
                 default:
                     // No period filter applied
                     break;
             }
-        
+
             $sql .= " ORDER BY p.datePointage desc";
 
             // Prepare and execute the query
             $db->query($sql);
-        
+
             // Bind the parameters dynamically
             foreach ($bindParams as $param => $value) {
                 $db->bind($param, $value);
             }
-        
+
             // Fetch the filtered data
             $results = $db->resultset();
-        
+
             // Calculate the start and end times for each pointage
             foreach ($results as &$pointage) {
                 $jourSemaine = date('N', strtotime($pointage->datePointage)) - 1; // Lundi=0, Mardi=1, etc.
@@ -1313,17 +1467,9 @@ if (isset($_GET['action'])) {
                                     $db->query("INSERT INTO wbcc_document (numeroDocument, nomDocument, urlDocument, commentaire, createDate, source, publie) 
                                                 VALUES (:numeroDocument, :nomDocument, :urlDocument, :commentaire, NOW(), :source, :publie)");
                                     $db->bind("numeroDocument", $numeroDocument);
-                                    if(gettype($nomDocuments) == "string") {
-                                        $db->bind("nomDocument", $nomDocuments ?? "Unnamed_Document_$i");
-                                    } else {
-                                        $db->bind("nomDocument", $nomDocuments[$i] ?? "Unnamed_Document_$i");
-                                    }
+                                    $db->bind("nomDocument", $nomDocuments[$i] ?? "Unnamed_Document_$i");
                                     $db->bind("urlDocument", $urlDocument);
-                                    if(gettype($comments) == "string") {
-                                        $db->bind("commentaire", $comments ?? null);
-                                    } else {
-                                        $db->bind("commentaire", $comments[$i] ?? null);
-                                    }
+                                    $db->bind("commentaire", $comments[$i] ?? null);
                                     $db->bind("source", 'EXTRANET');
                                     $db->bind("publie", 1);
 
@@ -1374,333 +1520,476 @@ if (isset($_GET['action'])) {
                 echo json_encode("0");
             }
         }
-        
-// if ($action == 'saveJustification') {
-//             if (isset($_POST['pointage_id'], $_POST['type'])) {
-//                 $pointage_id = $_POST['pointage_id'];
-//                 $motif = $_POST['motif'];
-//                 $type = $_POST['type'];
-//                 $nomDocuments = isset($_POST['nomDocument']) ? $_POST['nomDocument'] : [];
-//                 $comments = isset($_POST['comments']) ? $_POST['comments'] : [];
-//                 $errorMessages = [];
-//                 $successCount = 0;
-        
-//                 $motifColumn = $type === "Arrivé" ? "motifRetard" : ($type === "Départs" ? "motifRetardDepart" : "motifAbsent");
-//                 $isArrive = $type === "Arrivé" ? 1 : ($type === "Départs" ? 0 : null);
-//                 $isAbsent = $type === "Absence" ? 1 : 0;
-        
-//                 if (isset($_POST['modify']) && $_POST['modify'] == true) {
-//                     $db->query("UPDATE wbcc_pointage SET $motifColumn = :motif WHERE idPointage = :idPointage");
-//                     $db->bind("motif", $motif);
-//                     $db->bind("idPointage", $pointage_id);
-        
-//                     if (!$db->execute()) {
-//                         $errorMessages[] = "Failed to update motif: " . $db->errorInfo();
-//                     }
-//                 } else {
-//                     if (isset($_FILES['attachments']) && count($_FILES['attachments']['name']) > 0) {
-//                         $uploadDir = "../documents/justification/";
-//                         if (!is_dir($uploadDir)) {
-//                             mkdir($uploadDir, 0755, true);
-//                         }
-        
-//                         for ($i = 0; $i < count($_FILES['attachments']['name']); $i++) {
-//                             if ($_FILES['attachments']['error'][$i] == UPLOAD_ERR_OK) {
-//                                 $uploadedFile = $_FILES['attachments']['tmp_name'][$i];
-//                                 $originalFileName = $_FILES['attachments']['name'][$i];
-//                                 $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-        
-//                                 if (!in_array($fileExtension, ['pdf', 'mp4', 'jpg', 'jpeg', 'png'])) {
-//                                     $errorMessages[] = "Unsupported file type for $originalFileName";
-//                                     continue;
-//                                 }
-        
-//                                 $numeroDocument = "DOC" . date('dmYHis') . $pointage_id . $i;
-//                                 $nomDocumentSanitized = preg_replace('/[^a-zA-Z0-9.-]/', '', $nomDocuments[$i] ?? "Unnamed_Document_$i");
-//                                 $dateNow = date('YmdHis');
-//                                 $urlDocument = 'Pj_' . $pointage_id . '' . $nomDocumentSanitized . '' . $dateNow . '.' . $fileExtension;
-        
-//                                 if (move_uploaded_file($uploadedFile, $uploadDir . $urlDocument)) {
-//                                     $db->query("INSERT INTO wbcc_document (numeroDocument, nomDocument, urlDocument, commentaire, createDate, source, publie) 
-//                                                 VALUES (:numeroDocument, :nomDocument, :urlDocument, :commentaire, NOW(), :source, :publie)");
-//                                     $db->bind("numeroDocument", $numeroDocument);
-//                                     $db->bind("nomDocument", $nomDocuments ?? "Unnamed_Document_$i");
-//                                     $db->bind("urlDocument", $urlDocument);
-//                                     $db->bind("commentaire", $comments[$i] ?? null);
-//                                     $db->bind("source", 'EXTRANET');
-//                                     $db->bind("publie", 1);
-        
-//                                     if (!$db->execute()) {
-//                                         $errorMessages[] = "Failed to save document $originalFileName: " . $db->errorInfo();
-//                                         continue;
-//                                     }
-        
-//                                     $idDocument = $db->lastInsertId();
-        
-//                                     $db->query("INSERT INTO wbcc_document_pointage (idDocumentF, idPointageF, nomDocument, isArrive, isAbsent) 
-//                                                 VALUES (:idDocumentF, :idPointageF, :nomDocument, :isArrive, :isAbsent)");
-//                                     $db->bind("idDocumentF", $idDocument);
-//                                     $db->bind("idPointageF", $pointage_id);
-//                                     $db->bind("nomDocument", $nomDocuments[$i] ?? "Unnamed_Document_$i");
-//                                     $db->bind("isArrive", $isArrive);
-//                                     $db->bind("isAbsent", $isAbsent);
-        
-//                                     if (!$db->execute()) {
-//                                         $errorMessages[] = "Failed to link document $originalFileName: " . $db->errorInfo();
-//                                         continue;
-//                                     }
-        
-//                                     $successCount++;
-//                                 } else {
-//                                     $errorMessages[] = "Failed to move uploaded file $originalFileName.";
-//                                 }
-//                             } else {
-//                                 $errorMessages[] = "Error uploading file $i: " . $_FILES['attachments']['error'][$i];
-//                             }
-//                         }
-//                     }
-        
-//                     $db->query("UPDATE wbcc_pointage SET $motifColumn = :motif WHERE idPointage = :idPointage");
-//                     $db->bind("motif", $motif);
-//                     $db->bind("idPointage", $pointage_id);
-        
-//                     if (!$db->execute()) {
-//                         $errorMessages[] = "Failed to update pointage motif: " . $db->errorInfo();
-//                     }
-//                 }
-        
-//                 if (empty($errorMessages)) {
-//                     echo json_encode(['success' => true, 'message' => "Request processed successfully. Total uploads: $successCount"]);
-//                 } else {
-//                     echo json_encode(['success' => false, 'message' => implode(", ", $errorMessages)]);
-//                 }
-//             } else {
-//                 echo json_encode("0");
-//             }
-//         }
-        // if ($action == 'saveJustification') {
-        //     if (isset($_POST['pointage_id'], $_POST['type'])) {
-        //         $pointage_id = $_POST['pointage_id'];
-        //         $motif = $_POST['motif'];
-        //         $type = $_POST['type']; // "Arrivé" or "Départs"
-        //         $nomDocuments = isset($_POST['nomDocument']) ? $_POST['nomDocument'] : []; // Retrieve nomDocument array
-        //         $comments = isset($_POST['comments']) ? $_POST['comments'] : []; // Retrieve comments array
-        
-        //         $errorMessages = [];
-        //         $successCount = 0;
-        
-        //         // Define column and flag
-        //         $motifColumn = $type === "Arrivé" ? "motifRetard" : "motifRetardDepart";
-        //         $isArrive = $type === "Arrivé" ? 1 : 0;
-        
-        //         // Check if attachments exist
-        //         if (isset($_FILES['attachments']) && count($_FILES['attachments']['name']) > 0) {
-        //             $uploadDir = "../documents/pointage/justification/";
-        
-        //             if (!is_dir($uploadDir)) {
-        //                 mkdir($uploadDir, 0755, true);
-        //             }
-        
-        //             // Iterate through files
-        //             for ($i = 0; $i < count($_FILES['attachments']['name']); $i++) {
-        //                 if ($_FILES['attachments']['error'][$i] == UPLOAD_ERR_OK) {
-        //                     $uploadedFile = $_FILES['attachments']['tmp_name'][$i];
-        //                     $originalFileName = $_FILES['attachments']['name'][$i];
-        //                     $fileType = mime_content_type($uploadedFile);
-        //                     $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-        
-        //                     // Validate file type
-        //                     if (!in_array($fileExtension, ['pdf', 'mp4', 'jpg', 'jpeg', 'png'])) {
-        //                         $errorMessages[] = "Unsupported file type for $originalFileName";
-        //                         continue;
-        //                     }
-        
-        //                     // Create document variables
-        //                     $numeroDocument = "DOC" . date('dmYHis') . $pointage_id . $i;
-                            
-        //                     $nomDocument = isset($nomDocuments[$i]) ? $nomDocuments[$i] : "Unnamed_Document_$i";
-        //                     // Sanitize the nomDocument to remove special characters
-        //                     $nomDocumentSanitized = preg_replace('/[^a-zA-Z0-9._-]/', '_', $nomDocument);
-        
-        //                     // Create the desired URL format: Pj_idpointage_nomDocument_date.extension
-        //                     $dateNow = date('YmdHis'); // Current date-time in the format YYYYMMDDHHMMSS
-        //                     $urlDocument = 'Pj_' . $pointage_id . '_' . $nomDocumentSanitized . '_' . $dateNow . '.' . $fileExtension;
-        
-        //                     // Use corresponding nomDocument and comment
-        //                     $nomDocument = isset($nomDocuments[$i]) ? $nomDocuments[$i] : "Unnamed_Document_$i";
-        //                     $comment = isset($comments[$i]) ? $comments[$i] : null;
-        
-        //                     if (move_uploaded_file($uploadedFile, $uploadDir . $urlDocument)) {
-        //                         // Insert into wbcc_document
-        //                         $db->query("INSERT INTO wbcc_document (numeroDocument, nomDocument, urlDocument, commentaire, createDate, source, publie) 
-        //                                     VALUES (:numeroDocument, :nomDocument, :urlDocument, :commentaire, NOW(), :source, :publie)");
-        //                         $db->bind("numeroDocument", $numeroDocument);
-        //                         $db->bind("nomDocument", $nomDocument);
-        //                         $db->bind("urlDocument", $urlDocument);
-        //                         $db->bind("commentaire", $comment);
-        //                         $db->bind("source", 'EXTRANET');
-        //                         $db->bind("publie", 1);
-        
-        //                         if ($db->execute()) {
-        //                             $idDocument = $db->lastInsertId();
-        
-        //                             // Update wbcc_pointage
-        //                             $db->query("UPDATE wbcc_pointage 
-        //                                         SET idDocumentF = :idDocumentF, $motifColumn = :motif 
-        //                                         WHERE idPointage = :idPointage");
-        //                             $db->bind("idDocumentF", $idDocument);
-        //                             $db->bind("motif", $motif);
-        //                             $db->bind("idPointage", $pointage_id);
-        
-        //                             if ($db->execute()) {
-        //                                 // Insert into wbcc_document_pointage
-        //                                 $db->query("INSERT INTO wbcc_document_pointage (idDocumentF, idPointageF, nomDocument, isArrive) 
-        //                                             VALUES (:idDocumentF, :idPointageF, :nomDocument, :isArrive)");
-        //                                 $db->bind("idDocumentF", $idDocument);
-        //                                 $db->bind("idPointageF", $pointage_id);
-        //                                 $db->bind("nomDocument", $nomDocument);
-        //                                 $db->bind("isArrive", $isArrive);
-        
-        //                                 if ($db->execute()) {
-        //                                     $successCount++;
-        //                                 } else {
-        //                                     $errorMessages[] = "Failed to link document $originalFileName to pointage.";
-        //                                 }
-        //                             } else {
-        //                                 $errorMessages[] = "Failed to update pointage for document $originalFileName.";
-        //                             }
-        //                         } else {
-        //                             $errorMessages[] = "Failed to save document $originalFileName.";
-        //                         }
-        //                     } else {
-        //                         $errorMessages[] = "Failed to move uploaded file $originalFileName.";
-        //                     }
-        //                 } else {
-        //                     $errorMessages[] = "Error uploading file $i: " . $_FILES['attachments']['error'][$i];
-        //                 }
-        //             }
-        //         }
-        
-        //         // Final response
-        //         if (empty($errorMessages)) {
-        //             echo json_encode(['success' => true, 'message' => "Request processed successfully. Total uploads: $successCount"]);
-        //         } else {
-        //             echo json_encode(['success' => false, 'errors' => $errorMessages]);
-        //         }
-        //     } else {
-        //         echo json_encode(['error' => 'Required parameters are missing.']);
-        //     }
-        // }
+
+
 
         if ($action == 'deleteDocuments') {
             if (isset($_GET['idDocument'])) {
                 $idDocument = $_GET['idDocument'];
-        
-                try {
-                    // Delete from wbcc_document_pointage where idDocumentF matches
-                    $db->query("DELETE FROM wbcc_document_pointage WHERE idDocumentF = :idDocument");
-                    $db->bind("idDocument", $idDocument);
-        
-                    if (!$db->execute()) {
-                        throw new Exception("Failed to delete from wbcc_document_pointage.");
-                    }
-        
-                    // Delete from wbcc_document where idDocument matches
-                    $db->query("DELETE FROM wbcc_document WHERE idDocument = :idDocument");
-                    $db->bind("idDocument", $idDocument);
-        
-                    if (!$db->execute()) {
-                        throw new Exception("Failed to delete from wbcc_document.");
-                    }
-        
-                    // Success response
-                    echo json_encode(['success' => true, 'message' => 'Document deleted successfully.']);
-                } catch (Exception $e) {
-                    // Error response
-                    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+
+                // Delete from wbcc_document_pointage where idDocumentF matches
+                $db->query("DELETE FROM wbcc_document_pointage WHERE idDocumentF = :idDocument");
+                $db->bind("idDocument", $idDocument);
+
+                if (!$db->execute()) {
+                    echo json_encode(0);  // Failure response
+                    return;  // Stop further execution
                 }
+
+                // Delete from wbcc_document where idDocument matches
+                $db->query("DELETE FROM wbcc_document WHERE idDocument = :idDocument");
+                $db->bind("idDocument", $idDocument);
+
+                if (!$db->execute()) {
+                    echo json_encode(0);  // Failure response
+                    return;  // Stop further execution
+                }
+
+                // Success response
+                echo json_encode(['success' => true, 'message' => 'Document deleted successfully.']);
             } else {
                 // Missing idDocument
-                echo json_encode(['success' => false, 'error' => 'idDocument is required.']);
+                echo json_encode(0);  // Failure response
             }
         }
-       
+
+        if ($action == 'deleteDocumentsBynom') {
+            if (isset($_GET['nomDocument'])) {
+                // $idDocument = $_GET['nomDocument'];
+
+                // // Delete from wbcc_document_pointage where nomDocument matches
+                // $db->query("DELETE FROM wbcc_document_pointage WHERE nomDocument = :nomDocument");
+                // $db->bind("nomDocument", $nomDocument);
+
+                // if (!$db->execute()) {
+                //     echo json_encode(0);  // Failure response
+                //     return;  // Stop further execution
+                // }
+
+                // // Delete from wbcc_document where nomDocument matches
+                // $db->query("DELETE FROM wbcc_document WHERE nomDocument = :nomDocument");
+                // $db->bind("nomDocument", $nomDocument);
+
+                // if (!$db->execute()) {
+                //     echo json_encode(0);  // Failure response
+                //     return;  // Stop further execution
+                // }
+
+                // Success response
+                echo json_encode(['success' => true, 'message' => 'Suppression non disponible pour le moment']);
+            } else {
+                // Missing nomDocument
+                echo json_encode(0);  // Failure response
+            }
+        }
+
+        // if ($action == 'addPointage') {
+        //     try {
+        //         // 1. Récupérer et décoder les données entrantes
+        //         $input = file_get_contents('php://input');
+        //         $data = json_decode($input, true);
+
+        //         // 2. Vérification des données requises
+        //         if (!isset($data['idUser'], $data['adressePointage'])) {
+        //             echo json_encode(['error' => 'Données manquantes : idUser et adressePointage requis.']);
+        //             exit;
+        //         }
+
+        //         // 3. Initialisation des variables
+        //         $userid = $data['idUser'];
+        //         $adressePointage = $data['adressePointage'];
+        //         $datePointage = date('Y-m-d');
+        //         $heurePointage = date('H:i:s');
+
+        //         $db->query("
+        //             SELECT u.idSiteF, s.adresseSite 
+        //             FROM wbcc_utilisateur u 
+        //             LEFT JOIN wbcc_site s ON u.idSiteF = s.idSite 
+        //             WHERE u.idUtilisateur = :userid
+        //         ");
+        //         $db->bind(":userid", $userid);
+        //         $userSiteData = $db->single();
+        //         $adresseProgramme = $userSiteData->adresseSite;
+        //         $anomalie = ($adressePointage !== $adresseProgramme) ? 1 : 0;
+
+        //         // 4. Vérification si un pointage existe déjà pour aujourd'hui
+        //         $db->query("SELECT * FROM wbcc_pointage WHERE idUserF = :userid AND datePointage = :datePointage");
+        //         $db->bind(":userid", $userid);
+        //         $db->bind(":datePointage", $datePointage);
+        //         $existingPointage = $db->single();
+
+        //         if ($existingPointage) {
+        //             // 5. Gestion du début de pointage s'il n'existe pas encore
+        //             if (empty($existingPointage->heureDebutPointage)) {
+        //                 // Récupérer les jours et horaires de travail de l'utilisateur
+        //                 $db->query("SELECT jourTravail, horaireTravail FROM wbcc_utilisateur WHERE idUtilisateur = :userid");
+        //                 $db->bind(":userid", $userid);
+        //                 $userData = $db->single();
+
+        //                 if ($userData) {
+        //                     // 6. Vérifier si c'est un jour de travail
+        //                     $joursTravail = explode(';', $userData->jourTravail);
+        //                     $horairesTravail = explode(';', $userData->horaireTravail);
+
+        //                     $jourSemaine = date('N', strtotime($datePointage)); // Jour de la semaine (1 = lundi)
+        //                     $heureTravailJour = $horairesTravail[$jourSemaine - 1]; // Horaire du jour actuel
+
+        //                     if (!empty($heureTravailJour)) {
+        //                         list($heureDebutJour, $heureFinJour) = explode('-', $heureTravailJour);
+
+        //                         // Comparer l'heure actuelle avec l'heure de début de travail
+        //                         $datetimeDebutJour = new DateTime($heureDebutJour);
+        //                         $datetimePointage = new DateTime($heurePointage);
+
+        //                         $nbMinuteRetard = 0; // Initialiser les minutes de retard
+        //                         $retard = 0; // Par défaut, pas de retard
+
+        //                         // Vérifier si l'heure de pointage dépasse l'heure de début de travail de plus de 5 minutes
+        //                         if ($datetimePointage > $datetimeDebutJour) {
+        //                             $interval = $datetimeDebutJour->diff($datetimePointage);
+        //                             $nbMinuteRetard = ($interval->h * 60) + $interval->i;
+
+        //                             if ($nbMinuteRetard > 5) { // Seulement si plus de 5 minutes de retard
+        //                                 $retard = 1; // Marquer comme retard
+        //                             }
+        //                         }
+
+        //                         // 7. Mettre à jour le pointage avec les informations
+        //                         $db->query("
+        //                             UPDATE wbcc_pointage
+        //                             SET heureDebutPointage = :heurePointage,
+        //                                 nbMinuteRetard = :nbMinuteRetard,
+        //                                 adressePointage =:adressePointage,
+        //                                 adresseProgramme = :adresseProgramme,
+        //                                 anomalieDebutJour = :anomalie,
+        //                                 retard = :retard
+        //                             WHERE idUserF = :userid AND datePointage = :datePointage
+        //                         ");
+        //                         $db->bind(":heurePointage", $heurePointage);
+        //                         $db->bind(":nbMinuteRetard", $nbMinuteRetard);
+        //                         $db->bind(":adressePointage", $adressePointage);
+        //                         $db->bind(":retard", $retard);
+        //                         $db->bind(":adresseProgramme", $adresseProgramme);
+        //                         $db->bind(":anomalie", $anomalie);
+        //                         $db->bind(":userid", $userid);
+        //                         $db->bind(":datePointage", $datePointage);
+
+        //                         if ($db->execute()) {
+        //                             echo json_encode([
+        //                                 'success' => 'Pointage enregistré avec succès.',
+        //                                 'nbMinuteRetard' => $nbMinuteRetard,
+        //                                 'retard' => $retard,
+        //                                 'idPointage' => $existingPointage->idPointage
+        //                             ]);
+        //                         } else {
+        //                             echo json_encode(['error' => 'Erreur lors de la mise à jour du pointage.']);
+        //                         }
+        //                     } else {
+        //                         echo json_encode(['error' => 'Pas d\'horaire défini pour ce jour.']);
+        //                     }
+
+        //                 } else {
+        //                     echo json_encode(['error' => 'Utilisateur introuvable.']);
+        //                 }
+        //             } else {
+        //                 echo json_encode(['message' => 'Pointage déjà effectué pour aujourd\'hui.']);
+        //             }
+        //         } else {
+        //             // No existing pointage: Insert a new record
+        //             // Retrieve user's work schedule
+        //             $db->query("SELECT jourTravail, horaireTravail FROM wbcc_utilisateur WHERE idUtilisateur = :userid");
+        //             $db->bind(":userid", $userid);
+        //             $userData = $db->single();
+
+        //             if ($userData) {
+        //                 // Check if it's a working day
+        //                 $joursTravail = explode(';', $userData->jourTravail);
+        //                 $horairesTravail = explode(';', $userData->horaireTravail);
+        //                 $jourSemaine = date('N', strtotime($datePointage));
+        //                 $heureTravailJour = $horairesTravail[$jourSemaine - 1];
+
+        //                 if (!empty($heureTravailJour)) {
+        //                     list($heureDebutJour, $heureFinJour) = explode('-', $heureTravailJour);
+        //                     $datetimeDebutJour = new DateTime($heureDebutJour);
+        //                     $datetimePointage = new DateTime($heurePointage);
+
+        //                     $nbMinuteRetard = 0;
+        //                     $retard = 0;
+
+        //                     // Vérifier si l'heure de pointage dépasse l'heure de début de travail de plus de 5 minutes
+        //                     if ($datetimePointage > $datetimeDebutJour) {
+        //                         $interval = $datetimeDebutJour->diff($datetimePointage);
+        //                         $nbMinuteRetard = ($interval->h * 60) + $interval->i;
+
+        //                         if ($nbMinuteRetard > 5) { // Seulement si plus de 5 minutes de retard
+        //                             $retard = 1; // Marquer comme retard
+        //                         }
+        //                     }
+
+
+        //                     // Insert new pointage
+        //                     $db->query("
+        //                         INSERT INTO wbcc_pointage (datePointage, adressePointage, heureDebutPointage,heureDebutJour, heureFinJour,absent, retard, nbMinuteRetard,adresseProgramme,anomalieDebutJour, idUserF)
+        //                         VALUES (:datePointage, :adressePointage, :heurePointage,:heureDebutJour,:heureFinJour, 0, 1, :nbMinuteRetard,:adresseProgramme,:anomalie, :userid)
+        //                     ");
+        //                     $db->bind(":datePointage", $datePointage);
+        //                     $db->bind(":adressePointage", $adressePointage);
+        //                     $db->bind(":heurePointage", $heurePointage);
+        //                     $db->bind(":heureDebutJour", $heureDebutJour);
+        //                     $db->bind(":heureFinJour", $heureFinJour);
+        //                     $db->bind(":nbMinuteRetard", $nbMinuteRetard);
+        //                     $db->bind(":adresseProgramme", $adresseProgramme);
+        //                     $db->bind(":anomalie", $anomalie);
+        //                     $db->bind(":userid", $userid);
+
+        //                     if ($db->execute()) {
+        //                         // Récupérer l'ID du dernier enregistrement inséré
+        //                         $lastInsertedId = $db->lastInsertId();
+
+        //                         echo json_encode([
+        //                             'success' => 'Pointage ajouté avec succès.',
+        //                             'retard' => $retard,
+        //                             'adressePointage' => $adressePointage,
+        //                             'nbMinuteRetard' => $nbMinuteRetard,
+        //                             'idPointage' => $lastInsertedId // Inclure l'ID du pointage dans la réponse
+        //                         ]);
+        //                     } else {
+        //                         echo json_encode(['error' => 'Erreur lors de l\'ajout du pointage.']);
+        //                     }
+
+        //                 } else {
+        //                     echo json_encode(['error' => 'Pas d\'horaire défini pour ce jour.']);
+        //                 }
+        //             } else {
+        //                 echo json_encode(['error' => 'Utilisateur introuvable.']);
+        //             }
+        //         }
+        //     } catch (Exception $e) {
+        //         echo json_encode(['error' => 'Une erreur s\'est produite : ' . $e->getMessage()]);
+        //     }
+        // }
+
+        // if ($action == 'addPointageDepart') {
+        //     try {
+        //         // 1. Récupérer et décoder les données entrantes
+        //         $input = file_get_contents('php://input');
+        //         $data = json_decode($input, true);
+
+        //         // 2. Vérification des données requises
+        //         if (!isset($data['idUser'], $data['adressePointage'])) {
+        //             echo json_encode(['error' => 'Données manquantes : idUser et adressePointage requis.']);
+        //             exit;
+        //         }
+
+        //         // 3. Initialisation des variables
+        //         $userid = $data['idUser'];
+        //         $adressePointage = $data['adressePointage'];
+        //         $datePointage = date('Y-m-d');
+        //         $heurePointage = date('H:i:s');
+
+        //         $db->query("
+        //         SELECT u.idSiteF, s.adresseSite 
+        //         FROM wbcc_utilisateur u 
+        //         LEFT JOIN wbcc_site s ON u.idSiteF = s.idSite 
+        //         WHERE u.idUtilisateur = :userid
+        //         ");
+        //         $db->bind(":userid", $userid);
+        //         $userSiteData = $db->single();
+        //         $adresseProgramme = $userSiteData->adresseSite;
+        //         $anomalie = ($adressePointage !== $adresseProgramme) ? 1 : 0;
+
+        //         // 4. Vérification si un pointage existe déjà pour aujourd'hui
+        //         $db->query("SELECT * FROM wbcc_pointage WHERE idUserF = :userid AND datePointage = :datePointage");
+        //         $db->bind(":userid", $userid);
+        //         $db->bind(":datePointage", $datePointage);
+        //         $existingPointage = $db->single();
+
+        //         if ($existingPointage) {
+        //             // 5. Gestion du début de pointage s'il n'existe pas encore
+        //             if (empty($existingPointage->heureFinPointage)) {
+        //                 // Récupérer les jours et horaires de travail de l'utilisateur
+        //                 $db->query("SELECT jourTravail, horaireTravail FROM wbcc_utilisateur WHERE idUtilisateur = :userid");
+        //                 $db->bind(":userid", $userid);
+        //                 $userData = $db->single();
+
+        //                 if ($userData) {
+        //                     // 6. Vérifier si c'est un jour de travail
+        //                     $joursTravail = explode(';', $userData->jourTravail);
+        //                     $horairesTravail = explode(';', $userData->horaireTravail);
+
+        //                     $jourSemaine = date('N', strtotime($datePointage)); // Jour de la semaine (1 = lundi)
+        //                     $heureTravailJour = $horairesTravail[$jourSemaine - 1]; // Horaire du jour actuel
+
+        //                     if (!empty($heureTravailJour)) {
+        //                         list($heureDebutJour, $heureFinJour) = explode('-', $heureTravailJour);
+
+        //                         // Comparer l'heure actuelle avec l'heure de début de travail
+        //                         $datetimeFinJour = new DateTime($heureFinJour);
+        //                         $datetimePointage = new DateTime($heurePointage);
+
+        //                         $nbMinuteDepart = 0; // Initialiser les minutes de retard
+
+
+        //                         if ($datetimePointage < $datetimeFinJour) {
+        //                             $interval = $datetimeFinJour->diff($datetimePointage);
+        //                             $nbMinuteDepart = ($interval->h * 60) + $interval->i;
+
+        //                         }
+
+        //                         // 7. Mettre à jour le pointage avec les informations
+        //                         $db->query("
+        //                             UPDATE wbcc_pointage
+        //                             SET heureFinPointage = :heurePointage,
+        //                                 nbMinuteDepart = :nbMinuteDepart,
+        //                                 adresseFinPointage = :adressePointage,
+        //                                    adresseProgrammeFin = :adresseProgramme,
+        //                                 anomalieFinJour = :anomalie
+
+        //                             WHERE idUserF = :userid AND datePointage = :datePointage
+        //                         ");
+        //                         $db->bind(":heurePointage", $heurePointage);
+        //                         $db->bind(":nbMinuteDepart", $nbMinuteDepart);
+        //                         $db->bind(":adressePointage", $adressePointage);
+        //                         $db->bind(":adresseProgramme", $adresseProgramme);
+        //                         $db->bind(":anomalie", $anomalie);
+        //                         $db->bind(":userid", $userid);
+        //                         $db->bind(":datePointage", $datePointage);
+
+        //                         if ($db->execute()) {
+        //                             echo json_encode([
+        //                                 'success' => 'Pointage enregistré avec succès.',
+        //                                 'nbMinuteDepart' => $nbMinuteDepart,
+        //                                 'adressePointage' => $adressePointage,
+        //                                 'idPointage' => $existingPointage->idPointage
+        //                             ]);
+        //                         } else {
+        //                             echo json_encode(['error' => 'Erreur lors de la mise à jour du pointage.']);
+        //                         }
+        //                     } else {
+        //                         echo json_encode(['error' => 'Pas d\'horaire défini pour ce jour.']);
+        //                     }
+        //                 } else {
+        //                     echo json_encode(['error' => 'Utilisateur introuvable.']);
+        //                 }
+        //             } else {
+        //                 echo json_encode(['message' => 'Pointage déjà effectué pour aujourd\'hui.']);
+        //             }
+        //         } else {
+        //             // Insert a new pointage record if none exists
+        //             $db->query("INSERT INTO wbcc_pointage (datePointage, adressePointage , idUserF, absent) 
+        //             VALUES (:datePointage, :adressePointage, :userid, 1)");
+        //             $db->bind(":datePointage", $datePointage);
+        //             $db->bind(":adressePointage", $adressePointage);
+
+        //             $db->bind(":userid", $userid);
+
+        //             if ($db->execute()) {
+        //                 echo json_encode(['success' => 'Nouveau pointage ajouté pour l\'utilisateur.']);
+        //             } else {
+        //                 echo json_encode(['error' => 'Erreur lors de la création du pointage.']);
+        //             }
+        //         }
+        //     } catch (Exception $e) {
+        //         echo json_encode(['error' => 'Une erreur s\'est produite : ' . $e->getMessage()]);
+        //     }
+        // }
+
         if ($action == 'addPointage') {
-            try {
-                // 1. Récupérer et décoder les données entrantes
-                $input = file_get_contents('php://input');
-                $data = json_decode($input, true);
-        
-                // 2. Vérification des données requises
-                if (!isset($data['idUser'], $data['adressePointage'])) {
-                    echo json_encode(['error' => 'Données manquantes : idUser et adressePointage requis.']);
-                    exit;
-                }
-        
-                // 3. Initialisation des variables
-                $userid = $data['idUser'];
-                $adressePointage = $data['adressePointage'];
-                $datePointage = date('Y-m-d');
-                $heurePointage = date('H:i:s');
-        
-                // 4. Vérification si un pointage existe déjà pour aujourd'hui
-                $db->query("SELECT * FROM wbcc_pointage WHERE idUserF = :userid AND datePointage = :datePointage");
-                $db->bind(":userid", $userid);
-                $db->bind(":datePointage", $datePointage);
-                $existingPointage = $db->single();
-        
-                if ($existingPointage) {
-                    // 5. Gestion du début de pointage s'il n'existe pas encore
+            // 1. Récupérer et décoder les données entrantes
+            $input = file_get_contents('php://input');
+            $data = json_decode($input, true);
+
+            // 2. Vérification des données requises
+            if (!isset($data['idUser'], $data['adressePointage'], $data['typePointage'])) {
+                echo json_encode(['error' => 'Données manquantes : idUser, adressePointage et typePointage requis.']);
+                exit;
+            }
+
+            // 3. Initialisation des variables
+            $userid = $data['idUser'];
+            $adressePointage = $data['adressePointage'];
+            $typePointage = $data['typePointage']; // 'arrivee' ou 'depart'
+            $datePointage = date('Y-m-d');
+            $heurePointage = date('H:i:s');
+
+            $db->query("
+                SELECT u.idSiteF, s.adresseSite 
+                FROM wbcc_utilisateur u 
+                LEFT JOIN wbcc_site s ON u.idSiteF = s.idSite 
+                WHERE u.idUtilisateur = :userid
+            ");
+            $db->bind(":userid", $userid);
+            $userSiteData = $db->single();
+            $adresseProgramme = $userSiteData->adresseSite;
+            $anomalie = ($adressePointage !== $adresseProgramme) ? 1 : 0;
+
+            // 4. Vérification si un pointage existe déjà pour aujourd'hui
+            $db->query("SELECT * FROM wbcc_pointage WHERE idUserF = :userid AND datePointage = :datePointage");
+            $db->bind(":userid", $userid);
+            $db->bind(":datePointage", $datePointage);
+            $existingPointage = $db->single();
+
+            if ($existingPointage) {
+                // 5. Gestion du pointage selon le type
+                if ($typePointage == 'arrivee') {
                     if (empty($existingPointage->heureDebutPointage)) {
                         // Récupérer les jours et horaires de travail de l'utilisateur
                         $db->query("SELECT jourTravail, horaireTravail FROM wbcc_utilisateur WHERE idUtilisateur = :userid");
                         $db->bind(":userid", $userid);
                         $userData = $db->single();
-        
+
                         if ($userData) {
-                            // 6. Vérifier si c'est un jour de travail
+                            // Vérifier si c'est un jour de travail
                             $joursTravail = explode(';', $userData->jourTravail);
                             $horairesTravail = explode(';', $userData->horaireTravail);
-        
-                            $jourSemaine = date('N', strtotime($datePointage)); // Jour de la semaine (1 = lundi)
-                            $heureTravailJour = $horairesTravail[$jourSemaine - 1]; // Horaire du jour actuel
-        
+
+                            $jourSemaine = date('N', strtotime($datePointage));
+                            $heureTravailJour = $horairesTravail[$jourSemaine - 1];
+
                             if (!empty($heureTravailJour)) {
                                 list($heureDebutJour, $heureFinJour) = explode('-', $heureTravailJour);
-        
-                                // Comparer l'heure actuelle avec l'heure de début de travail
                                 $datetimeDebutJour = new DateTime($heureDebutJour);
                                 $datetimePointage = new DateTime($heurePointage);
-        
-                                $nbMinuteRetard = 0; // Initialiser les minutes de retard
-                                $retard = 0; // Par défaut, pas de retard
-        
+
+                                $nbMinuteRetard = 0;
+                                $retard = 0;
+
                                 if ($datetimePointage > $datetimeDebutJour) {
                                     $interval = $datetimeDebutJour->diff($datetimePointage);
                                     $nbMinuteRetard = ($interval->h * 60) + $interval->i;
-                                    $retard = 1; // Marquer comme retard
+
+                                    if ($nbMinuteRetard > 5) {
+                                        $retard = 1;
+                                    }
                                 }
-        
-                                // 7. Mettre à jour le pointage avec les informations
+
+                                // Mettre à jour le pointage avec les informations
                                 $db->query("
                                     UPDATE wbcc_pointage
                                     SET heureDebutPointage = :heurePointage,
                                         nbMinuteRetard = :nbMinuteRetard,
+                                        adressePointage = :adressePointage,
+                                        adresseProgramme = :adresseProgramme,
+                                        anomalieDebutJour = :anomalie,
                                         retard = :retard
                                     WHERE idUserF = :userid AND datePointage = :datePointage
                                 ");
                                 $db->bind(":heurePointage", $heurePointage);
                                 $db->bind(":nbMinuteRetard", $nbMinuteRetard);
+                                $db->bind(":adressePointage", $adressePointage);
                                 $db->bind(":retard", $retard);
+                                $db->bind(":adresseProgramme", $adresseProgramme);
+                                $db->bind(":anomalie", $anomalie);
                                 $db->bind(":userid", $userid);
                                 $db->bind(":datePointage", $datePointage);
-        
+
                                 if ($db->execute()) {
                                     echo json_encode([
-                                        'success' => 'Pointage enregistré avec succès.',
+                                        'success' => 'Pointage d\'arrivée enregistré avec succès.',
                                         'nbMinuteRetard' => $nbMinuteRetard,
                                         'retard' => $retard,
-                                        'idPointage' => $existingPointage->idPointage
+                                        'idPointage' => $existingPointage->idPointage,
+                                        'anomalie' => $anomalie
                                     ]);
                                 } else {
                                     echo json_encode(['error' => 'Erreur lors de la mise à jour du pointage.']);
@@ -1712,91 +2001,61 @@ if (isset($_GET['action'])) {
                             echo json_encode(['error' => 'Utilisateur introuvable.']);
                         }
                     } else {
-                        echo json_encode(['message' => 'Pointage déjà effectué pour aujourd\'hui.']);
+                        echo json_encode(['message' => 'Pointage d\'arrivée déjà effectué pour aujourd\'hui.']);
                     }
-                } else {
-                    echo json_encode(['error' => 'Pointage introuvable pour l\'utilisateur.']);
-                }
-            } catch (Exception $e) {
-                echo json_encode(['error' => 'Une erreur s\'est produite : ' . $e->getMessage()]);
-            }
-        }
-       if ($action == 'addPointageDepart') {
-            try {
-                // 1. Récupérer et décoder les données entrantes
-                $input = file_get_contents('php://input');
-                $data = json_decode($input, true);
-        
-                // 2. Vérification des données requises
-                if (!isset($data['idUser'], $data['adressePointage'])) {
-                    echo json_encode(['error' => 'Données manquantes : idUser et adressePointage requis.']);
-                    exit;
-                }
-        
-                // 3. Initialisation des variables
-                $userid = $data['idUser'];
-                $adressePointage = $data['adressePointage'];
-                $datePointage = date('Y-m-d');
-                $heurePointage = date('H:i:s');
-        
-                // 4. Vérification si un pointage existe déjà pour aujourd'hui
-                $db->query("SELECT * FROM wbcc_pointage WHERE idUserF = :userid AND datePointage = :datePointage");
-                $db->bind(":userid", $userid);
-                $db->bind(":datePointage", $datePointage);
-                $existingPointage = $db->single();
-        
-                if ($existingPointage) {
-                    // 5. Gestion du début de pointage s'il n'existe pas encore
+                } elseif ($typePointage == 'depart') {
                     if (empty($existingPointage->heureFinPointage)) {
                         // Récupérer les jours et horaires de travail de l'utilisateur
                         $db->query("SELECT jourTravail, horaireTravail FROM wbcc_utilisateur WHERE idUtilisateur = :userid");
                         $db->bind(":userid", $userid);
                         $userData = $db->single();
-        
+
                         if ($userData) {
-                            // 6. Vérifier si c'est un jour de travail
+                            // Vérifier si c'est un jour de travail
                             $joursTravail = explode(';', $userData->jourTravail);
                             $horairesTravail = explode(';', $userData->horaireTravail);
-        
-                            $jourSemaine = date('N', strtotime($datePointage)); // Jour de la semaine (1 = lundi)
-                            $heureTravailJour = $horairesTravail[$jourSemaine - 1]; // Horaire du jour actuel
-        
+
+                            $jourSemaine = date('N', strtotime($datePointage));
+                            $heureTravailJour = $horairesTravail[$jourSemaine - 1];
+
                             if (!empty($heureTravailJour)) {
                                 list($heureDebutJour, $heureFinJour) = explode('-', $heureTravailJour);
-        
-                                // Comparer l'heure actuelle avec l'heure de début de travail
                                 $datetimeFinJour = new DateTime($heureFinJour);
                                 $datetimePointage = new DateTime($heurePointage);
-        
-                                $nbMinuteDepart = 0; // Initialiser les minutes de retard
-                            
-        
+
+                                $nbMinuteDepart = 0;
+
                                 if ($datetimePointage < $datetimeFinJour) {
                                     $interval = $datetimeFinJour->diff($datetimePointage);
                                     $nbMinuteDepart = ($interval->h * 60) + $interval->i;
-                                  
                                 }
-        
-                                // 7. Mettre à jour le pointage avec les informations
+
+                                // Mettre à jour le pointage avec les informations
                                 $db->query("
                                     UPDATE wbcc_pointage
                                     SET heureFinPointage = :heurePointage,
-                                        nbMinuteDepart = :nbMinuteDepart
-                                        
+                                        nbMinuteDepart = :nbMinuteDepart,
+                                        adresseFinPointage = :adressePointage,
+                                        adresseProgrammeFin = :adresseProgramme,
+                                        anomalieFinJour = :anomalie
                                     WHERE idUserF = :userid AND datePointage = :datePointage
                                 ");
                                 $db->bind(":heurePointage", $heurePointage);
                                 $db->bind(":nbMinuteDepart", $nbMinuteDepart);
-                            
+                                $db->bind(":adressePointage", $adressePointage);
+                                $db->bind(":adresseProgramme", $adresseProgramme);
+                                $db->bind(":anomalie", $anomalie);
                                 $db->bind(":userid", $userid);
                                 $db->bind(":datePointage", $datePointage);
-        
+
                                 if ($db->execute()) {
+
                                     echo json_encode([
-                                        'success' => 'Pointage enregistré avec succès.',
+                                        'success' => 'Pointage de départ enregistré avec succès.',
                                         'nbMinuteDepart' => $nbMinuteDepart,
-                         
-                                        'idPointage' => $existingPointage->idPointage
+                                        'adressePointage' => $adressePointage,
+                                        'idPointage' => $existingPointage->idPointage,
+                                        'anomalie' => $anomalie
                                     ]);
                                 } else {
                                     echo json_encode(['error' => 'Erreur lors de la mise à jour du pointage.']);
@@ -1808,169 +2067,227 @@ if (isset($_GET['action'])) {
                             echo json_encode(['error' => 'Utilisateur introuvable.']);
                         }
                     } else {
-                        echo json_encode(['message' => 'Pointage déjà effectué pour aujourd\'hui.']);
-                    }
-                } else {
-                    // Insert a new pointage record if none exists
-                    $db->query("INSERT INTO wbcc_pointage (datePointage, adressePointage , idUserF, absent) 
-                    VALUES (:datePointage, :adressePointage, :userid, 1)");
-                    $db->bind(":datePointage", $datePointage);
-                    $db->bind(":adressePointage", $adressePointage);
-                    $db->bind(":userid", $userid);
-
-                    if ($db->execute()) {
-                        echo json_encode(['success' => 'Nouveau pointage ajouté pour l\'utilisateur.']);
-                    } else {
-                        echo json_encode(['error' => 'Erreur lors de la création du pointage.']);
+                        echo json_encode(['message' => 'Pointage de départ déjà effectué pour aujourd\'hui.']);
                     }
                 }
-            } catch (Exception $e) {
-                echo json_encode(['error' => 'Une erreur s\'est produite : ' . $e->getMessage()]);
+            } else {
+                // No existing pointage: Insert a new record
+                $db->query("SELECT jourTravail, horaireTravail FROM wbcc_utilisateur WHERE idUtilisateur = :userid");
+                $db->bind(":userid", $userid);
+                $userData = $db->single();
+
+                if ($userData) {
+                    // Check if it's a working day
+                    $joursTravail = explode(';', $userData->jourTravail);
+                    $horairesTravail = explode(';', $userData->horaireTravail);
+                    $jourSemaine = date('N', strtotime($datePointage));
+                    $heureTravailJour = $horairesTravail[$jourSemaine - 1];
+
+                    if (!empty($heureTravailJour)) {
+                        list($heureDebutJour, $heureFinJour) = explode('-', $heureTravailJour);
+                        $datetimePointage = new DateTime($heurePointage);
+
+                        $nbMinuteRetard = 0;
+                        $retard = 0;
+
+                        // Determine if it's an arrival or departure pointage
+                        if ($typePointage == 'arrivee') {
+                            // Logic for arrival pointage
+                            if ($datetimePointage > new DateTime($heureDebutJour)) {
+                                $interval = (new DateTime($heureDebutJour))->diff($datetimePointage);
+                                $nbMinuteRetard = ($interval->h * 60) + $interval->i; // Calculate minutes of delay
+                                if ($nbMinuteRetard > 5) { // Check if delay exceeds 5 minutes
+                                    $retard = 1; // Flag as late
+                                }
+                            }
+                        } else {
+                            // Logic for departure pointage
+                            if ($datetimePointage < new DateTime($heureFinJour)) {
+                                $interval = (new DateTime($heureFinJour))->diff($datetimePointage);
+                                $nbMinuteDepart = ($interval->h * 60) + $interval->i; // Calculate early departure minutes
+                            }
+                        }
+
+                        // Insert new pointage
+                        $db->query("
+                            INSERT INTO wbcc_pointage (datePointage, adressePointage, heureDebutPointage, heureDebutJour, heureFinJour, absent, retard, nbMinuteRetard, adresseProgramme, anomalieDebutJour, idUserF)
+                            VALUES (:datePointage, :adressePointage, :heurePointage, :heureDebutJour, :heureFinJour, 0, :retard, :nbMinuteRetard, :adresseProgramme, :anomalie, :userid)
+                        ");
+                        $db->bind(":datePointage", $datePointage);
+                        $db->bind(":adressePointage", $adressePointage);
+                        $db->bind(":heurePointage", $heurePointage);
+                        $db->bind(":heureDebutJour", $heureDebutJour);
+                        $db->bind(":heureFinJour", $heureFinJour);
+                        $db->bind(":retard", $retard);
+                        $db->bind(":nbMinuteRetard", $nbMinuteRetard);
+                        $db->bind(":adresseProgramme", $adresseProgramme);
+                        $db->bind(":anomalie", $anomalie);
+                        $db->bind(":userid", $userid);
+
+                        if ($db->execute()) {
+                            $lastInsertedId = $db->lastInsertId();
+                            echo json_encode([
+                                'success' => 'Pointage ajouté avec succès.',
+                                'retard' => $retard,
+                                'adressePointage' => $adressePointage,
+                                'nbMinuteRetard' => $nbMinuteRetard,
+                                'idPointage' => $lastInsertedId,
+                                'anomalie' => $anomalie
+                            ]);
+                        } else {
+                            echo json_encode(['error' => 'Erreur lors de l\'ajout du pointage.']);
+                        }
+                    } else {
+                        echo json_encode(['error' => 'Pas d\'horaire défini pour ce jour.']);
+                    }
+                } else {
+                    echo json_encode(['error' => 'Utilisateur introuvable.']);
+                }
             }
         }
-        
-        
-        
-        
+
+
+
         if ($action == "sendEmail") {
-            
             // Retrieve POST data
             $to = $_POST['to'] ?? ''; // Recipient email address
             $subject = $_POST['subject'] ?? ''; // Email subject
             $body = $_POST['body'] ?? ''; // Email body
-            
+
             // Validate required parameters
             if (empty($to) || empty($subject) || empty($body)) {
-                echo json_encode(['error' => 'Required fields (to, subject, body) are missing.']);
+                echo json_encode(0); // Return 0 on failure
                 exit;
             }
 
-                  
             // Pass an empty array for attachments
             $tabFiles = []; // Empty array since we don't want to include any attachments
-            
-            
+
             // Call the emailFromNoReply method with empty attachments
-           //$emailSent = Role::emailFromNoReply("wbcc024@wbcc.fr", [], "Test Nabila 2", "Bonjour",[]);
-           // $emailSent = Role::emailFromNoReply($to,[], $subject ,$body, []); 
-            //$emailSent = Role::mailGestionWithFiles($to, $subject ,$body, [], [],EMAIL_CODIR); 
-            ///var_dump($emailSent); 
+            //$emailSent = Role::emailFromNoReply("wbcc024@wbcc.fr", [], "Test Nabila 2", "Bonjour", []);
+            //$emailSent = Role::emailFromNoReply($to, [], $subject, $body, []); 
+            $emailSent = Role::mailExtranetWithFiles($to, $subject, $body, EMAIL_CODIR, [], []);
+
             // Return a JSON response
             if ($emailSent) {
                 echo json_encode(['success' => true, 'message' => 'Email sent successfully.']);
             } else {
-                echo json_encode(['error' => 'Failed to send the email.']);
+                echo json_encode(0); // Return 0 on failure
             }
         }
 
 
-        //AJouter nouveau notification
+        // Ajouter nouvelle notification
         if ($action == 'createNotification') {
             // Retrieve POST data
             $idUtilisateur = $_POST['idUtilisateur'] ?? null; // User ID receiving the notification
             $title = $_POST['title'] ?? ''; // Notification title
             $message = $_POST['message'] ?? ''; // Notification message
             $idPointage = $_POST['idPointage'] ?? null;
-        
+
             // Validate required parameters
             if (empty($idUtilisateur) || empty($title) || empty($message)) {
-                echo json_encode(['error' => 'Required fields (idUtilisateur, title, message) are missing.']);
+                echo json_encode(0); // Return 0 on failure if parameters are missing
                 exit;
             }
-        
+
             // Insert notification into the database
             $db->query("INSERT INTO wbcc_notification (idUtilisateur, title, message , idPointage) VALUES (:idUtilisateur, :title, :message , :idPointage)");
             $db->bind("idUtilisateur", $idUtilisateur);
             $db->bind("title", $title);
             $db->bind("message", $message);
             $db->bind("idPointage", $idPointage);
-        
+
+            // Check if insertion was successful
             if ($db->execute()) {
                 echo json_encode(['success' => true, 'message' => 'Notification created successfully.']);
             } else {
-                echo json_encode(['error' => 'Failed to create notification.']);
+                echo json_encode(0); // Return 0 on failure if the notification creation fails
             }
         }
-        //update notification a "Read"
+
+        // Update notification as "Read"
         if ($action == 'markNotificationAsRead') {
             // Retrieve POST data
             $idNotification = $_POST['idNotification'] ?? null; // Notification ID to mark as read
             $idUtilisateur = $_POST['idUtilisateur'] ?? null; // User ID to ensure that this notification belongs to them
-        
+
             // Validate required parameters
             if (empty($idNotification) || empty($idUtilisateur)) {
-                echo json_encode(['error' => 'Required fields (idNotification, idUtilisateur) are missing.']);
+                echo json_encode(0); // Return 0 if required fields are missing
                 exit;
             }
-        
+
             // Check if the notification exists and belongs to the user
             $db->query("SELECT * FROM wbcc_notification WHERE idNotification = :idNotification AND idUtilisateur = :idUtilisateur");
             $db->bind("idNotification", $idNotification);
             $db->bind("idUtilisateur", $idUtilisateur);
             $notification = $db->single();
-        
+
             if ($notification) {
                 // Mark the notification as read
                 $db->query("UPDATE wbcc_notification SET is_read = 1 WHERE idNotification = :idNotification");
                 $db->bind("idNotification", $idNotification);
-        
+
                 if ($db->execute()) {
                     echo json_encode(['success' => true, 'message' => 'Notification marked as read.']);
                 } else {
-                    echo json_encode(['error' => 'Failed to mark notification as read.']);
+                    echo json_encode(0); // Return 0 if the update fails
                 }
             } else {
-                echo json_encode(['error' => 'Notification not found or does not belong to the user.']);
+                echo json_encode(0); // Return 0 if notification is not found or does not belong to the user
             }
-        }  
-        //get notification with idUtilisateur      
+        }
+
+        // Get notifications with idUtilisateur
         if ($action == 'getNotifications') {
             // Retrieve user ID and read status from GET parameters
             $idUtilisateur = $_GET['idUtilisateur'] ?? null; // User ID
             $is_read = $_GET['is_read'] ?? null; // Filter by read status (0 for unread, 1 for read)
-        
+
             if (empty($idUtilisateur)) {
-                echo json_encode(['error' => 'User ID is required.']);
+                echo json_encode(0); // Return 0 if user ID is missing
                 exit;
             }
-        
-         // Build the query based on whether read status is provided
+
+            // Build the query based on whether read status is provided
             $query = "SELECT * FROM wbcc_notification WHERE idUtilisateur = :idUtilisateur ORDER BY created_at DESC";
 
             if ($is_read !== null) {
                 $query .= " AND is_read = :is_read";
             }
-        
+
             $db->query($query);
             $db->bind("idUtilisateur", $idUtilisateur);
-        
+
             if ($is_read !== null) {
                 $db->bind("is_read", $is_read);
             }
-        
+
             $notifications = $db->resultSet();
-        
+
             if ($notifications) {
-                echo json_encode(['success' => true, 'notifications' => $notifications]);
+                echo json_encode($notifications);
             } else {
-                echo json_encode(['error' => 'No notifications found.']);
+                echo json_encode(0); // Return 0 if no notifications are found
             }
         }
+
         if ($action == 'supprimerDocument') {
             $_POST = json_decode(file_get_contents('php://input'), true);
             $deleteSuccess = false;
-        
+
             foreach ($_POST as $key => $document) {
                 // Extract the nomDocument
-                $nomDocument = $document['nomDocument'];
-        
+                $idDocument  = $document['idDocumentF'];
+
                 // Delete from wbcc_document_pointage
-                $db->query("DELETE FROM wbcc_document_pointage WHERE nomDocument = :nomDocument");
-                $db->bind("nomDocument", $nomDocument, null);
+                $db->query("DELETE FROM wbcc_document_pointage WHERE idDocumentF  = :idDocumentF ");
+                $db->bind("idDocumentF ", $idDocument);
                 if ($db->execute()) {
                     // Delete from wbcc_document
-                    $db->query("DELETE FROM wbcc_document WHERE nomDocument = :nomDocument");
-                    $db->bind("nomDocument", $nomDocument, null);
+                    $db->query("DELETE FROM wbcc_document WHERE idDocument = :idDocument");
+                    $db->bind("idDocument", $idDocument);
                     if ($db->execute()) {
                         $deleteSuccess = true;
                     } else {
@@ -1982,43 +2299,44 @@ if (isset($_GET['action'])) {
                     break;
                 }
             }
-        
+
             if ($deleteSuccess) {
-                echo json_encode("Document DELETE");
+                echo json_encode(['success' => true, 'message' => 'Document DELETE']);
             } else {
-                echo json_encode("Error Document DELETE");
+                echo json_encode(0); // Return 0 on failure
             }
         }
+
         if ($action == "batchPointage") {
             $currentDate = date("Y-m-d");
             $currentTime = date("H:i");
             $currentDayOfWeek = date("N"); // Numéro du jour dans la semaine (1 = lundi, 7 = dimanche)
-        
+
             // Étape 1 : Récupérer les utilisateurs avec un rôle différent de 1 et 34
             $query = "
-                SELECT u.idUtilisateur, u.jourTravail, u.horaireTravail, s.nomSite, s.numeroSite 
+                SELECT u.idUtilisateur, u.jourTravail, u.horaireTravail, s.nomSite, s.numeroSite ,s.adresseSite
                 FROM wbcc_utilisateur u
                 LEFT JOIN wbcc_site s ON u.idSiteF = s.idSite
                 WHERE u.role NOT IN (1, 34)
             ";
             $db->query($query);
             $utilisateurs = $db->resultSet();
-        
+
             foreach ($utilisateurs as $utilisateur) {
                 $idUser = $utilisateur->idUtilisateur;
-                $nomSite = $utilisateur->nomSite;
+                $adresseSite = $utilisateur->adresseSite;
                 $joursTravail = explode(';', $utilisateur->jourTravail); // Ex: "Lundi;Mardi;Mercredi"
                 $horairesTravail = explode(';', $utilisateur->horaireTravail); // Ex: "09:00-17:00;08:00-16:00"
-        
+
                 // Vérifier si l'utilisateur travaille aujourd'hui
                 if (!isset($horairesTravail[$currentDayOfWeek - 1])) {
                     continue; // Pas d'horaire défini pour ce jour
                 }
-        
+
                 // Extraire les heures de début et de fin pour aujourd'hui
                 $horaireDuJour = $horairesTravail[$currentDayOfWeek - 1];
                 list($heureDebutJour, $heureFinJour) = explode('-', $horaireDuJour);
-        
+
                 if ($currentTime >= "09:00" && $currentTime <= "23:59") {
                     // Étape 2 : Vérifier si un pointage existe pour aujourd'hui
                     $queryCheck = "SELECT COUNT(*) as count FROM wbcc_pointage WHERE idUserF = :idUser AND datePointage = :currentDate";
@@ -2026,24 +2344,24 @@ if (isset($_GET['action'])) {
                     $db->bind(':idUser', $idUser);
                     $db->bind(':currentDate', $currentDate);
                     $count = $db->single()->count;
-            
+
                     // Si aucun pointage n'existe pour aujourd'hui, insérer un nouveau pointage
                     if ($count == 0) {
                         // Determine status based on the current time
                         $retard = 0;
                         $absent = 0;
-            
+
                         if ($currentTime >= "09:00" && $currentTime <= "18:15") {
                             $retard = 1; // Late during working hours
                         } elseif ($currentTime > "18:15" && $currentTime <= "23:59") {
                             $absent = 1; // Absent after working hours
                         }
-            
+
                         $queryInsert = "
                             INSERT INTO wbcc_pointage (
-                                numeroPointage, datePointage, retard, absent, idUserF, heureDebutJour, heureFinJour, adressePointage
+                                numeroPointage, datePointage, retard, absent, idUserF, heureDebutJour, heureFinJour , adresseProgramme
                             ) VALUES (
-                                NULL, :currentDate, :retard, :absent, :idUser, :heureDebutJour, :heureFinJour, :adressePointage
+                                NULL, :currentDate, :retard, :absent, :idUser, :heureDebutJour, :heureFinJour, :adresseSite
                             )
                         ";
                         $db->query($queryInsert);
@@ -2053,53 +2371,162 @@ if (isset($_GET['action'])) {
                         $db->bind(':idUser', $idUser);
                         $db->bind(':heureDebutJour', $heureDebutJour);
                         $db->bind(':heureFinJour', $heureFinJour);
-                        $db->bind(':adressePointage', $nomSite);
+                        $db->bind(':adresseSite', $adresseSite);
                         $db->execute();
                     }
                 }
-                
             }
         }
         if ($action == 'getPointageTodayByidUtilisateur') {
             // Retrieve user ID from GET parameters
             $idUtilisateur = $_GET['idUtilisateur'] ?? null; // User ID
-        
+
             if (empty($idUtilisateur)) {
-                echo json_encode(['error' => 'User ID is required.']);
+                echo json_encode(0); // Return 0 if user ID is missing
                 exit;
             }
-        
+
             // Get today's date in the format used in the database
             $dateNow = date('Y-m-d');
-        
+
             // Query to get today's pointage for the given user
             $query = "SELECT * FROM wbcc_pointage 
                       WHERE idUserF = :idUtilisateur 
                       AND datePointage = :dateNow";
-        
+
             $db->query($query);
             $db->bind("idUtilisateur", $idUtilisateur);
             $db->bind("dateNow", $dateNow);
-        
+
             $pointage = $db->single();
-        
+
             // Check if any pointage is found
             if ($pointage) {
-                echo json_encode(['success' => true, 'pointage' => $pointage]);
+                echo json_encode($pointage);
             } else {
-                echo json_encode(['success' => false, 'message' => 'No pointage found for today.']);
+                echo json_encode(0); // Return 0 if no pointage is found for today
             }
         }
-        
-        
-        
     }
     //FIN NABILA
- }
+
+    //JAWHAR
+    if ($action == 'saveJustification2') {
+        if (isset($_POST['pointage_id'], $_POST['type'])) {
+            $pointage_id = $_POST['pointage_id'];
+            $motif = $_POST['motif'];
+            $type = $_POST['type'];
+            $nomDocuments = isset($_POST['nomDocument']) ? $_POST['nomDocument'] : [];
+            $comments = isset($_POST['comments']) ? $_POST['comments'] : [];
+
+            $errorMessages = [];
+            $successCount = 0;
+
+            $motifColumn = $type === "Arrivé" ? "motifRetard" : ($type === "Départs" ? "motifRetardDepart" : "motifAbsent");
+            $isArrive = $type === "Arrivé" ? 1 : ($type === "Départs" ? 0 : null);
+            $isAbsent = $type === "Absence" ? 1 : 0;
+
+            if (isset($_POST['modify']) && $_POST['modify'] == true) {
+                $db->query("UPDATE wbcc_pointage SET $motifColumn = :motif WHERE idPointage = :idPointage");
+                $db->bind("motif", $motif);
+                $db->bind("idPointage", $pointage_id);
+
+                if (!$db->execute()) {
+                    $errorMessages[] = "Failed to update motif: " . $db->errorInfo();
+                }
+            } else {
+                if (isset($_FILES['attachments']) && count($_FILES['attachments']['name']) > 0) {
+                    $uploadDir = "../documents/pointage/justification/";
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+
+                    for ($i = 0; $i < count($_FILES['attachments']['name']); $i++) {
+                        if ($_FILES['attachments']['error'][$i] == UPLOAD_ERR_OK) {
+                            $uploadedFile = $_FILES['attachments']['tmp_name'][$i];
+                            $originalFileName = $_FILES['attachments']['name'][$i];
+                            $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+
+                            if (!in_array($fileExtension, ['pdf', 'mp4', 'jpg', 'jpeg', 'png'])) {
+                                $errorMessages[] = "Unsupported file type for $originalFileName";
+                                continue;
+                            }
+
+                            $numeroDocument = "DOC" . date('dmYHis') . $pointage_id . $i;
+                            $nomDocumentSanitized = preg_replace('/[^a-zA-Z0-9._-]/', '_', $nomDocuments[$i] ?? "Unnamed_Document_$i");
+                            $dateNow = date('YmdHis');
+                            $urlDocument = 'Pj_' . $pointage_id . '_' . $nomDocumentSanitized . '_' . $dateNow . '.' . $fileExtension;
+
+                            if (move_uploaded_file($uploadedFile, $uploadDir . $urlDocument)) {
+                                $db->query("INSERT INTO wbcc_document (numeroDocument, nomDocument, urlDocument, commentaire, createDate, source, publie, urlDossier) 
+                                            VALUES (:numeroDocument, :nomDocument, :urlDocument, :commentaire, NOW(), :source, :publie, 'pointage/justification')");
+                                $db->bind("numeroDocument", $numeroDocument);
+                                if (gettype($nomDocuments) == "string") {
+                                    $db->bind("nomDocument", $nomDocuments ?? "Unnamed_Document_$i");
+                                } else {
+                                    $db->bind("nomDocument", $nomDocuments[$i] ?? "Unnamed_Document_$i");
+                                }
+                                $db->bind("urlDocument", $urlDocument);
+                                if (gettype($comments) == "string") {
+                                    $db->bind("commentaire", $comments ?? null);
+                                } else {
+                                    $db->bind("commentaire", $comments[$i] ?? null);
+                                }
+                                $db->bind("source", 'EXTRANET');
+                                $db->bind("publie", 0);
+
+                                if (!$db->execute()) {
+                                    $errorMessages[] = "Failed to save document $originalFileName: " . $db->errorInfo();
+                                    continue;
+                                }
+
+                                $idDocument = $db->lastInsertId();
+
+                                $db->query("INSERT INTO wbcc_document_pointage (idDocumentF, idPointageF, isArrive, isAbsent) 
+                                            VALUES (:idDocumentF, :idPointageF, :isArrive, :isAbsent)");
+                                $db->bind("idDocumentF", $idDocument);
+                                $db->bind("idPointageF", $pointage_id);
+                                $db->bind("isArrive", $isArrive);
+                                $db->bind("isAbsent", $isAbsent);
+
+                                if (!$db->execute()) {
+                                    $errorMessages[] = "Failed to link document $originalFileName: " . $db->errorInfo();
+                                    continue;
+                                }
+
+                                $successCount++;
+                            } else {
+                                $errorMessages[] = "Failed to move uploaded file $originalFileName.";
+                            }
+                        } else {
+                            $errorMessages[] = "Error uploading file $i: " . $_FILES['attachments']['error'][$i];
+                        }
+                    }
+                }
+
+                $db->query("UPDATE wbcc_pointage SET $motifColumn = :motif WHERE idPointage = :idPointage");
+                $db->bind("motif", $motif);
+                $db->bind("idPointage", $pointage_id);
+
+                if (!$db->execute()) {
+                    $errorMessages[] = "Failed to update pointage motif: " . $db->errorInfo();
+                }
+            }
+
+            if (empty($errorMessages)) {
+                echo json_encode(['success' => true, 'message' => "Request processed successfully. Total uploads: $successCount"]);
+            } else {
+                echo json_encode(['success' => false, 'message' => implode(", ", $errorMessages)]);
+            }
+        } else {
+            echo json_encode("0");
+        }
+    }
+}
 
 
 
- function findItemByValue($nomTable, $col, $value)
+function findItemByValue($nomTable, $col, $value)
 {
     $db = new Database();
     $db->query("SELECT * FROM $nomTable WHERE $col = :numero");
@@ -2107,7 +2534,9 @@ if (isset($_GET['action'])) {
     $data = $db->single();
     return $data;
 }
-function getPeriodDateRange($periode) {
+
+function getPeriodDateRange($periode)
+{
     $today = date('Y-m-d');
     $startDate = '';
     $endDate = $today;

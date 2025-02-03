@@ -1,5 +1,4 @@
 <?php
-
 class GestionInterneCtrl extends Controller
 {
     public function __construct()
@@ -19,12 +18,106 @@ class GestionInterneCtrl extends Controller
         $this->projetModel = $this->model('Projet');
         $this->immeubleModel = $this->model('Immeuble');
         $this->congeModel = $this->model('Conge');
+        // $this->jourFerieModel = $this->model('JourFerie');
     }
 
     public function index()
     {
         header("location:javascript://history.go(-1)");
     }
+
+    //CONGE
+    public function gererConges()
+    {
+        $typeConge = "";
+        $statut = "";
+        $periode = "";
+        $dateOne = "";
+        $dateDebut = "";
+        $dateFin = "";
+        $idUtilisateur = "";
+        $idSite = "";
+        $conges = "";
+        $annee = "";
+        $solde = "";
+
+        extract($_GET);
+
+        $idContact = Role::connectedUser()->idUtilisateur;
+        $contacts =  $this->contactModel->getAllContacts();
+        $matricules =  $this->userModel->getAll();
+        $typesConge = $this->congeModel->getAllTypesConge();
+        $role = $_SESSION['connectedUser']->role;
+        $sites = $this->siteModel->getAllSites();
+
+        if ($idUtilisateur) {
+            $solde = $this->congeModel->getSolde($idUtilisateur, $annee);
+        }
+
+        if ($role == 1 || $role == 2) {
+            $conges =  $this->congeModel->getFilteredConge($typeConge, $statut, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $idUtilisateur, $annee);
+        } elseif ($role == 25) {
+            $managerSiteId = $_SESSION['connectedUser']->idSiteF;
+            $conges =  $this->congeModel->getFilteredConge($typeConge, $statut, $managerSiteId, $periode, $dateOne, $dateDebut, $dateFin, $idUtilisateur, $annee);
+        } else {
+            $idEmploye = $_SESSION['connectedUser']->idUtilisateur;
+            $conges =  $this->congeModel->getFilteredConge($typeConge, $statut, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $idEmploye, $annee);
+            $solde = $this->congeModel->getSolde($idEmploye, $annee);
+        }
+
+        $contacts = [];
+        $matricules = "";
+        if ($role == 1 || $role == 2) {
+            $contacts =   $this->userModel->getUsersByType("wbcc", 1);
+            $matricules =  $this->userModel->getUsersByType("wbcc", 1);
+        } elseif ($role == 25) {
+            $contacts =   $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
+            $matricules =  $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
+        }
+
+        $currentTime = new DateTime();
+        $serverTime = $currentTime->format('Y-m-d\TH:i:s');
+
+        $data = [
+            "typeConge" => $typeConge,
+            "statut" => $statut,
+            "typesConge" => $typesConge,
+            "contacts"  => $contacts,
+            "matricules"  => $matricules,
+            "conges" =>  $conges,
+            "solde" => $solde,
+            "sites" => $sites,
+            "periode" => $periode,
+            "dateOne" => $dateOne,
+            "dateDebut" => $dateDebut,
+            "dateFin" => $dateFin,
+            "serverTime" => $serverTime
+        ];
+
+        $this->view("gestionInterne/personnel/conge", $data);
+    }
+
+    public function ajouterTypeConge()
+    {
+        $typesConge = $this->congeModel->getAllTypesConge();
+
+        $data = [
+            "typesConge" => $typesConge,
+        ];
+
+        $this->view("gestionInterne/personnel/ajouterConge", $data);
+    }
+
+    public function createTypeConge()
+    {
+        $typeConge = "";
+        $quotaConge = "";
+        $politiqueConge = "";
+        extract($_GET);
+        $this->congeModel->createConge($typeConge, $quotaConge, $politiqueConge);
+        $this->view("gestionInterne/personnel/ajouterConge", $data);
+    }
+
 
     //ROLE
     public function indexRole()
@@ -36,7 +129,6 @@ class GestionInterneCtrl extends Controller
         ];
         $this->view('gestionInterne/role/indexRole', $data);
     }
-
     public function role($id = '')
     {
         $role = $this->roleModel->findByID($id);
@@ -50,7 +142,6 @@ class GestionInterneCtrl extends Controller
         ];
         $this->view('gestionInterne/role/role', $data);
     }
-
     //SUBVENTION
     public function indexSubvention()
     {
@@ -257,8 +348,8 @@ class GestionInterneCtrl extends Controller
         $role = $_SESSION['connectedUser']->role;
         $type = "wbcc";
         $idContact = Role::connectedUser()->idUtilisateur;
-        if($role==25) {
-            $personnels = $this->userModel->getUsersByManagerSiteId(($_SESSION['connectedUser'])->idSiteF, 1);
+        if ($role == 25) {
+            $personnels = $this->userModel->getUsersBySite(($_SESSION['connectedUser'])->idSiteF, 1);
         } else {
             $personnels = $this->userModel->getUsersByType($type);
         }
@@ -282,7 +373,6 @@ class GestionInterneCtrl extends Controller
         ];
         $this->view('gestionInterne/personnel/indexPersonnel', $data);
     }
-
     public function bilanComparatif()
     {
 
@@ -295,10 +385,10 @@ class GestionInterneCtrl extends Controller
         $previousStartDate = "";
         $previousEndDate = "";
         $idUtilisateur = ''; // For filtering by user
-        $selectedEmploye ="";
+        $selectedEmploye = "";
         $role = $_SESSION['connectedUser']->role;
         $re = getPeriodDates("$periode", []);
-          
+
         if (isset($_GET)) {
             extract($_GET);
         }
@@ -314,32 +404,38 @@ class GestionInterneCtrl extends Controller
                 $previousEndDate = $re['previousEndDate'];
             }
         }
-        
-        if($periode==="today") {
+
+        if ($periode === "today") {
             if (sizeof($re) != 0) {
                 $startDate = $re['startDate'];
                 $endDate = $re['endDate'];
                 $previousStartDate = $re['previousStartDate'];
                 $previousEndDate = $re['previousEndDate'];
             }
-        }     
+        }
 
         $idContact = Role::connectedUser()->idUtilisateur;
-        if($selectedEmploye) {
-            $selectedEmploye = $this->contactModel->findById($idUtilisateur);
+        if ($selectedEmploye || ($role != 1 && $role != 2 && $role != 25)) {
+            if ($role != 1 && $role != 2 && $role != 25) {
+                $selectedEmploye = $this->contactModel->findById($_SESSION['connectedUser']->idContactF)->fullName;
+            } else {
+                $selectedEmploye = $this->contactModel->findById($idContact);
+            }
         }
         $sites = $this->siteModel->getAllSites();
         $contactsList =   $this->userModel->getUsersByType("wbcc", "1");
 
-        if($role == 25) {
+        if ($role == 25) {
             $contactsList =   $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
         }
-        if($idUtilisateur=="" && $site=="") {
+        if ($idUtilisateur == "") {
             $contacts =   $contactsList;
         } else {
-            $contacts = $this->userModel->getFilteredUsers($site, $idUtilisateur);
+            $contacts = [];
+            $contacts[] =  $this->userModel->findUserByIdContact($idUtilisateur);
         }
-
+        $user = false;
+        $user = $this->contactModel->findById($idContact);
         $contactById =   $this->userModel->findUserByIdContact($idContact);
         $pointages = null;
         $pointages =  $this->pointageModel->getAllWithFullName($idContact);
@@ -356,10 +452,11 @@ class GestionInterneCtrl extends Controller
             "periode" => $periode,
             "date1" => $date1,
             "date2" => $date2,
-            "startDate"=> $startDate,
-            "endDate"=> $endDate,
+            "startDate" => $startDate,
+            "endDate" => $endDate,
             'previousStartDate' => $previousStartDate,
-            'previousEndDate' => $previousEndDate
+            'previousEndDate' => $previousEndDate,
+            "user" => $user
         ];
         $this->view("gestionInterne/personnel/bilan", $data);
     }
@@ -382,9 +479,8 @@ class GestionInterneCtrl extends Controller
             extract($_GET);
         }
 
-        if($role == 25) {
-            $managerSiteId = $_SESSION['connectedUser']->idSiteF;
-            $managerNomSite = $this->siteModel->findById($managerSiteId)->nomSite;
+        if ($role == 25) {
+            $site = $_SESSION['connectedUser']->idSiteF;
         }
 
         $idUtilisateur == '' ?
@@ -403,19 +499,27 @@ class GestionInterneCtrl extends Controller
         if ($role == 1 || $role == 2) {
             $contacts =   $this->userModel->getUsersByType("wbcc", 1);
             $matricules =  $this->userModel->getUsersByType("wbcc", 1);
+            if ($idUtilisateur) {
+                $fullName = $this->contactModel->findById($idUtilisateur)->fullName;
+                $titre .= ' DE ' . $fullName;
+            }
         } else {
             if ($role == 25) {
                 $contacts =   $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
                 $matricules =  $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
+                if ($idUtilisateur) {
+                    $fullName = $this->contactModel->findById($idUtilisateur)->fullName;
+                    $titre .= ' DE ' . $fullName;
+                }
             } else {
-                // $fullName = $this->userModel->findUserByIdContact(Role::connectedUser()->idContactF)[0]->fullName;
+                $idUtilisateur = $_SESSION['connectedUser']->idUtilisateur;
                 $fullName = $this->userModel->findUserByIdContact(Role::connectedUser()->idContactF)->fullName;
                 $titre .= ' DE ' . $fullName;
             }
         }
 
         $pointages = null;
-        $pointagesById = $this->pointageModel->getFilteredPointageWithidUser($idContact, $Motifjustification, $etat, $periode, $dateOne, $dateDebut, $dateFin);
+        $pointagesById = $this->pointageModel->getFilteredPointageWithidUser($idUtilisateur, $Motifjustification, $etat, $periode, $dateOne, $dateDebut, $dateFin);
 
         if ($role != 1 && $role != 2 && $role != 25) {
             $titre = 'LISTE DES POINTAGES';
@@ -423,14 +527,12 @@ class GestionInterneCtrl extends Controller
             $titre .= ' DE ' . $fullName;
         }
 
-        if ($site) {
-            $titre .= ' DU SITE DE ' . "'" . $site . "'";
+        if ($site != "") {
+            $siteObj = findItemByColumn("wbcc_site", "idSite", $site);
+            $titre .= ' DU SITE DE ' . "'" . $siteObj->nomSite . "'";
         }
 
-        if ($idUtilisateur) {
-            $fullName = $this->contactModel->findById($idUtilisateur)->fullName;
-            $titre .= ' DE ' . $fullName;
-        }
+
 
         if ($periode != "" && $periode != "2" && $periode != "1" && $periode != "today") {
             $re = getPeriodDates("$periode", []);
@@ -458,27 +560,26 @@ class GestionInterneCtrl extends Controller
             $totalMinuteRetardById += $pointage->nbMinuteRetard;
         }
 
-if($role ==1 || $role == 2) {
-    if ($Motifjustification == "" && $etat == "" && $site == "" && $periode == "" && $dateOne == "" && $dateDebut == "" && $dateFin == "" && $matricule == "" && $idUtilisateur == "") {
-        $pointages =  $this->pointageModel->getAllWithFullName($idContact);
-        foreach ($pointages as $index => $pointage) {
-            $totalMinuteRetard += $pointage->nbMinuteRetard;
+        if ($role == 1 || $role == 2) {
+            if ($Motifjustification == "" && $etat == "" && $site == "" && $periode == "" && $dateOne == "" && $dateDebut == "" && $dateFin == "" && $matricule == "" && $idUtilisateur == "") {
+                $pointages =  $this->pointageModel->getAllWithFullName($idContact);
+                foreach ($pointages as $index => $pointage) {
+                    $totalMinuteRetard += $pointage->nbMinuteRetard;
+                }
+            } else {
+                $pointages = $this->pointageModel->getFilteredPointage($Motifjustification, $etat, $site, $periode, $dateOne, $dateDebut, $dateFin, $matricule, $idUtilisateur);
+                foreach ($pointages as $index => $pointage) {
+                    $totalMinuteRetard += $pointage->nbMinuteRetard;
+                }
+            }
         }
-    } else {
-        $pointages = $this->pointageModel->getFilteredPointage($Motifjustification, $etat, $site, $periode, $dateOne, $dateDebut, $dateFin, $matricule, $idUtilisateur);
-        foreach ($pointages as $index => $pointage) {
-            $totalMinuteRetard += $pointage->nbMinuteRetard;
+
+        if ($role == 25) {
+            $pointages = $this->pointageModel->getFilteredPointage($Motifjustification, $etat, $site, $periode, $dateOne, $dateDebut, $dateFin, $matricule, $idUtilisateur);
+            foreach ($pointages as $index => $pointage) {
+                $totalMinuteRetard += $pointage->nbMinuteRetard;
+            }
         }
-    }
-}
-
-if($role == 25) {
-    $pointages = $this->pointageModel->getFilteredPointage($Motifjustification, $etat, $managerNomSite, $periode, $dateOne, $dateDebut, $dateFin, $matricule, $idUtilisateur);
-    foreach ($pointages as $index => $pointage) {
-        $totalMinuteRetard += $pointage->nbMinuteRetard;
-    }
-}
-
         $data = [
             "idUtilisateur" => $idUtilisateur,
             "titre" => $titre,
@@ -487,9 +588,9 @@ if($role == 25) {
             "etat" => $etat,
             "Motifjustification" => $Motifjustification,
             "periode" => $periode,
-            "dateOne"=> $dateOne,
-            "dateFin"=> $dateFin,
-            "dateDebut"=> $dateDebut,
+            "dateOne" => $dateOne,
+            "dateFin" => $dateFin,
+            "dateDebut" => $dateDebut,
             "contacts"  => $contacts,
             "contactById" => $contactById,
             "matricules"  => $matricules,
@@ -513,99 +614,6 @@ if($role == 25) {
         $this->view("gestionInterne/espaceAdmin/paie", $data);
     }
 
-    //****************************************************************** */
-    public function gererConges()
-    {
-        $typeConge = "";
-        $statut = "";
-        $periode = "";
-        $dateOne = "";
-        $dateDebut = "";
-        $dateFin = "";
-        $idUtilisateur = "";
-        $idSite = "";
-        $conges = "";
-        $annee = "";
-        $solde = "";
-
-        extract($_GET);
-
-        $idContact = Role::connectedUser()->idUtilisateur;
-        $contacts =  $this->contactModel->getAllContacts();
-        $matricules =  $this->userModel->getAll();
-        $typesConge = $this->congeModel->getAllTypesConge();
-        $role = $_SESSION['connectedUser']->role;
-        $sites = $this->siteModel->getAllSites();
-
-        if($idUtilisateur) {
-            $solde = $this->congeModel->getSolde($idUtilisateur, $annee);
-        }
-
-        if($role == 1 || $role == 2) {
-            $conges =  $this->congeModel->getFilteredConge($typeConge, $statut, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $idUtilisateur, $annee);
-        } elseif($role == 25) {
-            $managerSiteId = $_SESSION['connectedUser']->idSiteF;
-            $conges =  $this->congeModel->getFilteredConge($typeConge, $statut, $managerSiteId, $periode, $dateOne, $dateDebut, $dateFin, $idUtilisateur, $annee);
-        } else {
-            $idEmploye = $_SESSION['connectedUser']->idUtilisateur;
-            $conges =  $this->congeModel->getFilteredConge($typeConge, $statut, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $idEmploye, $annee);
-            $solde = $this->congeModel->getSolde($idEmploye, $annee);
-        }
-
-        $contacts = [];
-        $matricules = "";
-        if ($role == 1 || $role == 2) {
-            $contacts =   $this->userModel->getUsersByType("wbcc", 1);
-            $matricules =  $this->userModel->getUsersByType("wbcc", 1);
-        } elseif ($role == 25) {
-            $contacts =   $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
-            $matricules =  $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
-        }
-
-        $currentTime = new DateTime();
-        $serverTime = $currentTime->format('Y-m-d\TH:i:s');
-
-        $data = [
-            "typeConge" => $typeConge,
-            "statut" => $statut,
-            "typesConge" => $typesConge,
-            "contacts"  => $contacts,
-            "matricules"  => $matricules,
-            "conges" =>  $conges,
-            "solde" => $solde,
-            "sites" => $sites,
-            "periode" => $periode,
-            "dateOne" => $dateOne,
-            "dateDebut" => $dateDebut,
-            "dateFin" => $dateFin,
-            "serverTime" => $serverTime
-        ];
-
-        $this->view("gestionInterne/personnel/conge", $data);
-    }
-
-    //****************************************************************** */
-    public function ajouterTypeConge() {
-        $typesConge = $this->congeModel->getAllTypesConge();
-        
-        $data = [
-            "typesConge" => $typesConge,
-        ];
-
-        $this->view("gestionInterne/personnel/ajouterConge", $data);
-    }
-
-
-
-    public function createTypeConge() {
-        $typeConge = "";
-        $quotaConge = "";
-        $politiqueConge="";
-        extract($_GET);
-        $this->congeModel->createConge($typeConge, $quotaConge, $politiqueConge);
-        $this->view("gestionInterne/personnel/ajouterConge", $data);
-    }
-    
     public function tbdPresence()
     {
         $data = [];
@@ -642,7 +650,7 @@ if($role == 25) {
         $data = [
             "conges" =>  $conges
         ];
-        $this->view("gestionInterne/personnel/conge", $data);
+        $this->view("gestionInterne/espaceSalarie/espaceConge", $data);
     }
     public function Avertir()
     {
@@ -697,7 +705,7 @@ if($role == 25) {
     {
         // Initialiser les variables
         $projet = null;  // Changer false par null
-        $immeubles = $this->immeubleModel->getAllImmeubles();
+        $immeubles = $this->immeubleModel->getAllImmeublesCB();
         $sommaire = null;
         $immeuble = null;
         // Vérifier si l'ID est valide
@@ -705,7 +713,7 @@ if($role == 25) {
 
         if ($id != 0) {
             $projet = $this->projetModel->findProjetByColumnValue("idProjet", $id);
-            $immeuble = $this->immeubleModel->findImmeubleById($projet->idImmeuble);
+            $immeuble = findItemByColumn("wbcc_immeuble_cb", "idImmeuble", $projet->idImmeubleCB);
             if ($projet) {
                 // Charger le sommaire associé au projet
                 $sommaireModel = $this->model('Sommaire');
@@ -739,9 +747,22 @@ if($role == 25) {
     {
         // print_r($_POST);
         extract($_POST);
-        $idImmeuble = $_POST['idImmeuble'];  // Get the selected Immeuble ID
+        $idImmeuble = $_POST['idImmeuble'];
         echo "\idProjetCTRL = $idProjet";
         $idUser = Role::connectedUser()->idUtilisateur;
+
+        if (isset($_FILES['file'])) {
+            $file = $_FILES['file'];
+            $uploadBaseDir = $_SERVER['DOCUMENT_ROOT'] . '/public/documents/immeuble/';
+            $uploadFile = $uploadBaseDir . $file['name'];
+            if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+                $this->immeubleModel->updatePhotoImmeuble($idImmeuble, $file['name']);
+            } else {
+                echo "Error uploading file.";
+            }
+        } else {
+            echo "No file uploaded.";
+        }
 
         $projet = $this->projetModel->saveProjet($idProjet, $nomProjet, $descriptionProjet, $idImmeuble, $idUser);
 
@@ -764,5 +785,84 @@ if($role == 25) {
 
         // Redirection vers la liste des projets
         $this->redirectToMethod("GestionInterne", "indexProjet");
+    }
+
+    //JOUR FERIE
+
+    // Liste des jours fériés
+    public function indexJourFerie()
+    {
+        $idSiteUser = $_SESSION['connectedUser']->idSite;
+        $idUser = $_SESSION['connectedUser']->idUtilisateur;
+
+        $idSite = (isset($_GET['site'])) ? $_GET['site'] : $idSiteUser;
+        $annee = (isset($_GET['annee'])) ? $_GET['annee'] : date('Y');
+
+        $joursFeries = $this->jourFerieModel->getAllJoursFeries($idSite, $annee);
+        $site = $this->siteModel->findById($idSite);
+        $sites = $this->siteModel->getAllSites();
+        $data = [
+            "joursFeries" => $joursFeries,
+            "titre" => "Jours fériés ",
+            "sousTitre" => "Liste des jours fériés " . $annee . "_WBCC-" . $site->nomSite,
+            "annee" => $annee,
+            "site" => $site,
+            "sites" => $sites,
+        ];
+        $this->view('gestionInterne/jourFerie/indexJourFerie', $data);
+    }
+
+    public function jourFerie($id = '')
+    {
+        $idSiteUser = $_SESSION['connectedUser']->idSite;
+        $idUser = $_SESSION['connectedUser']->idUtilisateur;
+
+        $idSite = (isset($_GET['site'])) ? $_GET['site'] : $idSiteUser;
+        $annee = (isset($_GET['annee'])) ? $_GET['annee'] : date('Y');
+
+        $joursFeries = $this->jourFerieModel->getAllJoursFeries($idSite, $annee);
+        $site = $this->siteModel->findById($idSite);
+        $sites = $this->siteModel->getAllSites();
+        $jourFerie = $this->jourFerieModel->findJourFerieByColumnValue("idJourFerie", $id);
+        $data = [
+            "jourFerie" => $jourFerie,
+            "joursFeries" => $joursFeries,
+            "titre" => "Jours fériés",
+            "sousTitre" => "Ajout de jours fériés " . $annee . "_WBCC-" . $site->nomSite,
+            "annee" => $annee,
+            "site" => $site,
+            "sites" => $sites
+        ];
+        $this->view('gestionInterne/jourFerie/jourFerie', $data);
+    }
+
+    public function saveJourFerie($idJourFerie = null)
+    {
+        extract($_POST);
+        $jourFerie = $this->jourFerieModel->saveJourFerie($nomJourFerie, $dateJourFerie, $anneeJourFerie, $idSiteF, $payer, $chomer, $idJourFerie);
+        $data = [];
+        $this->redirectToMethod('GestionInterne', "indexJourFerie?site=$idSiteF&annee=$anneeJourFerie");
+    }
+
+    public function ajoutJourFerie()
+    {
+        extract($_GET);
+
+        $idSiteUser = $_SESSION['connectedUser']->idSite;
+        $idUser = Role::connectedUser()->idUtilisateur;
+        $idSite = (isset($_GET['idSite'])) ? $_GET['idSite'] : $idSiteUser;
+        $annee = (isset($_GET['annee'])) ? $_GET['annee'] : date('Y');
+        $anneeReference = (isset($_GET['anneeReference'])) ? $_GET['anneeReference'] : date('Y');
+
+        $joursFeries = $this->jourFerieModel->getAllJoursFeries($idSite, $anneeReference);
+        foreach ($joursFeries as $jourFerie) {
+            $date = date("{$annee}-m-d", strtotime($jourFerie->dateJourFerie));
+            $this->jourFerieModel->saveJourFerie($jourFerie->nomJourFerie, $date, $annee, $idSite, $jourFerie->Payer, $jourFerie->Chomer, null);
+        }
+    }
+
+    public function deleteJourFerie($id)
+    {
+        $this->jourFerieModel->deleteJourFerieById($id);
     }
 }
