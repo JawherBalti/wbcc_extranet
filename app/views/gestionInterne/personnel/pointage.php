@@ -594,31 +594,31 @@ $color3 = "#fce8ea";
                     <p>
                         <i class="fas fa-link"></i>
                         <strong id="modalpiecsejustification">Pièces justificatives d'arrivée:</strong>
-                    <div id="piece-arrivee-form" class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>">
-                        <!-- <p>
-                            <strong>Ajouter une pièce justificative</strong>
-                        </p> -->
                         <div class="scrollable-container mb-3">
                             <span id="modalurlJustification"></span>
                         </div>
 
+                        <div class="<?=$viewAdmin2 == "" ? "row" : "d-none"?>">
+                            <div class="col-md-12">
+                                <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif d'arrivée:</strong></p>
+                                <div id="motif-arrivee-admin" class="motif-container"></div>
+                            </div>
+                        </div>
+                    <div id="piece-arrivee-form" class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>">
+                        <!-- <p>
+                            <strong>Ajouter une pièce justificative</strong>
+                        </p> -->
                         <form method="post" action="" id="justificationFormArrivee" enctype="multipart/form-data">
                             <div class="d-flex flex-column">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="hidden" id="pointage_id" name="pointage_id">
-                                        <div class="col-md-12">
-                                            <label for="nomDocument">Nom du document</label>
-                                            <input class="form-control" type="text" id="nomDocumentArrivee"
-                                                name="nomDocument">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
+                                    <div class="col">
                                         <label for="commentaire">Selectionner un fichier</label>
-                                        <input class="form-control" type="file" name="attachments[]" id="attachments"
-                                            multiple>
+                                        <input class="form-control" type="file" name="attachments[]" id="attachmentsArrivee"
+                                            multiple accept="image/*, .pdf, .mp4">
                                     </div>
                                 </div>
+                                <div id="fileDetails" class="mt-3"></div> <!-- Conteneur pour les détails des fichiers -->
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif d'arrivée:</strong>
@@ -690,48 +690,67 @@ $color3 = "#fce8ea";
                 <span class="justif-depart-text"></span>
 
                 <div class="depart-section">
-                    <p><i class="fas fa-comment"></i> <strong>État du départ:</strong> <span
-                            id="modalMotifRetarddepart"></span></p>
-                    <p> <i class="fas fa-link"></i>
-                        <strong id="modalpiecsejustification">Pièces justificatives du départ:</strong>
-                    <div id="piece-depart-form" class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>">
-                        <p>
-                            <strong>Ajouter une pièce justificative</strong>
-                        </p>
-
-                        <form method="post" action="" id="justificationFormDepart" enctype="multipart/form-data">
-                            <div class="d-flex flex-column">
-                                <input type="hidden" id="pointage_id" name="pointage_id">
-                                <div class="d-flex flex-column w-50">
-                                    <label for="nomDocument">Nom du document</label>
-                                    <input type="text" id="nomDocumentDepart" name="nomDocument"
-                                        placeholder="nom document">
-                                </div>
-                                <div class="d-flex flex-column w-50">
-                                    <label for="commentaire">Commentaire</label>
-                                    <input type="text" id="commentaireDepart" name="commentaire"
-                                        placeholder="commentaire">
-                                </div>
-                                <div class="d-flex flex-column w-50">
-                                    <label for="commentaire">Selectionner un fichier</label>
-                                    <input type="file" name="attachments[]" id="attachments" multiple>
-                                </div>
-                                <button class="emp-btn btn btn-red btn-round mt-2 w-25" type="submit"
-                                    name="submit">Ajouter</button>
-                            </div>
-                        </form>
-
-                    </div>
+                    <p>
+                        <i class="fas fa-comment"></i>
+                        <strong>Mention du départ:</strong>
+                        <span id="modalMotifRetarddepart"></span>
                     </p>
-                    <div class="scrollable-container mb-3">
+                    <p>
+                        <i class="fas fa-link"></i>
+                        <strong id="modalpiecsejustification">Pièces justificatives du départ:</strong>
 
-                        <span id="modalurlJustificationDepart"></span>
+                        <div class="scrollable-container mb-3">
+                            <span id="modalurlJustificationDepart"></span>
+                        </div>
+
+                        <div class="<?=$viewAdmin2 == "" ? "row" : "d-none"?>">
+                            <div class="col-md-12">
+                                <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif du départ:</strong></p>
+                                <div id="motif-depart-admin" class="motif-container"></div>
+                            </div>
+                        </div>
+
+                        <div id="piece-depart-form" class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>">
+                            <form method="post" action="" id="justificationFormDepart" enctype="multipart/form-data">
+                                <div class="d-flex flex-column">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="commentaire">Selectionner un fichier</label>
+                                            <input class="form-control" type="file" name="attachments[]" id="attachmentsDepart"
+                                                multiple accept="image/*, .pdf, .mp4">
+                                        </div>
+                                    </div>
+                                    <div id="fileDetailsDepart" class="mt-3"></div> <!-- Conteneur pour les détails des fichiers -->
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif du départ:</strong>
+                                            </p>
+                                            <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
+                                                name="motif" id="motif-depart" required>
+                                            <span id="motifDepartErreur" class="text-danger">Veuillez entrer le
+                                                motif</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 offset-5">
+                                            <button class="emp-btn btn btn-red btn-round mt-2" type="submit"
+                                                name="submit">Enregistrer</button>
+                                        </div>
+                                    </div>
+
+                                    <div hidden>
+                                        <label for="commentaire">Commentaire</label>
+                                        <input type="text" id="commentaireArrivee" name="commentaire"
+                                            placeholder="commentaire">
+                                    </div>
+                                    <!-- <input type="hidden" id="pointage_id" name="pointage_id"> -->
+                                </form>
+                            </div>
+                        </p>
                     </div>
-                    <p><i class="fas fa-comment"></i> <strong>Motif du départ:</strong></p>
-                    <input class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>" type="text" name="motif" id="motif-depart"
-                        required placeholder="Ajouter un motif">
-                    <span id="motifDepartErreur" class="text-danger">Veuillez entrer le motif</span>
-                    <div id="modalJustificationDepart" class="motif-container"></div>
+
                     <div class="mt-0">
                         <div class="<?= $viewAdmin != '' ? $viewAdmin : 'form-group confirm-justif-depart' ?>">
                             <label for="confirmationDepart" class="font-weight-bold">Êtes-vous sûr de vouloir valider la
@@ -765,82 +784,104 @@ $color3 = "#fce8ea";
                     </div>
                 </div>
 
-
                 <div class="absent-section hidden">
-                    <p><i class="fas fa-comment"></i> <strong>État d'absence:</strong> <span
-                            id="modalMotifAbsence"></span></p>
-
-                    <p> <i class="fas fa-link"></i>
-                        <strong id="modalpiecsejustification">Pièces justificatives d'absence:</strong>
-                    <div id="piece-absence-form" class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>">
-                        <p>
-                            <strong>Ajouter une pièce justificative</strong>
-                        </p>
-                        <form method="post" action="" id="justificationFormAbsence" enctype="multipart/form-data">
-                            <div class="d-flex flex-column">
-                                <input type="hidden" id="pointage_id" name="pointage_id">
-                                <div class="d-flex flex-column w-50">
-                                    <label for="nomDocument">Nom du document</label>
-                                    <input class="mb-2" type="text" id="nomDocumentAbsence" name="nomDocument"
-                                        placeholder="ajouter le nom du document">
-                                </div>
-                                <div class="d-flex flex-column w-50">
-                                    <label for="commentaire">Commentaire</label>
-                                    <input class="mb-2" type="text" id="commentaireAbsence" name="commentaire"
-                                        placeholder="commentaire">
-                                </div>
-                                <div class="d-flex flex-column w-50">
-                                    <label for="commentaire">Selectionner un fichier</label>
-                                    <input class="mb-2" type="file" name="attachments[]" id="attachments" multiple>
-                                </div>
-                                <button class="emp-btn btn btn-red btn-round mt-2 w-25" type="submit"
-                                    name="submit">Ajouter</button>
-                            </div>
-                        </form>
-                    </div>
+                    <p>
+                        <i class="fas fa-comment"></i> 
+                        <strong>Mention d'absence:</strong> 
+                        <span id="modalMotifAbsence"></span>
                     </p>
-                    <div class="scrollable-container mb-3">
+                    <p>
+                        <i class="fas fa-link"></i>
+                        <strong id="modalpiecsejustification">Pièces justificatives d'absence:</strong>
+                        <div class="scrollable-container mb-3">
+                            <span id="modalurlJustificationAbsence"></span>
+                        </div>
 
-                        <span id="modalurlJustificationAbsence"></span>
-                    </div>
-                    <p><i class="fas fa-comment"></i> <strong>Motif d'absence:</strong></p>
-                    <input class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>" type="text" name="motif" id="motif-absence"
-                        required placeholder="Ajouter un motif">
-                    <span id="motifAbsenceErreur" class="text-danger">Veuillez entrer le motif</span>
-                    <div id="modalJustificationAbsence" class="motif-container"></div>
-                    <div class="mt-0">
-                        <div class="<?= $viewAdmin != '' ? $viewAdmin : 'form-group confirm-justif-absence' ?>">
-                            <label for="confirmationDepart" class="font-weight-bold">Êtes-vous sûr de vouloir valider la
-                                justification d'absence'?</label><br>
-
-                            <div class="row">
-                                <div class="form-check d-inline-block ml-3">
-                                    <input type="radio" class="form-check-input" id="confirmDepartOui"
-                                        name="confirmationDepart" value="oui">
-                                    <label class="form-check-label font-weight-bold" for="confirmDepartOui">Oui</label>
-                                </div>
-
-                                <div class="form-check d-inline-block ml-3">
-                                    <input type="radio" class="form-check-input" id="confirmDepartNon"
-                                        name="confirmationDepart" value="non">
-                                    <label class="form-check-label font-weight-bold" for="confirmDepartNon">Non</label>
-                                </div>
-
-                            </div>
-                            <input type="hidden" id="modalpointage_id">
-                            <input type="hidden" id="modalidUserF">
-                            <input type="hidden" id="modalemailuser">
-
-                            <div class="modal-footer">
-                                <button class="btn btn-success" type="button"
-                                    id="confirmJustificationAbsenceSubmit">Confirmer</button>
-                                <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+                        <div class="<?=$viewAdmin2 == "" ? "row" : "d-none"?>">
+                            <div class="col-md-12">
+                                <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif d'absence:</strong></p>
+                                <div id="motif-absence-admin" class="motif-container"></div>
                             </div>
                         </div>
-                        <div class="hidden confirm-justif-absence-msg"></div>
+                        </p>
+
+                        <div id="piece-absence-form" class="<?= $viewAdmin2 == "" ? "d-none" : "" ?>">
+                            <form method="post" action="" id="justificationFormAbsence" enctype="multipart/form-data">
+                                <div class="d-flex flex-column">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="commentaire">Selectionner un fichier</label>
+                                            <input class="form-control" type="file" name="attachments[]" id="attachmentsAbsence"
+                                                multiple accept="image/*, .pdf, .mp4">
+                                        </div>
+                                    </div>
+                                    <div id="fileDetailsAbsence" class="mt-3"></div> <!-- Conteneur pour les détails des fichiers -->
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif d'absence:</strong>
+                                            </p>
+                                            <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
+                                                name="motif" id="motif-absence" required>
+                                            <span id="motifAbsenceErreur" class="text-danger">Veuillez entrer le
+                                                motif</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 offset-5">
+                                            <button class="emp-btn btn btn-red btn-round mt-2" type="submit"
+                                                name="submit">Enregistrer</button>
+                                        </div>
+                                    </div>
+
+                                    <div hidden>
+                                        <label for="commentaire">Commentaire</label>
+                                        <input type="text" id="commentaireAbsence" name="commentaire"
+                                            placeholder="commentaire">
+                                    </div>
+                                    <input type="hidden" id="pointage_id" name="pointage_id">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="mt-0">
+                            <div class="<?= $viewAdmin != '' ? $viewAdmin : 'form-group confirm-justif-absence' ?>">
+                                <label for="confirmationDepart" class="font-weight-bold">Êtes-vous sûr de vouloir valider la
+                                    justification d'absence?
+                                </label>
+                                <br>
+        
+                                <div class="row">
+                                    <div class="form-check d-inline-block ml-3">
+                                        <input type="radio" class="form-check-input" id="confirmDepartOui"
+                                            name="confirmationDepart" value="oui">
+                                        <label class="form-check-label font-weight-bold" for="confirmDepartOui">Oui</label>
+                                    </div>
+        
+                                    <div class="form-check d-inline-block ml-3">
+                                        <input type="radio" class="form-check-input" id="confirmDepartNon"
+                                            name="confirmationDepart" value="non">
+                                        <label class="form-check-label font-weight-bold" for="confirmDepartNon">Non</label>
+                                    </div>
+                                </div>
+                                
+                                <input type="hidden" id="modalpointage_id">
+                                <input type="hidden" id="modalidUserF">
+                                <input type="hidden" id="modalemailuser">
+        
+                                <div class="modal-footer">
+                                    <button class="btn btn-success" type="button"
+                                        id="confirmJustificationAbsenceSubmit">Confirmer</button>
+                                    <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+                                </div>
+                            </div>
+                            <div class="hidden confirm-justif-absence-msg"></div>
+                        </div>
                     </div>
+                    
+                    </p>
                 </div>
-            </div>
         </div>
     </div>
 
@@ -926,6 +967,150 @@ $color3 = "#fce8ea";
         const URLROOT = '<?= URLROOT ?>';
 
         let selectedPointageId = null;
+
+        document.getElementById('attachmentsAbsence').addEventListener('change', function (event) {
+        const files = event.target.files;
+        const fileDetailsContainer = document.getElementById('fileDetailsAbsence');
+        fileDetailsContainer.innerHTML = ''; // Effacer les champs précédents
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Créer un conteneur pour chaque fichier
+            const fileContainer = document.createElement('div');
+            fileContainer.className = 'file-container mb-3 p-3 border rounded';
+
+            // Afficher le nom du fichier
+            const fileName = document.createElement('div');
+            fileName.textContent = `Fichier : ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            fileName.className = 'mb-2';
+            fileContainer.appendChild(fileName);
+
+            // Ajouter un champ pour le nom du document
+            const nomDocumentLabel = document.createElement('label');
+            nomDocumentLabel.textContent = 'Nom du document :';
+            nomDocumentLabel.className = 'form-label';
+            const nomDocumentInput = document.createElement('input');
+            nomDocumentInput.type = 'text';
+            nomDocumentInput.name = 'nomDocument[]';
+            nomDocumentInput.className = 'form-control mb-2';
+            nomDocumentInput.required = true;
+            nomDocumentInput.placeholder = 'Entrez le nom du document';
+            fileContainer.appendChild(nomDocumentLabel);
+            fileContainer.appendChild(nomDocumentInput);
+
+            // Ajouter un champ pour le commentaire
+            const commentLabel = document.createElement('label');
+            commentLabel.textContent = 'Commentaire :';
+            commentLabel.className = 'form-label';
+            const commentInput = document.createElement('input');
+            commentInput.type = 'text';
+            commentInput.name = 'comments[]';
+            commentInput.className = 'form-control mb-2';
+            commentInput.placeholder = 'Entrez un commentaire';
+            fileContainer.appendChild(commentLabel);
+            fileContainer.appendChild(commentInput);
+
+            // Ajouter le conteneur au formulaire
+            fileDetailsContainer.appendChild(fileContainer);
+        }
+    });
+
+        document.getElementById('attachmentsDepart').addEventListener('change', function (event) {
+        const files = event.target.files;
+        const fileDetailsContainer = document.getElementById('fileDetailsDepart');
+        fileDetailsContainer.innerHTML = ''; // Effacer les champs précédents
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Créer un conteneur pour chaque fichier
+            const fileContainer = document.createElement('div');
+            fileContainer.className = 'file-container mb-3 p-3 border rounded';
+
+            // Afficher le nom du fichier
+            const fileName = document.createElement('div');
+            fileName.textContent = `Fichier : ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            fileName.className = 'mb-2';
+            fileContainer.appendChild(fileName);
+
+            // Ajouter un champ pour le nom du document
+            const nomDocumentLabel = document.createElement('label');
+            nomDocumentLabel.textContent = 'Nom du document :';
+            nomDocumentLabel.className = 'form-label';
+            const nomDocumentInput = document.createElement('input');
+            nomDocumentInput.type = 'text';
+            nomDocumentInput.name = 'nomDocument[]';
+            nomDocumentInput.className = 'form-control mb-2';
+            nomDocumentInput.required = true;
+            nomDocumentInput.placeholder = 'Entrez le nom du document';
+            fileContainer.appendChild(nomDocumentLabel);
+            fileContainer.appendChild(nomDocumentInput);
+
+            // Ajouter un champ pour le commentaire
+            const commentLabel = document.createElement('label');
+            commentLabel.textContent = 'Commentaire :';
+            commentLabel.className = 'form-label';
+            const commentInput = document.createElement('input');
+            commentInput.type = 'text';
+            commentInput.name = 'comments[]';
+            commentInput.className = 'form-control mb-2';
+            commentInput.placeholder = 'Entrez un commentaire';
+            fileContainer.appendChild(commentLabel);
+            fileContainer.appendChild(commentInput);
+
+            // Ajouter le conteneur au formulaire
+            fileDetailsContainer.appendChild(fileContainer);
+        }
+    });
+
+        document.getElementById('attachmentsArrivee').addEventListener('change', function (event) {
+        const files = event.target.files;
+        const fileDetailsContainer = document.getElementById('fileDetails');
+        fileDetailsContainer.innerHTML = ''; // Effacer les champs précédents
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Créer un conteneur pour chaque fichier
+            const fileContainer = document.createElement('div');
+            fileContainer.className = 'file-container mb-3 p-3 border rounded';
+
+            // Afficher le nom du fichier
+            const fileName = document.createElement('div');
+            fileName.textContent = `Fichier : ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            fileName.className = 'mb-2';
+            fileContainer.appendChild(fileName);
+
+            // Ajouter un champ pour le nom du document
+            const nomDocumentLabel = document.createElement('label');
+            nomDocumentLabel.textContent = 'Nom du document :';
+            nomDocumentLabel.className = 'form-label';
+            const nomDocumentInput = document.createElement('input');
+            nomDocumentInput.type = 'text';
+            nomDocumentInput.name = 'nomDocument[]';
+            nomDocumentInput.className = 'form-control mb-2';
+            nomDocumentInput.required = true;
+            nomDocumentInput.placeholder = 'Entrez le nom du document';
+            fileContainer.appendChild(nomDocumentLabel);
+            fileContainer.appendChild(nomDocumentInput);
+
+            // Ajouter un champ pour le commentaire
+            const commentLabel = document.createElement('label');
+            commentLabel.textContent = 'Commentaire :';
+            commentLabel.className = 'form-label';
+            const commentInput = document.createElement('input');
+            commentInput.type = 'text';
+            commentInput.name = 'comments[]';
+            commentInput.className = 'form-control mb-2';
+            commentInput.placeholder = 'Entrez un commentaire';
+            fileContainer.appendChild(commentLabel);
+            fileContainer.appendChild(commentInput);
+
+            // Ajouter le conteneur au formulaire
+            fileDetailsContainer.appendChild(fileContainer);
+        }
+    });
 
         function selectRow(row) {
 
@@ -1545,19 +1730,41 @@ $color3 = "#fce8ea";
 
                 // Récupérez les valeurs nécessaires
                 var motif = $(motifSelector).val();
-                var nomDocument = $(documentSelector).val();
-                var commentaire = $(commentSelector).val();
                 var pointage_id = $('#pointage_id').val();
+                // var nomDocument = $(documentSelector).val();
+                // var commentaire = $(commentSelector).val();
 
                 let motifType = $(motifSelector).val(); // Specific to the form
 
-                // Préparez les données du formulaire
+                const nomDocuments = [];
+                const comments = [];
+
+                // Parcourir tous les champs "nomDocument[]" et "comments[]"
+                document.querySelectorAll('input[name="nomDocument[]"]').forEach((input, index) => {
+                    nomDocuments.push(input.value); // Ajouter la valeur du champ "nomDocument"
+                });
+
+                document.querySelectorAll('input[name="comments[]"]').forEach((input, index) => {
+                    comments.push(input.value); // Ajouter la valeur du champ "comments"
+                });
+
                 var formData = new FormData(this);
+
+                // Ajouter les valeurs au FormData
+                nomDocuments.forEach((nomDocument, index) => {
+                    formData.append('nomDocument[]', nomDocument);
+                });
+
+                comments.forEach((comment, index) => {
+                    formData.append('comments[]', comment);
+                });
+
+                // Préparez les données du formulaire
                 formData.append('pointage_id', pointage_id);
                 formData.append('motif', motifType);
                 formData.append('type', justificationType);
-                formData.append('nomDocument', nomDocument);
-                formData.append('comments', commentaire);
+                // formData.append('nomDocument', nomDocument);
+                // formData.append('comments', commentaire);
 
                 // Check if motif is empty, show error if necessary
                 if (!motifType) {
@@ -1577,7 +1784,7 @@ $color3 = "#fce8ea";
                     });
 
                     $('#justificationModal').modal('hide');
-                    window.location.reload();
+                    // window.location.reload();
                 } catch (error) {
                     console.error('Erreur AJAX ou notification :', error);
                 }
@@ -1656,9 +1863,6 @@ $color3 = "#fce8ea";
                         justifArriveeText.classList.add('hidden')
                         justifDepartText.classList.add('hidden')
                         justifDepartHr.classList.add('hidden')
-
-
-
                     } else {
                         //si present cacher confirmation absence
                         absentSection.classList.add('hidden')
@@ -1725,24 +1929,31 @@ $color3 = "#fce8ea";
                     let pieceAbsenceForm = document.querySelector("#piece-absence-form")
 
                     let motifDepart = document.querySelector("#motif-depart")
+                    let motifDepartAdmin = document.querySelector("#motif-depart-admin")
                     let motifArrivee = document.querySelector("#motif-arrivee")
+                    let motifArriveeAdmin = document.querySelector("#motif-arrivee-admin")
                     let motifAbsence = document.querySelector("#motif-absence")
+                    let motifAbsenceAdmin = document.querySelector("#motif-absence-admin")
 
                     if (pieceDepartForm && pieceArriveeForm && pieceAbsenceForm) {
                         if (response.resultatTraiteAbsent === 'Accepté' || response.resultatTraiteAbsent ===
                             'Refusé') {
                             pieceAbsenceForm.classList.add("hidden")
                             motifAbsence.classList.add("hidden")
+                            motifAbsenceAdmin.classList.add("hidden")
                         } else {
                             pieceAbsenceForm.classList.remove("hidden")
                             motifAbsence.classList.remove("hidden")
+                            motifAbsenceAdmin.classList.remove("hidden")
                         }
                         if (response.resultatTraite === 'Accepté' || response.resultatTraite === 'Refusé') {
                             pieceArriveeForm.classList.add("hidden")
                             motifArrivee.classList.add("hidden")
+                            motifArriveeAdmin.classList.add("hidden")
                         } else {
                             pieceArriveeForm.classList.remove("hidden")
                             motifArrivee.classList.remove("hidden")
+                            motifArriveeAdmin.classList.remove("hidden")
                         }
                         if (response.resultatTraiteDepart === 'Accepté' || response.resultatTraiteDepart ===
                             'Refusé') {
@@ -1871,9 +2082,11 @@ $color3 = "#fce8ea";
                         }
                     }
 
-                    let justificationAbsenceElement = document.getElementById('modalJustificationAbsence');
+                    let justificationAbsenceElement = document.getElementById('motif-absence');
                     if (justificationAbsenceElement) {
-                        justificationAbsenceElement.innerHTML = response.motifAbsent ?
+                        justificationAbsenceElement.value = response.motifAbsent;
+
+                        motifAbsenceAdmin.innerHTML = response.motifAbsent ?
                             `<p style="margin-left:20px; font-size:16px;">${response.motifAbsent}</p>` :
                             `<p style="font-size:16px;">Aucun motif trouvé</p>`;
                     }
@@ -1937,10 +2150,14 @@ $color3 = "#fce8ea";
                     let justificationElement = document.getElementById('motif-arrivee');
                     if (justificationElement) {
                         justificationElement.value = response.motifRetard;
+                        motifArriveeAdmin.innerHTML = response.motifRetard ?
+                            `<p style="margin-left:20px; font-size:16px;">${response.motifRetard}</p>` :
+                            `<p style="font-size:16px;">Aucun motif trouvé</p>`;
                     }
-                    let justificationDepartElement = document.getElementById('modalJustificationDepart');
+                    let justificationDepartElement =  document.getElementById('motif-depart')
                     if (justificationDepartElement) {
-                        justificationDepartElement.innerHTML = response.motifRetardDepart ?
+                        justificationDepartElement.value = response.motifRetardDepart;
+                        motifDepartAdmin.innerHTML = response.motifRetardDepart ?
                             `<p style="margin-left:20px; font-size:16px;">${response.motifRetardDepart}</p>` :
                             `<p style="font-size:16px;">Aucun motif trouvé</p>`;
                     }
