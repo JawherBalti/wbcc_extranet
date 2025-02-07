@@ -334,7 +334,8 @@ if (isset($_GET['action'])) {
             if ($congeId) { // Check if the save/update was successful
                 // Handle file uploads only if it's a new conge (no ID provided)
                 if (isset($_FILES['attachments']) && count($_FILES['attachments']['name']) > 0) {
-                    $uploadDir = "../documents/conge/justification/";
+                    $uploadDir = "../documents/personnel/conge/justificatif/";
+
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
                     }
