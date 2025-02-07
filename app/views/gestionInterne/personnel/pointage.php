@@ -562,8 +562,11 @@ $color3 = "#fce8ea";
 
                         <p><i class="fas fa-calendar-alt"></i> <strong>Date Pointage:</strong> <span
                                 id="modalDatePointage"></span></p>
-                        <p><i class="fas fa-exclamation-circle"></i> <strong>Statut d'arrivée:</strong> <span
-                                id="modalEtat"></span></p>
+                        <p>
+                            <i class="fas fa-exclamation-circle"></i>
+                            <strong>Statut d'arrivée:</strong>
+                            <span id="modalEtat"></span>
+                        </p>
                         <p><i class="fas fa-exclamation-circle"></i> <strong>Statut du départ:</strong> <span
                                 id="modalEtatDepart"></span></p>
                     </div>
@@ -623,8 +626,10 @@ $color3 = "#fce8ea";
                                     <div class="col-md-12">
                                         <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif d'arrivée:</strong>
                                         </p>
-                                        <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
-                                            name="motif" id="motif-arrivee" required>
+                                        <!-- <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
+                                            name="motif" id="motif-arrivee" required> -->
+                                            <textarea class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" name="motif" id="motif-arrivee" required></textarea>
+
                                         <span id="motifArriveeErreur" class="text-danger">Veuillez entrer le
                                             motif</span>
                                     </div>
@@ -726,8 +731,10 @@ $color3 = "#fce8ea";
                                         <div class="col-md-12">
                                             <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif du départ:</strong>
                                             </p>
-                                            <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
-                                                name="motif" id="motif-depart" required>
+                                            <!-- <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
+                                                name="motif" id="motif-depart" required> -->
+                                                <textarea class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" name="motif" id="motif-depart" required></textarea>
+
                                             <span id="motifDepartErreur" class="text-danger">Veuillez entrer le
                                                 motif</span>
                                         </div>
@@ -821,8 +828,10 @@ $color3 = "#fce8ea";
                                         <div class="col-md-12">
                                             <p class="mt-2"><i class="fas fa-comment"></i> <strong>Motif d'absence:</strong>
                                             </p>
-                                            <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
-                                                name="motif" id="motif-absence" required>
+                                            <!-- <input class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" type="text"
+                                                name="motif" id="motif-absence" required> -->
+                                                <textarea class="form-control <?= $viewAdmin2 == "" ? "hidden" : "" ?>" name="motif" id="motif-absence" required></textarea>
+
                                             <span id="motifAbsenceErreur" class="text-danger">Veuillez entrer le
                                                 motif</span>
                                         </div>
@@ -1180,7 +1189,7 @@ $color3 = "#fce8ea";
                     }, 500);
                     $("#msgSuccess").text("Données exportées avec succès !!!");
                     $('#successOperation').modal('show');
-                    document.location.href = `<?= URLROOT ?>/public/json/export/` + response;
+                    // document.location.href = `<?= URLROOT ?>/public/documents/json/export/` + response;
                 },
                 error: function(response) {
                     console.log(response);
@@ -1784,7 +1793,7 @@ $color3 = "#fce8ea";
                     });
 
                     $('#justificationModal').modal('hide');
-                    // window.location.reload();
+                    window.location.reload();
                 } catch (error) {
                     console.error('Erreur AJAX ou notification :', error);
                 }
@@ -1845,6 +1854,35 @@ $color3 = "#fce8ea";
                 dataType: 'json',
                 success: function(response) {
                     console.log(response);
+
+                    function timeStringToMinutes(timeStr) {
+                        if(timeStr) {
+                            const parts = timeStr.split(':');
+                            console.log(timeStr)
+
+                            if (parts.length < 2 ) { // Minimum 2 parts (hours and minutes)
+                                return;
+                            }
+    
+                            const hoursStr = parts[0].trim();
+                            const minutesStr = parts[1].trim();
+    
+                            if (!/^\d+$/.test(hoursStr) || !/^\d+$/.test(minutesStr)) {
+                                return;
+                            }
+    
+                            const hours = parseInt(hoursStr, 10);
+                            const minutes = parseInt(minutesStr, 10);
+    
+                            if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+                                return;
+                            }
+    
+                            return (hours * 60) + minutes;
+                        }
+
+                    }
+
                     let arriveeSection = document.querySelector('.arrivee-section')
                     let justifArriveeText = document.querySelector('.justif-arrivee-text')
 
@@ -2184,13 +2222,19 @@ $color3 = "#fce8ea";
                     let etatElement = document.getElementById('modalEtat');
 
                     if (etatElement) {
-                        let etat = '<span class="badge badge-success">À l\'heure</span>';
-                        if (response.absent == 1) {
-                            etat = '<span class="badge badge-danger">Absent</span>';
-                        } else if (response.retard == 1) {
-                            etat = '<span class="badge badge-warning">Retard</span>';
+                        let etatDetails = '-';
+                        if(response.heureDebutPointage === null) {
+                            etatDetails = '<span class="badge badge-danger">Absent</span>'
+                        } else if(timeStringToMinutes(response.heureDebutJour) >= timeStringToMinutes(response.heureDebutPointage)) {
+                            etatDetails = '<span class="badge badge-success">À l\'heure</span>'
+                        } else {
+                            if (response.retard == 1) {
+                                etatDetails = '<span class="badge badge-warning">Retard</span>';
+                            } else {
+                                etatDetails = "-"
+                            }
                         }
-                        etatElement.innerHTML = etat;
+                        etatElement.innerHTML = etatDetails;
                     }
 
                     let difference = calculerDifferenceHeures(response.heureDebutJour, response
@@ -2203,15 +2247,14 @@ $color3 = "#fce8ea";
                         etat = '<span class="badge badge-warning">Retard</span>';
                     }
 
-                    etatElement.innerHTML = etat;
+                    // etatElement.innerHTML = etat;
 
                     let etatdepart;
                     if (response.absent == 1) {
                         etatdepart = '<span class="badge badge-danger">Absent</span>';
                     } else {
-                        let difference = calculerDifferenceHeures(response.heureFinJour, response
-                            .heureFinPointage);
-
+                        let difference = calculerDifferenceHeures(response.heureFinJour, response.heureFinPointage);
+console.log(difference)
                         if (difference === "-") {
                             etatdepart = '<span class="badge badge-success">À l\'heure</span>';
                         } else if (difference.startsWith("-")) {
@@ -2253,7 +2296,7 @@ $color3 = "#fce8ea";
                             // Map the filtered documents to create HTML links
                             justificationAbsenceLinks = filteredDocs
                                 .map(doc =>
-                                    `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/pointage/justification/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
+                                    `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/personnel/pointage/justificatif/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
                                 )
                                 .join('<br>'); // Add an HTML line break between the links
                         } else {
@@ -2283,7 +2326,7 @@ $color3 = "#fce8ea";
                             // Map the filtered documents to create HTML links
                             justificationLinks = filteredDocs
                                 .map(doc =>
-                                    `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/pointage/justification/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
+                                    `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/./personnel/pointage/justificatif/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
                                 )
                                 .join('<br>'); // Add an HTML line break between the links
                         } else {
@@ -2312,7 +2355,7 @@ $color3 = "#fce8ea";
                                 // Map the filtered documents to create HTML links
                                 justificationDepartLinks = filteredDocsDepart
                                     .map(doc =>
-                                        `<a style="color:#13058f; text-decoration: none;  font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/pointage/justification/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
+                                        `<a style="color:#13058f; text-decoration: none;  font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/personnel/pointage/justificatif/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
                                     )
                                     .join('<br>'); // Add an HTML line break between the links
                             } else {
