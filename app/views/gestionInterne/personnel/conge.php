@@ -1296,7 +1296,7 @@ function formatDate($date)
                         // Créer un lien pour chaque document
                         justificationLinks = filteredDocs
                             .map(doc =>
-                                `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/conge/justification/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
+                                `<a style="color:#13058f; text-decoration: none; font-size:16px; font-weight:bold; margin-left:20px;" href="${URLROOT}/public/documents/personnel/conge/justificatif/${doc.urlDocument}" target="_blank">${doc.nomDocument}</a>`
                             )
                             .join('<br>'); // Add an HTML line break between the links
                     } else {
