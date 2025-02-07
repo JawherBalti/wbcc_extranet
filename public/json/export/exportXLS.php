@@ -60,11 +60,18 @@ $fileNameExport = $_POST['fileName'];
 
 function exportTableToExcel($htmlTable, $fileName)
 {
-    // Créer un nouvel objet Spreadsheet
+    $uploadDir = '../../../public/documents/personnel/pointage/export/'; //  Goes up one directory and then into "exports".  Adjust as needed.
+
+    // Create the directory if it doesn't exist.  This is crucial!
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true); // The 'true' makes it recursive.  Adjust permissions if needed.
+    }
+
+    $fullPath = $uploadDir . $fileName . ".xlsx"; // Add file extension
+
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
-    // Charger la table HTML
     $dom = new DOMDocument();
     @$dom->loadHTML($htmlTable);
 
@@ -99,11 +106,10 @@ function exportTableToExcel($htmlTable, $fileName)
 
     // Écrire le fichier Excel
     $writer = new Xlsx($spreadsheet);
-    $writer->save($fileName);
+    $writer->save($fullPath);  // Use the full path here
 
-    echo json_encode($fileName);
+    echo json_encode($fullPath); // Return the full path.  This is important for your JS to work properly.
 }
-
 
 // Appeler la fonction d'exportation
 exportTableToExcel($htmlTable, $fileNameExport . date('dmYhis') . '.xlsx');
