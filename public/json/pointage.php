@@ -2436,7 +2436,7 @@ if (isset($_GET['action'])) {
                 }
             } else {
                 if (isset($_FILES['attachments']) && count($_FILES['attachments']['name']) > 0) {
-                    $uploadDir = "../documents/pointage/justification/";
+                    $uploadDir = "../documents/personnel/pointage/justificatif/";
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
                     }
@@ -2459,7 +2459,7 @@ if (isset($_GET['action'])) {
 
                             if (move_uploaded_file($uploadedFile, $uploadDir . $urlDocument)) {
                                 $db->query("INSERT INTO wbcc_document (numeroDocument, nomDocument, urlDocument, commentaire, createDate, source, publie, urlDossier) 
-                                            VALUES (:numeroDocument, :nomDocument, :urlDocument, :commentaire, NOW(), :source, :publie, 'pointage/justification')");
+                                            VALUES (:numeroDocument, :nomDocument, :urlDocument, :commentaire, NOW(), :source, :publie, 'personnel/pointage/justificatif')");
                                 $db->bind("numeroDocument", $numeroDocument);
                                 if (gettype($nomDocuments) == "string") {
                                     $db->bind("nomDocument", $nomDocuments ?? "Unnamed_Document_$i");
