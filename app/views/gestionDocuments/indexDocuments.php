@@ -1,569 +1,564 @@
 <?php
-$user = $_SESSION["connectedUser"];
-$role = $user->idRole;
+$idRole = $_SESSION["connectedUser"]->role;
+$hasAccess = ($idRole == "1" || $_SESSION["connectedUser"]->isAccessAllOP == "1");
+$viewAdmin = $hasAccess ? "col-md-4 col-xs-12 mb-3" : "hidden";
 ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" type="text/css"
+    href="<?= URLROOT ?>/assets/ticket/vendor/libs/datepicker/jquery.timepicker.css" />
+<link rel="stylesheet" type="text/css"
+    href="<?= URLROOT ?>/assets/ticket/vendor/libs/datepicker/documentation-assets/bootstrap-datepicker.css" />
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?= URLROOT ?>/assets/ticket/css/tenue-reunion.css" />
 
-<div class="section-title">
-    <div class="col-md-6">
-        <h2>
-            <span>
-                <i class="fa fa-solid fa-user" style="color: #c00000"></i>
-            </span> GESTION PERSONNEL
-        </h2>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Earnings (Monthly) Card Example -->
-            <div
-                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <a href="<?= $data['gerepresence'] ?>">
-                                    <div class=" row text-lg font-weight-bold text-info text-uppercase mb-1">
-                                        <div href="#" class="btn btn-info btn-circle">
-                                            1
-                                        </div><span class="mt-2"> &nbsp; POINTAGE </span>
-                                    </div>
-                                    <hr>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0 Absence</div>
-                                </a>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-2x text-danger-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div
-                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <a  href="<?= $data['gererConges'] ?>">
-                                    <div class="text-lg font-weight-bold text-success text-uppercase mb-1">
-                                        <div class="btn btn-success btn-circle">
-                                            2
-                                        </div><span class="mt-2"> &nbsp; CONGE </span>
-                                    </div>
-                                    <hr>
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col-auto">
-                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="progress progress-sm mr-2">
-                                                <div class="progress-bar bg-success" role="progressbar"
-                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-danger-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div
-                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
-                <div class="card border-left-danger shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <a href="#">
-                                    <div class="text-lg font-weight-bold text-success text-danger mb-1">
-                                        <div class="btn btn-danger btn-circle">
-                                            3
-                                        </div><span class="mt-2"> &nbsp; AVERTISSEMENT </span>
-                                    </div>
-                                    <hr>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                </a>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-comments fa-2x text-danger-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pending Requests Card Example -->
-            <div
-                class="<?= $role == "1" || $role == "2" || $role == "25" ? "col-xl-3 col-md-3" : "col-xl-6 col-md-6" ?> mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <a href="#">
-                                    <div class="text-lg font-weight-bold text-warning text-uppercase mb-1">
-                                        <div class="btn btn-warning btn-circle">
-                                            4
-                                        </div><span class="mt-2"> &nbsp; PAIEMNENT </span>
-                                    </div>
-                                    <hr>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                </a>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-euro-sign fa-2x text-danger-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="section-title mb-0">
+    <h2 class="mb-0">
+        <button onclick="history.back()">
+            <i class="fas fa-fw fa-arrow-left" style="color: #c00000"></i>
+        </button>
+        <span>
+            &nbsp;&nbsp;
+            <i class="fas fa-fw fa-file" style="color: #c00000"></i>
+            Tableau de Bord
+        </span>
+    </h2>
 </div>
 
-<?php
-if ($role == "1" || $role == "2" || $role == "25") {
-?>
-    <!-- DataTales Example -->
-    <div class="card shadow mt-3">
-        <div class="card-header py-3 text-center">
-            <div class="row">
-                <h3 class="m-0 mt-2 col-md-10 font-weight-bold text-primary">
-                    <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;"><?= $titre ?></font>
-                    </font>
-                </h3>
-                <div class="float-right col-md-2">
-                    <?php
-                    if ($role == 1 || $role == 2) { ?>
-                        <button onclick="onClickAdd()" type="button" rel="tooltip" title="Ajouter"
-                            class="btn btn btn-sm btn-red  ml-1" data-toggle="modal" data-target="#personnelModal">
-                            <i class="fas fa-user-plus" style="color: #ffffff"></i>
-                            Ajouter un utilisateur
-                        </button>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
+<div class="mt-3" id="accordionFiltrea">
+  <div class="table-responsive">
+    <div class="card accordion-item" style="border-radius: none !important; box-shadow: none !important;">
+      <div id="bloc1" class="accordion-collapse collapse show" data-bs-parent="#accordionFiltrea"
+           style="box-shadow: none !important;">
+        <div class="accordion-body">
+          <form method="GET" style="border: none; margin: 0px; padding: 0px;">
+            <div class="row" style="width: 100%; margin: auto;">
 
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable16" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Site</th>
-                            <th>login</th>
-                            <th>Prénom</th>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Rôle</th>
-                            <th>Etat</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $i = 1;
-                        foreach ($personnels as $pers) {
-                            $etat = "";
-                            if ($pers->etatUser == 0) {
-                                $etat = "Bloqué";
-                            } else {
-                                if ($pers->token != null && $pers->token != "") {
-                                    $etat = "En attente de confirmation";
-                                } else {
-                                    $etat = "Actif";
-                                }
-                            }
-                        ?>
-                            <tr style="background-color: <?= ($pers->etatUser == 0) ? "lightgrey" : ""  ?>;">
-                                <td><?= $i++ ?></td>
-                                <td><?= $pers->nomSite ?></td>
-                                <td><?= $pers->login ?></td>
-                                <td><?= ucfirst($pers->prenomContact) ?></td>
-                                <td><?= strtoupper($pers->nomContact) ?></td>
-                                <td><?= $pers->email ?></td>
-                                <td><?= $pers->libelleRole ?></td>
-                                <td><?= $etat ?></td>
-                                <td style="text-align : center">
-                                    <button <?= $_SESSION["connectedUser"]->libelleRole == "Administrateur" ? "" : "hidden" ?>
-                                        type="button" rel="tooltip" title="Editer"
-                                        onclick="onClickEdit(<?= $pers->idUtilisateur ?>)" value=""
-                                        class="btn btn-sm btn-warning btn-simple btn-link" data-toggle="modal"
-                                        data-target="#personnelModal">
-                                        <i class="fas fa-user-edit" style="color: #ffffff"></i>
-                                    </button>
-                                    <button <?= $_SESSION["connectedUser"]->libelleRole == "Administrateur" ? "" : "hidden" ?>
-                                        <?= ($idContact == $pers->idUtilisateur) ? "disabled" : "" ?> type="button"
-                                        rel="tooltip" title="<?= ($pers->etatUser == 0) ? "Activer" : "Désactiver"  ?>"
-                                        onclick="onClickBloquer(<?= $pers->idUtilisateur ?>,<?= $pers->etatUser ?>)" value=""
-                                        class="btn btn-sm btn-info btn-simple btn-link" data-toggle="modal"
-                                        data-target="#bloquerModal">
-                                        <i class="fas  <?= ($pers->etatUser == 0) ? "fa-user" : "fa-user-slash"  ?>"
-                                            style="color: #ffffff"></i>
-                                    </button>
-                                    <button <?= $_SESSION["connectedUser"]->libelleRole == "Administrateur" ? "" : "hidden" ?>
-                                        <?= ($idContact == $pers->idUtilisateur) ? "disabled" : "" ?> type="button"
-                                        rel="tooltip" title="Supprimer" onclick='onClickDelete(<?= $pers->idContact ?>)'
-                                        class="btn btn-sm btn-danger btn-simple btn-link" data-toggle="modal"
-                                        data-target="#deleteModal">
-                                        <i class="fas fa-user-times" style="color: #ffffff"></i>
-                                    </button>
-                                    <a href="<?= linkTo("Utilisateur", "configuration", $pers->idUtilisateur); ?>" type="button"
-                                        rel="tooltip" title="Configuration" class="btn btn-sm btn-primary btn-simple btn-link">
-                                        <i class="fa fa-cog" style="color: #ffffff"></i>
-                                    </a>
-                                </td>
+              <div class="col-md-4 col-xs-12 mb-3">
+                <fieldset class="py-3">
+                  <legend class='col-md-12 text-white text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                    Nom de la tâche
+                  </legend>
+                  <input type="text" name="nom" class="form-control" placeholder="Rechercher..." value="<?= isset($_GET['nom']) ? htmlspecialchars($_GET['nom']) : '' ?>">
+                </fieldset>
+              </div>
 
-                            </tr>
-                        <?php    }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+              <div class="<?= $viewAdmin ?>">
+  <fieldset class="py-3">
+    <legend class='col-md-12 text-white text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+      Assigné à
+    </legend>
+    <select name="assigner" class="form-control">
+      <option value="">-- Sélectionner un utilisateur --</option>
+      <?php foreach ($utilisateurs as $utilisateur) : ?>
+        <option value="<?= htmlspecialchars($utilisateur->fullName) ?>"
+          <?= (isset($_GET['assigner']) && $_GET['assigner'] === $utilisateur->fullName) ? 'selected' : '' ?>>
+          <?= htmlspecialchars($utilisateur->fullName) ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+  </fieldset>
+</div>
 
-    <!-- Personnel Modal-->
-    <div class="modal fade" id="personnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Utilisateur</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form id="msform" method="post" action="<?= linkTo("Utilisateur", "saveUser", "wbcc") ?>">
-                    <div class="modal-body mt-0">
-                        <div class="row mt-0">
-                            <div class="col-md-12 text-left ">
-                                <div class="card ">
-                                    <div class="col-md-12 mx-0">
-                                        <!-- progressbar -->
-                                        <div class="row register-form mt-0">
-                                            <fieldset>
-                                                <legend class="text-center legend font-weight-bold text-uppercase"><i
-                                                        class="icofont-info-circle"></i>Création d'un compte</legend>
-                                                <input type="hidden" name="idContact" id="idContact">
+              <div class="<?= $viewAdmin ?>">
+    <fieldset class="py-3">
+        <legend class='col-md-12 text-white text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+            &nbsp;Site
+        </legend>
+        <select id="site" name="site" class="form-control">
+            <option <?= $site === '' ? 'selected' : '' ?> value="">Tout</option>
+            <?php foreach ($sites as $sit): ?>
+                <?php
+                if (
+                    $hasAccess || $_SESSION["connectedUser"]->nomSite == $sit->nomSite
+                ):
+                ?>
+                    <option <?= $site == $sit->nomSite ? "selected" : "" ?> value="<?= $sit->nomSite ?>">
+                        <?= $sit->nomSite ?>
+                    </option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+    </fieldset>
+</div>
 
-                                                <input type="hidden" name="URLROOT" id="URLROOT" value="<?= URLROOT ?>">
-                                                <div class="row">
-                                                    <div class="row ">
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Civilité </label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <select name="civilite" id="civilite" class="form-control">
-                                                                    <option value="">-- Choisir --</option>
-                                                                    <option value="M">Monsieur</option>
-                                                                    <option value="Mme">Madame</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Prénom <small
-                                                                        class="text-danger">*</small></label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <input required type="text" name="prenom"
-                                                                    class="form-control" id="prenom">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Nom<small
-                                                                        class="text-danger">*</small></label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <input required type="tel" name="nom" class="form-control"
-                                                                    id="nom">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Ligne Directe<small
-                                                                        class="text-danger">*</small></label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <input required type="tel" name="tel1" class="form-control"
-                                                                    id="tel1">
-                                                            </div>
-                                                        </div>
+              <div class="col-md-6 col-xs-12 mb-3">
+                <fieldset class="py-3">
+                  <legend class='col-md-12 text-white text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                    Statut
+                  </legend>
+                  <select name="etat" class="form-control">
+                    <option value="">Tout</option>
+                    <option value="False" <?= isset($_GET['etat']) && $_GET['etat'] === 'False' ? 'selected' : '' ?>>Ouvert</option>
+                    <option value="True" <?= isset($_GET['etat']) && $_GET['etat'] === 'True' ? 'selected' : '' ?>>Clôturé</option>
+                  </select>
+                </fieldset>
+              </div>
 
-
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Email Personnel<small
-                                                                        class="text-danger">*</small></label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <input onchange="onChangeEmailPerso()" required type="email"
-                                                                    name="email" class="form-control" id="email">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Role <small
-                                                                        class="text-danger">*</small></label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <select required="required" name="role" id="role"
-                                                                    class="form-control">
-                                                                    <option value="">-- Choisir --</option>
-                                                                    <?php foreach ($roles as $r) {
-                                                                    ?>
-                                                                        <option value="<?= $r->idRole ?>">
-                                                                            <?= $r->libelleRole ?></option>
-                                                                    <?php } ?>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4 mb-1">
-                                                            <div class="col-md-12">
-                                                                <label for="">Site <small
-                                                                        class="text-danger">*</small></label>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <select onchange="onChangeRole()" required="required"
-                                                                    name="idSite" id="idSite" class="form-control">
-                                                                    <option value="">-- Choisir --</option>
-                                                                    <?php foreach ($sites as $s) {
-                                                                    ?>
-                                                                        <option value="<?= $s->idSite ?>">
-                                                                            <?= $s->nomSite ?></option>
-                                                                    <?php } ?>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </div>
+              <div class="col-md-6 col-xs-12 mb-3">
+                                  <fieldset class="py-3">
+                                <legend class='text-white col-md-12 text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                                        &nbsp;Date d'importation</legend>
+                                    <div class="card ">
+                                        <select name="periode" id="periode" class="form-control" onchange="dateCreationSelect(this.value)">
+                                            <option <?= $periode === '' ? 'selected' : ''; ?> value="">Tout</option>
+                                            <option <?= $periode === 'today' ? 'selected' : ''; ?> value="today">Aujourd'hui</option>
+                                            <option <?= $periode === '1' ? 'selected' : ''; ?> value="1">A la date du</option>
+                                            <option <?= $periode === '2' ? 'selected' : ''; ?> value="2">Personnaliser</option>
+                                            <option <?= $periode === 'semaine' ? 'selected' : ''; ?> value="semaine">cette semaine</option>
+                                            <option <?= $periode === 'mois' ? 'selected' : ''; ?> value="mois">ce mois</option>
+                                            <option <?= $periode === 'trimestre' ? 'selected' : ''; ?> value="trimestre">Ce trimestre</option>
+                                            <option <?= $periode === 'semestre' ? 'selected' : ''; ?> value="semestre">Ce semestre</option>
+                                            <option <?= $periode === 'annuel' ? 'selected' : ''; ?> value="annuel">Cette année</option>
+                                        </select>
                                     </div>
-                                </div>
+                                </fieldset>
+
+                                <fieldset id="datepairOne" style="display: none;">
+                                    <legend
+                                        class='text-white col-md-12 text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                                        Personnaliser </legend>
+                                    <p >
+                                        <label for="defaultFormControlInput" class="form-label">Date:</label>
+                                        <br>
+                                        <input name="dateOne" id="dateOne" readonly style="border: 1px solid black;" type="text" class="this-form-control col-xs-12 col-md-12 date start " value="<?= $dateOne ? $dateOne: ''; ?>" placeholder="Choisir..." />
+                                    </p>
+                                </fieldset>
+
+                                <fieldset id="datepair" style="display: none;">
+                                    <legend
+                                            class='text-white col-md-12 text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                                            Personnaliser </legend>
+                                    <p>
+                                        <label for="defaultFormControlInput" class="form-label">Début:</label>
+                                        <br>
+                                        <input name="dateDebut" id="dateDebut" readonly style="border: 1px solid black;" type="text" class="this-form-control col-xs-12 col-md-12 date start " value="<?= $dateDebut ? $dateDebut : ''; ?>" placeholder="Choisir..." />
+                                        <!-- <input name="heureDebut" id="heureDebut" style="border: 1px solid black; display: none;" type="text" class="this-form-control col-md-offset-1 col-md-4 col-xs-offset-1 col-xs-5  time start " value="<?= (isset($_GET['heureDebut'])) ? $_GET['heureDebut'] : ''; ?>" placeholder="Choisir..." /> -->
+                                        <br><br>
+                                        <label for="defaultFormControlInput" class="form-label">Fin:</label>
+                                        <br>
+                                        <input name="dateFin" id="dateFin" readonly style="border: 1px solid black;" type="text" class="this-form-control col-xs-12 col-md-12 date end " value="<?= $dateFin ? $dateFin : ''; ?>" placeholder="Choisir..." />
+                                        <!-- <input name="heureFin" id="heureFin" style="border: 1px solid black; display: none;" type="text" class="this-form-control col-md-offset-1 col-md-4 col-xs-offset-1 col-xs-5 time end " value="<?= (isset($_GET['heureFin'])) ? $_GET['heureFin'] : ''; ?>" placeholder="Choisir..." /> -->
+                                    </p>
+                                </fieldset>
                             </div>
+              <div class="col-md-4 offset-4 col-xs-12">
+                <button type="submit" class="btn btn-danger form-control mt-2" style="border-radius: 0px;">
+                  FILTRER
+                </button>
+              </div>
 
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
-                        <button class="btn btn-success" href="submit">Enregistrer</button>
-                    </div>
-                </form>
             </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Bloquer Modal-->
-    <div class="modal fade" id="bloquerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modalHeader">
-                    <h5 class="modal-title" id="exampleModalLabel2">Désactivation</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form id="msform" method="post" action="<?= linkTo("Utilisateur", "bloquerUser", 'wbcc') ?>">
-                    <div class="modal-body">
-                        <input type="hidden" name="idUtilisateur" id="idUtilisateur">
-                        <input type="hidden" name="etatUser" id="etatUser">
-                        <div id="textBloquage">
-                            Voulez-vous bloquer cet utilisateur ?
-                            Ceci va empêcher cet utilisateur de se connecter!
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger" type="button" data-dismiss="modal">Non</button>
-                        <button class="btn btn-success" href="submit">Oui</button>
-                    </div>
-                </form>
+<div class="mt-3" id="accordionFiltrea">
+  <div class="table-responsive">
+    <div class="card accordion-item" style="background-color: transparent !important;border-radius: none !important; box-shadow: none !important;">
+      <div id="bloc1" class="accordion-collapse collapse show" data-bs-parent="#accordionFiltrea"
+           style="box-shadow: none !important;">
+        <div class="card" style="background-color: transparent !important;">
+          <div class="card-body">
+          <?php if ($_SESSION["connectedUser"]->isAdmin): ?>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-sm btn-red ml-1" data-toggle="modal"
+                      data-target="#leaveRequestModal" rel="tooltip" title="Ajouter">
+                <i class="fas fa-plus" style="color: #ffffff"></i>
+                Créer un répertoire
+              </button>
             </div>
+          <?php endif; ?>
+
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- SUPPRESSION Modal-->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #E74A3B">
-                    <h5 class="modal-title">Suppression</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form id="msform" method="post" action="<?= linkTo("Utilisateur", "delete", 'wbcc') ?>">
-                    <div class="modal-body">
-                        <input type="hidden" name="idContact2" id="idContact2">
-                        <div id="textBloquage">
-                            Voulez-vous supprimer ce collaborateur ?</br>
-                            Cette action est irreversible !
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" type="button" data-dismiss="modal">Non</button>
-                        <button class="btn btn-danger" href="submit">Oui</button>
-                    </div>
-                </form>
-            </div>
+<!-- Modal Créer Répertoire -->
+<div class="modal fade" id="leaveRequestModal" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Bandeau en-tête rouge -->
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title m-0 w-100 text-center font-weight-bold">Créer un répertoire</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <!-- Corps du formulaire -->
+      <form id="formCreateRepertoire">
+        <div class="modal-body px-5 py-4">
+
+          <div class="form-group mb-4">
+            <label for="entrepriseSelect" class="font-weight-bold">Entreprise</label>
+            <select id="entrepriseSelect" class="form-control" required></select>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="anneeSelect" class="font-weight-bold">Année</label>
+            <select id="anneeSelect" class="form-control" required disabled></select>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="serviceSelect" class="font-weight-bold">Service</label>
+            <select id="serviceSelect" class="form-control" required disabled></select>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="userSelect" class="font-weight-bold">Nom utilisateur</label>
+            <select id="userSelect" name="userId" class="form-control form-control-lg" required>
+              <option value="">Chargement...</option>
+            </select>
+          </div>
+
         </div>
+
+        <!-- Pied de la modale avec bouton -->
+        <div class="modal-footer px-5 pb-4 pt-0">
+          <button type="submit" class="btn btn-danger btn-lg w-100">
+            Créer un nouveau répertoire
+          </button>
+        </div>
+
+      </form>
     </div>
+  </div>
+</div>
 
-<?php   }
-?>
 
 
-<script type="text/javascript">
-    const URLROOT = document.getElementById("URLROOT").value;
+<!-- compteur -->
+<div class="row justify-content-center mt-3">
+    <!-- Carte Tâches en attente -->
+    <div class="col-md-3">
+      <div class="card text-center p-3" style="border: 1px solid #ccc;">
+        <div class="h4 mb-2">Tâches en attente</div>
+        <div class="display-6" style="color: #c00000;">
+          <?= $data['documentsEnAttente'] ?>
+        </div>
+      </div>
+    </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3" style="border: 1px solid #ccc;">
+      <div class="h4 mb-2">Tâches ouvertes</div>
+      <div class="display-6" style="color: #c00000;">
+        <?= $data['tachesOuvertes'] ?>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3" style="border: 1px solid #ccc;">
+      <div class="h4 mb-2">Tâches clôturées</div>
+      <div class="display-6" style="color: #c00000;">
+        <?= $data['tachesCloturees'] ?>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Tableua -->
+<div class="mt-4">
+  <h5>Tâches récents</h5>
+  <div class="table-responsive">
+  <table class="table table-bordered">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Nom</th>
+    <th>Assigné a</th>
+    <th>Nom du document</th>
+    <th>Site</th>
+    <th>Date importation</th>
+    <th>Date d’assignation</th>
+    <th>Statut</th>
+  </tr>
+</thead>
+<tbody>
+  <?php $i = 1; ?>
+  <?php foreach ($data['Documents'] as $doc): ?>
+    <tr>
+      <td><?= $i++ ?></td>
+      <td><?= htmlspecialchars($doc->nom) ?></td>
+      <td><?= htmlspecialchars($doc->assignerName) ?></td>
+      <td><?= htmlspecialchars($doc->nomDocument) ?></td>
+      <td><?= htmlspecialchars($doc->siteName) ?></td>
+      <td><?= date('d/m/Y H:i', strtotime($doc->createDate)) ?></td>
+      <td><?= date('d/m/Y H:i', strtotime($doc->startTime)) ?></td>
+      <td>
+        <?php if ($doc->etatDocument == 1): ?>
+          <span class="badge badge-success">Ouvert</span>
+        <?php else: ?>
+          <span class="badge badge-danger">Clôturé</span>
+        <?php endif; ?>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+</tbody>
+  </table>
+</div>
+</div>
 
-    function onClickAdd() {
-        document.getElementById("email").removeAttribute("readonly");
-        document.getElementById("idContact").value = "0";
-        document.getElementById("civilite").value = "";
-        document.getElementById("prenom").value = "";
-        document.getElementById("nom").value = "";
-        document.getElementById("tel1").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("role").value = "";
-        document.getElementById("idSite").value = "";
-    }
+<!-- Section des graphiques -->
+<div class="row mt-4">
+  <div class="col-md-12 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header text-white" style="background-color: #c00000;">
+        <div class="d-flex justify-content-between align-items-center">
+          <span><strong>1. Répartition des tâches</strong></span>
+          <span class="badge bg-secondary">Total <?= array_sum($data['tachesStats']) ?></span>
+        </div>
+      </div>
+      <div class="card-body text-center">
+        <canvas id="chartTaches" ></canvas>
+      </div>
+    </div>
+  </div>
 
-    function onChangeRole(elt) {
-        const role = document.getElementById('role');
-        if (role.value == 18) {
-            document.getElementById("divConfig").removeAttribute("hidden");
+  <div class="col-md-12 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header text-white" style="background-color: #c00000;">
+        <div class="d-flex justify-content-between align-items-center">
+          <span><strong>2. Tâches par utilisateur</strong></span>
+          <span class="badge bg-secondary">Total <?= array_sum($data['topUsersCounts']) ?></span>
+        </div>
+      </div>
+      <div class="card-body text-center">
+        <canvas id="chartTopUsers"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header text-white" style="background-color: #c00000;">
+        <div class="d-flex justify-content-between align-items-center">
+          <span><strong>3. Tâches par site</strong></span>
+          <span class="badge bg-secondary">Total <?= array_sum($data['siteCounts']) ?></span>
+        </div>
+      </div>
+      <div class="card-body text-center">
+        <canvas id="chartSites" ></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="<?= URLROOT ?>/assets/ticket/vendor/libs/jquery/jquery.js"></script>
+<script type="text/javascript" src="<?= URLROOT ?>/assets/ticket/vendor/libs/jquery/jquery.js"></script>
+<script type="text/javascript" src="<?= URLROOT ?>/assets/ticket/vendor/libs/datepicker/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="<?= URLROOT ?>/assets/ticket/vendor/libs/datepicker/jquery.timepicker.js"></script>
+<script type="text/javascript" src="<?= URLROOT ?>/assets/ticket/vendor/libs/datepicker/documentation-assets/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?= URLROOT ?>/assets/ticket/js/datepair.js"></script>
+<script type="text/javascript" src="<?= URLROOT ?>/assets/ticket/js/jquery.datepair.js"></script>
+<script src="<?= URLROOT ?>/assets/ticket/vendor/js/bootstrap.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+
+<script>
+  var isAdmin = `<?= $_SESSION["connectedUser"]->isAdmin ?>`;
+  const tachesStats = <?= json_encode($data['tachesStats']) ?>;
+  const topUsersLabels = <?= json_encode($data['topUsersLabels']) ?>;
+  const topUsersCounts = <?= json_encode($data['topUsersCounts']) ?>;
+  const siteLabels = <?= json_encode($data['siteLabels']) ?>;
+  const siteCounts = <?= json_encode($data['siteCounts']) ?>;
+
+  function toggleDateInputs(value) {
+    document.getElementById('dateUnique').style.display = value === '1' ? 'block' : 'none';
+    document.getElementById('dateRange').style.display = value === '2' ? 'block' : 'none';
+  }
+  let directoryStructure = {};
+
+  fetch("<?= URLROOT ?>/public/json/document.php?action=getDirectoryStructure")
+    .then(response => response.json())
+    .then(data => {
+      directoryStructure = data;
+      const entrepriseSelect = document.getElementById("entrepriseSelect");
+      entrepriseSelect.innerHTML = '<option value="">Sélectionner</option>';
+      Object.keys(data).forEach(entreprise => {
+        const opt = document.createElement("option");
+        opt.value = entreprise;
+        opt.textContent = entreprise;
+        entrepriseSelect.appendChild(opt);
+      });
+    });
+
+  document.getElementById("entrepriseSelect").addEventListener("change", function () {
+    const anneeSelect = document.getElementById("anneeSelect");
+    const serviceSelect = document.getElementById("serviceSelect");
+    anneeSelect.innerHTML = '';
+    serviceSelect.innerHTML = '';
+    anneeSelect.disabled = false;
+    serviceSelect.disabled = true;
+
+    const years = Object.keys(directoryStructure[this.value] || {});
+    years.forEach(y => {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.textContent = y;
+      anneeSelect.appendChild(opt);
+    });
+  });
+
+  document.getElementById("anneeSelect").addEventListener("change", function () {
+    const entreprise = document.getElementById("entrepriseSelect").value;
+    const services = directoryStructure[entreprise][this.value] || [];
+    const serviceSelect = document.getElementById("serviceSelect");
+    serviceSelect.innerHTML = '';
+    serviceSelect.disabled = false;
+
+    services.forEach(service => {
+      const opt = document.createElement("option");
+      opt.value = service;
+      opt.textContent = service;
+      serviceSelect.appendChild(opt);
+    });
+  });
+  function loadUserListDynamic() {
+    const entreprise = document.getElementById("entrepriseSelect").value;
+    const annee = document.getElementById("anneeSelect").value;
+    const service = document.getElementById("serviceSelect").value;
+    const select = document.getElementById("userSelect");
+
+    if (!entreprise || !annee || !service) return;
+
+    fetch(`<?= URLROOT ?>/public/json/document.php?action=getAvailableUsers&entreprise=${entreprise}&annee=${annee}&service=${service}`)
+      .then(response => response.json())
+      .then(data => {
+        select.innerHTML = '';
+        if (data.length === 0) {
+          const opt = document.createElement("option");
+          opt.textContent = "Tous les utilisateurs ont un répertoire";
+          opt.disabled = true;
+          select.appendChild(opt);
         } else {
-            document.getElementById("divConfig").setAttribute("hidden", "");
+          const defaultOpt = document.createElement("option");
+          defaultOpt.value = '';
+          defaultOpt.textContent = 'Sélectionner un utilisateur';
+          select.appendChild(defaultOpt);
+
+          data.forEach(user => {
+            const opt = document.createElement("option");
+            opt.value = user.id;
+            opt.textContent = user.name;
+            select.appendChild(opt);
+          });
         }
+      });
+  }
 
+  document.getElementById("serviceSelect").addEventListener("change", function () {
+    loadUserListDynamic();
+  });
+
+
+  document.getElementById("formCreateRepertoire").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const userId = document.getElementById("userSelect").value;
+  const entreprise = document.getElementById("entrepriseSelect").value;
+  const annee = document.getElementById("anneeSelect").value;
+  const service = document.getElementById("serviceSelect").value;
+
+  if (!entreprise || !annee || !service || !userId) {
+    alert("Tous les champs sont obligatoires.");
+    return;
+  }
+
+  fetch("<?= URLROOT ?>/public/json/document.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "createDirectory",
+      idUtilisateur: userId,
+      entreprise: entreprise,
+      annee: annee,
+      service: service
+    })
+  })
+    .then(response => response.json())
+    .then(result => {
+      $('#leaveRequestModal').modal('hide');
+      window.location.reload();
+    });
+});
+
+
+
+// Données simulées (remplace avec tes vraies données PHP)
+const tachesData = {
+  labels: ['Ouvertes', 'Clôturées', 'En attente'],
+  datasets: [{
+    label: 'Tâches',
+    data: [
+      tachesStats.ouvertes || 0,
+      tachesStats.cloturees || 0,
+      tachesStats.attente || 0
+    ],
+    backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+  }]
+};
+
+
+
+const topUsersData = {
+  labels: topUsersLabels,
+  datasets: [{
+    label: 'Tâches Assignés',
+    data: topUsersCounts,
+    backgroundColor: [
+  '#17a2b8', '#ffc107', '#28a745', '#dc3545', '#6f42c1'
+]
+
+  }]
+};
+
+
+const docsSiteData = {
+  labels: siteLabels,
+  datasets: [{
+    label: 'Tâches par site',
+    data: siteCounts,
+    backgroundColor: ['#6f42c1', '#fd7e14', '#20c997', '#007bff', '#dc3545', '#ffc107']
+  }]
+};
+
+new Chart(document.getElementById('chartTaches'), {
+  type: 'doughnut',
+  data: tachesData
+});
+
+
+new Chart(document.getElementById('chartTopUsers'), {
+  type: 'doughnut',
+  data: topUsersData,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+      title: {
+        display: true,
+        text: 'Répartition des tâches par utilisateur',
+      }
     }
+  }
+});
 
 
-    function onClickEdit(id) {
-        $.ajax({
-            type: "GET",
-            url: `${URLROOT}/public/json/utilisateur.php?action=findById&id=${id}`,
-            dataType: "JSON",
-            success: function(data) {
 
-                // console.log(data);
-                document.getElementById("idContact").value = data['idContact'];
-                document.getElementById("civilite").value = data['civiliteContact'];
-                document.getElementById("prenom").value = data['prenomContact'];
-                document.getElementById("nom").value = data['nomContact'];
-                document.getElementById("tel1").value = data['telContact'];
-                document.getElementById("email").value = data['email'];
+new Chart(document.getElementById('chartSites'), {
+  type: 'pie',
+  data: docsSiteData
+});
 
-                if (data['libelleRole'] !== null && data['libelleRole'] !== "") {
-                    document.getElementById("role").value = data['idRole'];
-                }
 
-                if (data['idSiteF'] !== null && data['idSiteF'] !== "") {
-                    document.getElementById("idSite").value = data['idSiteF'];
-                }
-                document.getElementById("email").setAttribute("readonly", "readonly");
-            },
-            error: function(jqXHR, error, errorThrown) {
-                console.log(jqXHR.responseText);
-            }
-        });
-    }
-
-    function onClickBloquer(id, etat) {
-        document.getElementById("idUtilisateur").value = id;
-        document.getElementById("etatUser").value = etat;
-        if (etat == 1) {
-            document.getElementById("exampleModalLabel2").innerHTML = "Désactivation du compte";
-            document.getElementById("textBloquage").innerHTML =
-                "Voulez-vous désactiver le compte de ce collaborateur ?</br> Ceci va empêcher au collaborateur de se connecter sur l'extranet <b> WBCC ASSISTANCE </b>";
-            document.getElementById("modalHeader").style.backgroundColor = "#E74A3B";
-
-        } else {
-            document.getElementById("exampleModalLabel2").innerHTML = "Activation du compte";
-            document.getElementById("textBloquage").innerHTML =
-                "Voulez-vous activer le compte de ce collaborateur ?</br> Ceci va permettre au collaborateur de se connecter sur l'extranet <b> WBCC ASSISTANCE </b>";
-            document.getElementById("modalHeader").style.backgroundColor = "#1CC88A";
-        }
-    }
-
-    function onClickDelete(idContact) {
-        document.getElementById("idContact2").value = idContact;
-    }
-
-    function onChangeEmailPerso() {
-        var email = document.getElementById("email").value;
-        $.ajax({
-            type: "GET",
-            url: `${URLROOT}/public/json/utilisateur.php?action=findByEmail&email=${email}`,
-            dataType: "JSON",
-            success: function(data) {
-                if (data !== "0") {
-                    alert("Cette adresse email est déjà utilisée par un autre utilisateur !");
-                    document.getElementById("email").value = "";
-                    document.getElementById("email").focus();
-                }
-            },
-            error: function(jqXHR, error, errorThrown) {
-                console.log(jqXHR.responseText);
-            }
-        });
-    }
-
-    function changePostalCode() {
-        var code = document.getElementById("codePostal").value;
-        if (code.length === 5) {
-            readTextFile(`${URLROOT}/public/json/codePostal.json`, function(text) {
-                var data = JSON.parse(text);
-                var test = false;
-                data.forEach(function(val) {
-                    if (val[2] === Number(code)) {
-                        test = true;
-                        document.getElementById("ville").value = val[9];
-                        document.getElementById("departement").value = val[12];
-                        document.getElementById("region").value = val[14];
-                        //console.log(val[9],val[12],val[14]);
-                    }
-                });
-                if (!test) {
-                    alert("Ce code postal n'existe Pas");
-                }
-            });
-        } else {
-            document.getElementById("codePostal").value = "";
-            document.getElementById("ville").value = "";
-            document.getElementById("departement").value = "";
-            document.getElementById("region").value = "";
-            alert("Code postal invalide !");
-        }
-
-    }
-
-    function readTextFile(file, callback) {
-        var rawFile = new XMLHttpRequest();
-        rawFile.overrideMimeType("application/json");
-        rawFile.open("GET", file, true);
-        rawFile.onreadystatechange = function() {
-            if (rawFile.readyState === 4 && rawFile.status == "200") {
-                callback(rawFile.responseText);
-            }
-        }
-        rawFile.send(null);
-    }
 </script>
