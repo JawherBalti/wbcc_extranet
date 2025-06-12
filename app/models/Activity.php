@@ -2,30 +2,51 @@
 
 class Activity extends Model
 {
-public function getActivities($statut, $idUtilisateur, $idSite, $periode, $dateOne, $dateDebut, $dateFin) {
-    $sql = "SELECT a.*, u.*, rc.urlDossier, rc.idDocument
+public function getActivities($statut, $idUtilisateur, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $numero) {
+    $sql = "SELECT a.*, u.*, rc.*
             FROM wbcc_repertoire_commun_activity rca
             JOIN wbcc_activity a ON rca.idActivityF = a.idActivity
             JOIN wbcc_utilisateur u ON a.idUtilisateurF = u.idUtilisateur
             JOIN wbcc_repertoire_commun rc ON rca.idRepertoireF = rc.idDocument
-            WHERE 1=1";
+            WHERE a.isDeleted = 0";
+
+$idUtilisateurConnecte = $_SESSION['connectedUser']->idUtilisateur;
 
     // Filter by user ID
     if (!empty($idUtilisateur)) {
         $sql .= " AND a.idUtilisateurF = $idUtilisateur";
     }
 
+    if (!$_SESSION['connectedUser']->isAdmin) {
+        $sql = "SELECT 
+                a.*, d.*, c2.fullName AS assignerName, s.nomSite AS siteName
+            FROM wbcc_activity a
+            LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
+            LEFT JOIN wbcc_contact c2 ON u2.idContactF = c2.idContact
+            LEFT JOIN wbcc_site s ON u2.idSiteF = s.idSite
+            LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
+            LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
+            WHERE 1=1
+        ";
+        $sql .= " AND a.idUtilisateurF = $idUtilisateurConnecte";
+
+        if (!empty($numero)) {
+            $sql .= " AND a.numeroActivity = $numero";
+        }
+    }
+
     // Filter by activity status
     if ($statut == '0') {
         //En attente
-        $sql .= " AND (a.isCleared = 0 AND DATE(a.endTime) >= CURRENT_DATE)";
+        $sql .= " AND a.isCleared = 0";
     } elseif ($statut == '1') {
         //Cloturé
         $sql .= " AND a.isCleared = 1";
-    } elseif ($statut == '2') {
-        //En retard
-        $sql .= " AND a.isCleared = 0 AND DATE(a.endTime) < CURRENT_DATE";
-    }
+    } 
+    // elseif ($statut == '2') {
+    //     //En retard
+    //     $sql .= " AND a.isCleared = 0 AND DATE(a.endTime) < CURRENT_DATE";
+    // }
     // Filter by user site
     if (!empty($idSite)) {
         $sql .= " AND u.idSiteF = $idSite";
@@ -150,43 +171,23 @@ public function getActivities($statut, $idUtilisateur, $idSite, $periode, $dateO
 
 
 
-    public function countTachesOuvertes($where, $params)
+    public function countTaches($etat, $where = [], $params = [])
     {
-        $query = "SELECT COUNT(*) AS total FROM wbcc_activity a
-                LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
-                LEFT JOIN wbcc_contact c2 ON u2.idContactF = c2.idContact
-                LEFT JOIN wbcc_site s ON u2.idSiteF = s.idSite
-                LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
-                LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
-                WHERE a.isDeleted = 0 AND a.isCleared = 1";
-
-        if (!empty($where)) {
-            $query .= " AND " . implode(" AND ", $where);
+        $sql = "
+            SELECT COUNT(*) AS total
+            FROM wbcc_activity a
+            LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
+            LEFT JOIN wbcc_contact   c2 ON u2.idContactF     = c2.idContact
+            LEFT JOIN wbcc_site      s  ON u2.idSiteF        = s.idSite
+            LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
+            LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
+            WHERE a.isDeleted = 0 AND a.isCleared = :etat
+        ";
+        $params[':etat'] = $etat;
+        if ($where) {
+            $sql .= " AND ".implode(" AND ", $where);
         }
-
-        $this->db->query($query);
-        foreach ($params as $k => $v) {
-            $this->db->bind($k, $v);
-        }
-        return $this->db->single()->total;
-    }
-
-
-    public function countTachesCloturees($where, $params)
-    {
-        $query = "SELECT COUNT(*) AS total FROM wbcc_activity a
-                LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
-                LEFT JOIN wbcc_contact c2 ON u2.idContactF = c2.idContact
-                LEFT JOIN wbcc_site s ON u2.idSiteF = s.idSite
-                LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
-                LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
-                WHERE a.isDeleted = 0 AND a.isCleared = 0";
-
-        if (!empty($where)) {
-            $query .= " AND " . implode(" AND ", $where);
-        }
-
-        $this->db->query($query);
+        $this->db->query($sql);
         foreach ($params as $k => $v) {
             $this->db->bind($k, $v);
         }
@@ -273,36 +274,23 @@ public function getActivities($statut, $idUtilisateur, $idSite, $periode, $dateO
     }
 
     
-    public function getTachesUtilisateur($idUtilisateur, $where = [], $params = [])
+    public function getAllActivitiesForSelect($idUtilisateur = null)
     {
         $sql = "
             SELECT 
                 a.idActivity,
                 a.numeroActivity,
-                a.createDate,
-                a.startTime,
-                a.endTime,
-                a.organizer AS organizer,
-                a.location,
-                a.isCleared,
-                a.publie,
-                d.nomDocument,
-                d.urlDocument,
-                c2.fullName AS assignerName,
-                s.nomSite AS siteName
+                d.nomDocument
             FROM wbcc_activity a
-            LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
-            LEFT JOIN wbcc_contact c2 ON u2.idContactF = c2.idContact
-            LEFT JOIN wbcc_site s ON u2.idSiteF = s.idSite
             LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
             LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
-            WHERE a.isDeleted = 0 AND a.idUtilisateurF = :idUtilisateur
+            WHERE a.isDeleted = 0
         ";
 
-        $params[':idUtilisateur'] = $idUtilisateur;
-
-        if (!empty($where)) {
-            $sql .= " AND " . implode(" AND ", $where);
+        $params = [];
+        if ($idUtilisateur !== null) {
+            $sql .= " AND a.idUtilisateurF = :idUtilisateur";
+            $params[':idUtilisateur'] = $idUtilisateur;
         }
 
         $sql .= " ORDER BY a.createDate DESC";
@@ -314,6 +302,57 @@ public function getActivities($statut, $idUtilisateur, $idSite, $periode, $dateO
 
         return $this->db->resultSet();
     }
+    public function getTachesUtilisateur($idUtilisateur = null, $where = [], $params = [])
+    {
+        $sql = "SELECT 
+                a.*, d.*, c2.fullName AS assignerName, s.nomSite AS siteName
+            FROM wbcc_activity a
+            LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
+            LEFT JOIN wbcc_contact c2 ON u2.idContactF = c2.idContact
+            LEFT JOIN wbcc_site s ON u2.idSiteF = s.idSite
+            LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
+            LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
+            WHERE a.isDeleted = 0
+        ";
+    
+        if (!is_null($idUtilisateur)) {
+            $sql .= " AND a.idUtilisateurF = :idUtilisateur";
+            $params[':idUtilisateur'] = $idUtilisateur;
+        }
+    
+        if (!empty($where)) {
+            $sql .= " AND " . implode(" AND ", $where);
+        }
+    
+        $sql .= " ORDER BY a.createDate DESC";
+    
+        $this->db->query($sql);
+        foreach ($params as $key => $val) {
+            $this->db->bind($key, $val);
+        }
+    
+        return $this->db->resultSet();
+    }
+public function countTachesEnRetard($where, $params)
+{
+    $query = "SELECT COUNT(*) AS total FROM wbcc_activity a
+            LEFT JOIN wbcc_utilisateur u2 ON a.idUtilisateurF = u2.idUtilisateur
+            LEFT JOIN wbcc_contact c2 ON u2.idContactF = c2.idContact
+            LEFT JOIN wbcc_site s ON u2.idSiteF = s.idSite
+            LEFT JOIN wbcc_repertoire_commun_activity rca ON a.idActivity = rca.idActivityF
+            LEFT JOIN wbcc_repertoire_commun d ON rca.idRepertoireF = d.idDocument
+            WHERE a.isDeleted = 0 AND a.isCleared = 0 AND DATE(a.endTime) < CURRENT_DATE";
+
+    if (!empty($where)) {
+        $query .= " AND " . implode(" AND ", $where);
+    }
+
+    $this->db->query($query);
+    foreach ($params as $k => $v) {
+        $this->db->bind($k, $v);
+    }
+    return $this->db->single()->total;
+}
 
 
 }
