@@ -1,74 +1,65 @@
 <?php
     $user = $_SESSION["connectedUser"];
     $idUtilisateur = $user->idUtilisateur;
+    $isAdmin = $user->isAdmin;
     $fullName = $user->fullName;
     $role = $user->idRole;
     $viewAdmin = (($role == "1" || $role == "2" || $role == "25")) ? "" : "hidden";
 ?>
 
-    <?php
-    // Function to get companies
-    function getCompanies($path) {
-        $companies = [];
-        if (is_dir($path)) {
-            $items = array_diff(scandir($path), ['.', '..']);
-            foreach ($items as $item) {
-                if (is_dir($path . $item)) {
-                    $companies[] = $item;
-                }
-            }
-        }
-        return $companies;
-    }
+<div class="modal fade" id="leaveRequestModal" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title m-0 w-100 text-center font-weight-bold">Sélectionner un répertoire</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
 
-    // Function to get years for a company
-    function getYears($path, $company) {
-        $years = [];
-        $companyPath = $path . $company . '/';
-        if (is_dir($companyPath)) {
-            $items = array_diff(scandir($companyPath), ['.', '..']);
-            foreach ($items as $item) {
-                if (is_dir($companyPath . $item)) {
-                    $years[] = $item;
-                }
-            }
-        }
-        return $years;
-    }
+      <form id="formSelectRepertoire">
+        <div class="modal-body px-5 py-4">
+          <!-- Company Selection -->
+          <div class="form-group mb-4">
+            <label class="font-weight-bold">Entreprise</label>
+            <select id="entrepriseSelect" class="form-control" onchange="loadTopLevelFolders()">
+              <option value="">-- Sélectionner une entreprise --</option>
+              <!-- Options will be loaded dynamically -->
+            </select>
+          </div>
 
-    // Function to get services for a company and year
-    function getServices($path, $company, $year) {
-        $services = [];
-        $yearPath = $path . $company . '/' . $year . '/';
-        if (is_dir($yearPath)) {
-            $items = array_diff(scandir($yearPath), ['.', '..']);
-            foreach ($items as $item) {
-                if (is_dir($yearPath . $item)) {
-                    $services[] = $item;
-                }
-            }
-        }
-        return $services;
-    }
+          <!-- Folder Hierarchy -->
+          <div id="folderHierarchy">
+            <!-- Dynamic selects will appear here -->
+          </div>
+        </div>
+    </form>
+    <div class="modal-footer px-5 pb-4 pt-0">
+      <button type="submit" id="confirm-btn" class="btn btn-danger btn-lg w-100">
+        Confirmer la sélection
+      </button>
+    </div>
+        <input type="hidden" id="modalDocumentId">
+        <input type="hidden" id="modalDocumentCreateDate">
+        <input type="hidden" id="modalDocumentEditDate">
+        <input type="hidden" id="modalDocumentNom">
+        <input type="hidden" id="modalDocumentUrl">
+    </div>
+  </div>
+</div>
 
-    // Function to get users for a company, year and service
-    function getUsers($path, $company, $year, $service) {
-        $users = [];
-        $servicePath = $path . $company . '/' . $year . '/' . $service . '/';
-        if (is_dir($servicePath)) {
-            $items = array_diff(scandir($servicePath), ['.', '..']);
-            foreach ($items as $item) {
-                if (is_dir($servicePath . $item)) {
-                    $users[] = $item;
-                }
-            }
-        }
-        return $users;
-    }
-
-    $basePath = $_SERVER['DOCUMENT_ROOT'] . parse_url(URLROOT, PHP_URL_PATH) . '/public/documents/repertoires/';
-    $companies = getCompanies($basePath);
-?>
+    
+    <!-- MODAL ERROR -->
+    <div class="modal fade modal-center" id="errorOperation">
+        <div class="modal-dialog modal-lg bg-white">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <h3 id="msgError" style="color:red"></h3>
+                    <button onclick="closeModal()" class="btn btn-danger" data-dismiss="modal" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- DataTales Example -->
 <div class="section-title">
@@ -80,90 +71,114 @@
         </h2>
     </div>
 </div>
+
+
+<div class=" mt-3" id="accordionFiltrea">
+    <div class="table-responsive">
+        <div class="card accordion-item" style="broder-radius: none !important; box-shadow: none !important;">
+            <div id="bloc1" class="accordion-collapse collapse show" data-bs-parent="#accordionFiltrea"
+                style="box-shadow: none !important;">
+                <div class="accordion-body" style="box-shadow: none !important;">
+                    <form method="GET" id="filterForm" action="<?= linkTo('GestionDocuments', 'repertoireCommun') ?>"
+                        style="border: none; margin: 0px !important; padding: 0px !important; margin: auto;">
+                        
+                        <div class="row justify-content-center" style="width: 100%;  margin: auto;">
+                            <div
+                                class="row alig-items-center justify-content-center col-md-10 col-xs-12 mb-3">
+                                <fieldset class="py-4 col-md-12 date-picker">
+                                    <legend
+                                        class='text-white col-md-12 text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                                        &nbsp;Date
+                                    </legend>
+                                    <div class="card">
+                                        <Select name="periode" id="dateDemande" class="form-control"
+                                            onchange="dateCreationSelect(this.value)">
+                                            <option value="">Tout</option>
+                                            <option value="today">Aujourd'hui</option>
+                                            <option value="semaine">Semaine en cours</option>
+                                            <option value="mois">Mois en cours</option>
+                                            <option value="annee">Année en cours</option>
+                                            <option value="trimestre">Trimestre en cours</option>
+                                            <option value="semestre">Semestre en cours</option>
+                                            <option value="1">A la date du</option>
+                                            <option value="2">Personnaliser</option>
+                                        </Select>
+                                    </div>
+                                </fieldset>
+                                <fieldset id="datepairOne" class="col-md-4" style="display: none;">
+                                    <legend
+                                        class='text-white text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                                        Personnaliser
+                                    </legend>
+                                    <p>
+                                        <label for="defaultFormControlInput" class="form-label">Date:</label>
+                                        <br>
+                                        <input name="dateOne" id="dateOne" readonly style="border: 1px solid black;"
+                                            type="text" class="this-form-control col-xs-12 col-md-12 date start "
+                                            value="<?= isset($dateOne) ? $dateOne : ''; ?>"
+                                            placeholder="Choisir..." />
+                                    </p>
+                                </fieldset>
+
+                                <fieldset id="datepair" class="col-md-4" style="display: none;">
+                                    <legend
+                                        class='text-white col-md-12 text-uppercase font-weight-bold text-center py-2 badge bg-dark mx-0'>
+                                        Personnaliser
+                                    </legend>
+                                    <p>
+                                        <label for="defaultFormControlInput" class="form-label">Début:</label>
+                                        <br>
+                                        <input name="dateDebut" id="dateDebut" readonly style="border: 1px solid black;"
+                                            type="text" class="this-form-control col-xs-12 col-md-12 date start "
+                                            value="<?= isset($dateDebut) ? $dateDebut : ''; ?>"
+                                            placeholder="Choisir..." />
+                                        <br><br>
+                                        <label for="defaultFormControlInput" class="form-label">Fin:</label>
+                                        <br>
+                                        <input name="dateFin" id="dateFin" readonly style="border: 1px solid black;"
+                                            type="text" class="this-form-control col-xs-12 col-md-12 date end "
+                                            value="<?= isset($dateFin) ? $dateFin : ''; ?>"
+                                            placeholder="Choisir..." />
+                                    </p>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-4 col-xs-12">
+                                <br>
+                                <button type="submit" id="filterButton" class="btn btn-primary form-control"
+                                    style="margin-top: 0; border-radius: 0px; background: #c00000; ">FILTRER</button>
+                                <br><br>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <div class="card shadow mt-3">
         <div class="card-header py-3 text-center">
             <div class="row align-items-center justify-content-center">
                 <h3 class="m-0 mt-2 col-md-10 font-weight-bold text-primary">
-                    <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;"><?= $titre ?></font>
-                    </font>
+                <div class="col-md-10">
+                    <h2 class="text-center font-weight-bold" id="titre">Liste des documents</h2>
+                </div>
                 </h3>
             </div>
         </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable16" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Visualiser</th>
-                            <th>Nom document</th>
-                            <th>Date de création</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $i = 1;
-                    foreach ($repertoireCommun as $rep) {
-                        $etat = "";
-                        $dateFormatee = date("d/m/Y", strtotime($rep->createDate));
-                    ?>
-                        <tr>
-                            <td><?= $i++ ?></td>
-                            <td class="text-center">
-                                <a href="<?= URLROOT ?>/public/documents/repertoireCommun/<?=$rep->urlDocument?>" target="_blank" type="button" class="btn btn-sm btn-icon"
-                                    style="background: #e74c3c; color:white">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </td>
-                            <td><?= $rep->nomDocument ?></td>
-                            <td><?= $dateFormatee ?></td>
-<td>
-    <form class="d-flex">
-        <div class="cascading-dropdowns">
-            <!-- Company Dropdown -->
-            <select class="form-control company-select mb-2" 
-                    onchange="updateYears(this)" 
-                    style="width: 100% !important;">
-                <option value="">Choisir société</option>
-                <?php foreach ($companies as $company): ?>
-                    <option value="<?= htmlspecialchars($company); ?>">
-                        <?= htmlspecialchars($company); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            
-            <!-- Year Dropdown (initially hidden) -->
-            <select class="form-control year-select mb-2 d-none" 
-                    onchange="updateServices(this)" 
-                    style="width: 100% !important;">
-                <option value="">Choisir année</option>
-            </select>
-            
-            <!-- Service Dropdown (initially hidden) -->
-            <select class="form-control service-select mb-2 d-none" 
-                    style="width: 100% !important;">
-                <option value="">Choisir service</option>
-            </select>
-            
-            <select class="form-control select3 user-select d-none" 
-                    style="width: 100% !important;">
-                <option value="">Choisir utilisateur</option>
-                <?php foreach ($listeComptableGestionnaire as $u): ?>
-                    <option value="<?= htmlspecialchars($u->idUtilisateur); ?>">
-                        <?= htmlspecialchars($u->fullName); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="ml-3">
-            <button type="button" class="btn btn-primary form-control validerBtn" onclick="valider(this, <?=$rep->idDocument?>)">Valider</button>
-        </div>
-    </form>
-</td>
-                        </tr>
-                    <?php } ?>
+            <table class="table table-bordered" id="tabledata" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Visualiser</th>
+                        <th>Nom document</th>
+                        <th>Date de création</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
                 </tbody>
             </table>
             <span id="connectedUserId" class="hidden" value=<?php $_SESSION["connectedUser"]->idUtilisateur?>></span>
@@ -174,107 +189,148 @@
 
 <script type="text/javascript">
 
-    async function valider(button, id) {
-    const form = button.closest('form');
-    const row = button.closest('tr');
-    const viewButton = row.querySelector('td:nth-child(2) a');
-    const documentUrl = viewButton.getAttribute('href');
-    
-    const viewButton2 = row.querySelector('td:nth-child(3)');
-    const nomDoc = viewButton2.innerHTML;
-    
-    const companySelect = form.querySelector('.company-select');
-    const yearSelect = form.querySelector('.year-select');
-    const serviceSelect = form.querySelector('.service-select');
-    const userSelect = form.querySelector('.user-select');
-    
-    // Validate selections
-    if (!companySelect?.value || !yearSelect?.value || !serviceSelect?.value || !userSelect?.value) {
-        alert("Veuillez remplir tous les champs.");
-        return;
+    function closeModal() {
+        $('#errorOperation').modal('hide');
     }
-    
-    const company = companySelect.value;
-    const year = yearSelect.value;
-    const service = serviceSelect.value;
-    const user = userSelect.value;
-    const userSelectedName = userSelect.options[userSelect.selectedIndex].text;
-    const fullPath = `${company}/${year}/${service}`;
-    const extDoc = documentUrl.split("repertoireCommun/")[1];
-    const newDocumentUrl = `${fullPath}/${extDoc}`;
 
-    const connectedUserId = <?= $_SESSION['connectedUser']->idUtilisateur; ?>;
-    const connectedUserName = "<?= addslashes($_SESSION['connectedUser']->fullName); ?>";
-    
-    // Show loading state
-    button.disabled = true;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Déplacement en cours...';
+$(document).ready(function() {
+    const table = $('#tabledata').DataTable({
+        "oLanguage": {
+            "sZeroRecords": "Aucune donnée !",
+            "sProcessing": "En cours...",
+            "sLengthMenu": "Nombre d'éléments _MENU_ ",
+            "sInfo": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+            "sInfoEmpty": "Affichage de 0 à 0 sur 0 entrée",
+            "sInfoFiltered": "(filtré à partir de _MAX_ total entrées)",
+            "sSearch": "Recherche:",
+        },
+        "language": {
+            "paginate": {
+                "previous": "<<",
+                "next": ">>"
+            }
+        },
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": `<?= URLROOT ?>/public/json/documents.php?action=getRepertoireCommunDataTable&periode=<?= $periode ?>&dateOne=<?= $dateOne ?>&dateDebut=<?= $dateDebut ?>&dateFin=<?= $dateFin ?>`,
+            "type": "GET",
+            "data": function(d) {
+                // Add your custom filters to the DataTables request
+                d.periode = $('#periodeFilter').val();
+                d.dateOne = $('#dateOneFilter').val();
+                d.dateDebut = $('#dateDebutFilter').val();
+                d.dateFin = $('#dateFinFilter').val();
+            },
+            "error": function(xhr, error, thrown) {
+                console.error("Erreur AJAX :", xhr.responseText);
+                alert("Erreur lors du chargement des données. Vérifie la console.");
+            }
+        },
+        "columns": [
+            { 
+                "data": null,
+                "render": function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                },
+                "orderable": false
+            },
+            { "data": 1, "orderable": false },
+            { "data": 2 },
+            { "data": 3 },
+            { "data": 4, "orderable": false }
+        ],
+        "order": [[3, 'desc']] // Default order by createDate
+    });
 
-    let originalFilePath; // Store for rollback
-    let newFilePath; // Store moved file path
+    // Refresh table when filters change
+    $('#periodeFilter, #dateOneFilter, #dateDebutFilter, #dateFinFilter').change(function() {
+        table.ajax.reload();
+    });
 
-    try {
-        // Step 1: Move the file
-        const moveResponse = await fetch(`<?= URLROOT ?>/public/json/documents.php?action=copyDocument`, {
+    // Update title with record count
+    table.on('draw.dt', function() {
+        const total = table.page.info().recordsDisplay;
+        $('#titre').text(`Liste des documents (${total})`);
+    });
+});
+
+    function dateCreationSelect(val) {
+        if (val == 2) {
+            $('#datepair').show();
+            $('#datepairOne').hide();
+            $('#anneepair').hide();
+            $(".date-picker").removeClass("col-md-12");
+            $(".date-picker").addClass("col-md-4");
+        } else if (val == 1) {
+            $('#datepairOne').show();
+            $('#datepair').hide();
+            $('#anneepair').hide();
+            $(".date-picker").removeClass("col-md-12");
+            $(".date-picker").addClass("col-md-4");
+        } else if (val == "annee") {
+            $('#anneepair').show();
+            $('#datepair').hide();
+            $('#datepairOne').hide();
+            $(".date-picker").removeClass("col-md-4");
+            $(".date-picker").addClass("col-md-12");
+        } else {
+            $('#datepair').hide();
+            $('#datepairOne').hide();
+            $('#anneepair').hide();
+            $(".date-picker").removeClass("col-md-4");
+            $(".date-picker").addClass("col-md-12");
+        }
+    }
+
+    function openTransferModal(id) {
+        resetModal();
+        
+        $.ajax({
+            url: `<?= URLROOT ?>/public/json/documents.php?action=getDocumentById`,
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sourceUrl: documentUrl,
-                destinationPath: fullPath,
-                userId: connectedUserId,
-                userName: connectedUserName
-            })
+            data: {
+                idDocument: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                const idDocument = document.querySelector("#modalDocumentId")
+                idDocument.value = id;
+                const createDate = document.querySelector("#modalDocumentCreateDate")
+                createDate.value = response.data.createDate
+                const editDate = document.querySelector("#modalDocumentEditDate")
+                editDate.value = response.data.editDate
+                const nomDoc = document.querySelector("#modalDocumentNom")
+                nomDoc.value = response.data.nomDocument
+                const urlDoc = document.querySelector("#modalDocumentUrl")
+                urlDoc.value = response.data.urlDocument
+                $('#leaveRequestModal').modal('show');
+            },
+            error: function(response) {
+                console.error('Erreur lors de la récupération des détails du pointage:', response);
+                    // alert('Une erreur s\'est produite lors de la récupération des détails.');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var dateCreation = $('#dateDemande').val();
+        dateCreationSelect(dateCreation);
+
+        $('.date').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            endDate: '<?= date('d-m-Y') ?>',
+            weekStart: 1
         });
 
-        if (!moveResponse.ok) throw new Error("Échec du déplacement du fichier.");
-        
-        const moveData = await moveResponse.json();
-        if (!moveData.success) throw new Error(moveData.message);
-        
-        // Store paths for rollback
-        originalFilePath = moveData.originalPath;
-        newFilePath = moveData.newPath;
-
-        // Step 2: Create activity
-        try {
-            await createActivity(id, connectedUserId, connectedUserName, user, userSelectedName, nomDoc, newDocumentUrl);
-        } catch (activityError) {
-            // Rollback the moved file because createActivity failed
-            alert("Erreur lors de la création de l'activité. Annulation du déplacement...");
-            await rollbackMove(originalFilePath, newFilePath, connectedUserId, connectedUserName);
-            throw activityError;  // rethrow to catch block below
-        }
-        // Step 3: Create history
-        await createHistorique("Assignation");
-
-        // Step 4: Send notification (non-critical)
-        try {
-            await createNotification(user, "Tâche assignée", "L'administrateur vous a assigné une tâche");
-        } catch (notificationError) {
-            console.error("Notification failed (non-critical):", notificationError);
-        }
-
-        // Step 5: Delete original record
-        await deleteDocument(id);
-
-        setTimeout(() => window.location.reload(), 500);
-
-    } catch (error) {
-        console.error("Error:", error);
-
-        // Rollback file move if it was successful
-        if (originalFilePath && newFilePath) {
-            try {
-                await rollbackMove(originalFilePath, newFilePath, connectedUserId, connectedUserName);
-            } catch (rollbackError) {
-                console.error("Rollback failed:", rollbackError);
-            }
-        }
-    } finally {
-        button.disabled = false;
-        button.textContent = 'Valider';
-    }
-}
+        $('.time').timepicker({
+            showDuration: true,
+            timeFormat: 'H:i',
+            step: 1
+        });
+        //  $('.select3').select2();
+    });
 
     function createHistorique(historyAction) {
         return new Promise((resolve, reject) => {
@@ -310,7 +366,7 @@
         });
     }
 
-    function createActivity(idDocument, assignePar, connectedUserName, assigneA, userSelectedName, nomDoc, urlDoc) {
+    function createActivity(idDocument, assignePar, connectedUserName, assigneA, userSelectedName, nomDoc, newNomDoc, urlDoc) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: `<?= URLROOT ?>/public/json/documents.php?action=createActivity`,
@@ -322,6 +378,7 @@
                     userSelectedName: userSelectedName,
                     idDocument, idDocument,
                     nomDoc: nomDoc,
+                    newNomDoc: newNomDoc,
                     urlDoc: urlDoc
                 },
                 dataType: 'json',
@@ -344,125 +401,375 @@
         });
     }
 
-    async function rollbackMove(originalPath, newPath, userId, userName) {
-        const rollbackResponse = await fetch(`<?= URLROOT ?>/public/json/documents.php?action=rollBackDocument`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+async function rollbackMove(originalPath, newPath, userId, userName) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: `<?= URLROOT ?>/public/json/documents.php?action=rollBackDocument`,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
                 sourceUrl: newPath,
                 destinationPath: originalPath.split('/').slice(0, -1).join('/'),
                 userId,
                 userName
-            })
-        });
-        if (!rollbackResponse.ok) throw new Error("Rollback HTTP error");
-        const rollbackData = await rollbackResponse.json();
-        if (!rollbackData.success) throw new Error("Rollback failed on server");
-    }
-</script>
-
-<script>
-    // Store the folder data in JavaScript variables
-    // Store the folder data in JavaScript variables
-const folderData = {
-    companies: <?= json_encode($companies); ?>,
-    years: {},
-    services: {}
-};
-
-<?php
-    // Preload years data
-    foreach ($companies as $company) {
-        $years = getYears($basePath, $company);
-        echo "folderData.years['" . addslashes($company) . "'] = " . json_encode($years) . ";\n";
-        
-        // Preload services data
-        foreach ($years as $year) {
-            $services = getServices($basePath, $company, $year);
-            echo "folderData.services['" . addslashes($company) . "_" . addslashes($year) . "'] = " . json_encode($services) . ";\n";
-        }
-    }
-?>
-
-function updateYears(selectElement) {
-    const container = selectElement.closest('.cascading-dropdowns');
-    const company = selectElement.value;
-    const yearSelect = container.querySelector('.year-select');
-    
-    // Reset downstream selects
-    yearSelect.innerHTML = '<option value="">Choisir année</option>';
-    yearSelect.classList.add('d-none');
-    
-    const serviceSelect = container.querySelector('.service-select');
-    serviceSelect.innerHTML = '<option value="">Choisir service</option>';
-    serviceSelect.classList.add('d-none');
-    
-    const actionSelect = container.querySelector('.user-select');
-    actionSelect.classList.add('d-none');
-
-    if (!company) return;
-
-    // Populate years
-    const years = folderData.years[company] || [];
-    years.forEach(year => {
-        yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
-    });
-    
-    if (years.length > 0) {
-        yearSelect.classList.remove('d-none');
-    }
-}
-
-function updateServices(selectElement) {
-    const container = selectElement.closest('.cascading-dropdowns');
-    const company = container.querySelector('.company-select').value;
-    const year = selectElement.value;
-    const serviceSelect = container.querySelector('.service-select');
-    
-    // Reset action select
-    const actionSelect = container.querySelector('.user-select');
-    actionSelect.classList.add('d-none');
-
-    if (!year) return;
-
-    // Populate services
-    const services = folderData.services[`${company}_${year}`] || [];
-    serviceSelect.innerHTML = '<option value="">Choisir service</option>';
-    services.forEach(service => {
-        serviceSelect.innerHTML += `<option value="${service}">${service}</option>`;
-    });
-    
-    if (services.length > 0) {
-        serviceSelect.classList.remove('d-none');
-        
-        // Show action select when service is selected
-        serviceSelect.addEventListener('change', function () {
-            const row = this.closest('tr') || this.closest('.your-container-class'); // adjust as needed
-            const select3 = row.querySelector('.select3');
-
-            if (this.value) {
-                select3.classList.remove('d-none');
-                $(select3).select2();
-            } else {
-                select3.classList.add('d-none');
+            }),
+            success: function(rollbackData) {
+                if (!rollbackData.success) {
+                    reject(new Error("Rollback failed on server"));
+                } else {
+                    resolve(rollbackData);
+                }
+            },
+            error: function(xhr, status, error) {
+                reject(new Error("Rollback HTTP error"));
             }
         });
+    });
+}
+
+
+// Load companies when modal opens
+
+let connectedUserSociete = ''
+let connectedUserSocieteId = ''
+let isAdmin = <?= $isAdmin ?> ? true : false
+
+$(document).ready(function() {
+        $('#leaveRequestModal').on('show.bs.modal', function() {
+        resetModal();
+        if(!isAdmin && connectedUserSocieteId) {
+            loadTopLevelFolders(); // Auto-load for non-admins
+        }
+    });
+    if(!isAdmin) {
+        $.ajax({
+            url: `<?= URLROOT ?>/public/json/documents.php?action=getCompanyByUserId`,
+            method: 'POST',
+            data: {
+                idUtilisateur: '<?= $idUtilisateur ?>'
+            },
+            dataType: 'json',
+            success: function(response) {
+                connectedUserSociete = response.data.nom_societe
+                connectedUserSocieteId = response.data.id
+                loadCompanies();
+            },
+            error: function(response) {
+                console.error('Erreur lors de la récupération des détails du pointage:', response);
+                    // alert('Une erreur s\'est produite lors de la récupération des détails.');
+            }
+        });
+    } else {
+        loadCompanies()
+    }
+});
+
+function loadCompanies() {
+    $.ajax({
+        url: `<?= URLROOT ?>/public/json/documents.php?action=getCompanies`,
+        type: 'POST',
+        dataType: 'json', // Explicitly expect JSON
+        success: function(response) {
+        if(response.success) {
+                const select = $('#entrepriseSelect');
+                select.empty();
+                
+                if(isAdmin) {
+                    select.append('<option value="">-- Sélectionner une entreprise --</option>');
+                    response.data.forEach(company => {
+                        select.append(`<option value="${company.id}">${company.nom_societe}</option>`);
+                    });
+                } else {
+                    // For non-admin, add only their company and trigger load
+                    select.append(`<option value="${connectedUserSocieteId}" selected>${connectedUserSociete}</option>`);
+                    select.prop('disabled', true);
+                    loadTopLevelFolders(); // Automatically load folders
+                }
+
+        }
+    }
+    });
+}
+
+let selectedPath = []; // To store the complete folder path
+let selectedUser = null; // To store the selected user
+
+
+function loadTopLevelFolders() {
+    const companyId = isAdmin ? $('#entrepriseSelect').val() : connectedUserSocieteId;
+
+    if(!companyId) return;
+    const companySelect = document.querySelector('#entrepriseSelect')
+    const companySelectedName = isAdmin ? companySelect.options[companySelect.selectedIndex].text : connectedUserSociete;
+    selectedPath = [{ type: 'company', name: isAdmin ? companySelectedName : connectedUserSociete }]; // Reset path with company
+    $('#folderHierarchy').empty();
+
+    $.ajax({
+        url: `<?= URLROOT ?>/public/json/documents.php?action=getFolders`,
+        type: 'POST',
+        dataType: 'json', // Explicitly expect JSON
+        data: { 
+            idSociete: companyId,
+            idParent: null 
+        },
+        success: function(response) {
+            if(response.success) {
+                addFolderSelect(null, response.data);
+            }
+        }
+    });
+}
+
+function addFolderSelect(parentId, folders) {
+    const selectId = `folderSelect_${parentId || 'root'}`;
+    const companyId = isAdmin ? $('#entrepriseSelect').val() : connectedUserSocieteId;
+    
+    const selectHtml = `
+    <div class="form-group folder-select">
+        <select id="${selectId}" class="form-control" 
+                onchange="loadChildFolders(
+                    ${parentId || 'null'}, 
+                    this.value, 
+                    this.options[this.selectedIndex].text
+                )">
+            <option value="">-- Sélectionner un répertoire --</option>
+            ${folders.map(folder => `<option value="${folder.id}">${folder.nom}</option>`).join('')}
+        </select>
+    </div>`;
+    
+    $('#folderHierarchy').append(selectHtml);
+}
+
+function loadChildFolders(parentId, folderId, folderName) {
+    if (!folderId) {
+        // Remove all selects after this one
+        $(`#folderSelect_${parentId || 'root'}`).parent().nextAll().remove();
+        // Update path to remove subsequent folders
+        // selectedPath = selectedPath.slice(0, selectedPath.findIndex(item => item.id === parentId) + 1);
+        return;
+    }
+
+    // Add/update folder in path
+    const folderIndex = selectedPath.findIndex(item => item.id === parentId);
+    if (folderIndex >= 0) {
+        selectedPath = selectedPath.slice(0, folderIndex + 1);
+    }
+    selectedPath.push({ type: 'folder', id: folderId, name: folderName});
+    const companyId = isAdmin ? $('#entrepriseSelect').val() : connectedUserSocieteId;
+
+    $.ajax({
+        url: `<?= URLROOT ?>/public/json/documents.php?action=getFolders`,
+        type: 'POST',
+        dataType: 'json', // Explicitly expect JSON
+        data: { 
+            idSociete: companyId,
+            idParent: folderId 
+        },
+        success: function(response) {
+            const companySelect = document.querySelector('#entrepriseSelect')
+            const companySelectedName = isAdmin ? companySelect.options[companySelect.selectedIndex].text : connectedUserSociete;
+            // Remove all selects after this one
+            $(`#folderSelect_${parentId || 'root'}`).parent().nextAll().remove();
+            
+            if(response.success) {
+                if(response.data.length > 0) {
+                    // If there are more folders, show folder select
+                    addFolderSelect(folderId, response.data);
+                } else {
+                    // If no more folders, show users select
+                    loadCompanyUsers(companySelectedName);
+                }
+            }
+        }
+    });
+}
+
+function loadCompanyUsers(companyName) {
+    const isAdmin = <?= $role ?> == "1" || <?= $role ?> == "2" || <?= $role ?> == "25" ? true : false;
+
+    const connectedUserId = <?= $idUtilisateur; ?>;
+    $.ajax({
+        url: `<?= URLROOT ?>/public/json/utilisateurs.php?action=getUsersByCompany`,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            companyName: companyName,
+            isAdmin: isAdmin,
+            connectedUserId: connectedUserId
+        },
+        success: function(response) {
+            addUsersSelect(response);
+        }
+    });
+}
+
+function addUsersSelect(users) {
+    const selectHtml = `
+    <div class="form-group users-select">
+        <label class="font-weight-bold">Sélectionner un utilisateur</label>
+        <select id="userSelect" class="form-control" onchange="setSelectedUser(this)">
+            <option value="">-- Sélectionner un utilisateur --</option>
+            ${users.map(user => `<option value="${user.idUtilisateur}" data-email="${user.email}">${user.fullName}</option>`).join('')}
+        </select>
+    </div>
+    <div class="form-group users-select">
+        <label class="font-weight-bold">Nom du document</label>
+        <input class="form-control document-input" placeholder="Nom du document"/>
+    </div>
+    
+    `;
+    
+    $('#folderHierarchy').append(selectHtml);
+}
+
+function setSelectedUser(selectElement) {
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const selectedUserEmail = selectedOption.getAttribute('data-email');
+
+    selectedUser = {
+        id: selectElement.value,
+        name: selectedOption.text,
+        email: selectedUserEmail
+    };
+}
+
+function resetModal() {
+    $('#folderHierarchy').empty();
+    $('#pathDisplay').text('Aucune sélection');
+    selectedPath = [];
+    selectedUser = null;
+    
+    if(isAdmin) {
+        $('#entrepriseSelect').val('').prop('disabled', false);
+    } else {
+        $('#entrepriseSelect').prop('disabled', true);
     }
 }
 
-// Helper function to construct the full path
-function getFullPath(container) {
-    const company = container.querySelector('.company-select').value;
-    const year = container.querySelector('.year-select').value;
-    const service = container.querySelector('.service-select').value;
-    const action = container.querySelector('.user-select').value;
-    
-    if (company && year && service && action) {
-        return {
-            path: `${company}/${year}/${service}`,
-            action: action
-        };
-    }
-    return null;
-}
+$("#confirm-btn").on("click", async function () {
+    const idDocument = document.querySelector("#modalDocumentId")
+    const createDate = document.querySelector("#modalDocumentCreateDate")
+    const editDate = document.querySelector("#modalDocumentEditDate")
+    const nomDoc = document.querySelector("#modalDocumentNom")
+    const newNomDoc = document.querySelector('.document-input')
+    const urlDoc = document.querySelector("#modalDocumentUrl")
+    const fullUrlDoc = "<?= URLROOT ?>/public/documents/repertoireCommun/" + urlDoc.value
+
+    // Validate selections
+        if (!newNomDoc?.value || selectedPath.length == 0 || !selectedUser.name) {
+                $("#msgError").text("Veuillez remplir tous les champs.");
+                $('#errorOperation').modal('show');
+            return;
+        }
+    const user = selectedUser.id;
+    const userSelectedName = selectedUser.name
+    const fullPath = selectedPath.map(item => item.name).join('/');
+    const extDoc = urlDoc.value
+    const newDocumentUrl = `${fullPath}/${extDoc}`;
+    const connectedUserId = <?= $_SESSION['connectedUser']->idUtilisateur; ?>;
+    const connectedUserName = "<?= addslashes($_SESSION['connectedUser']->fullName); ?>";
+        
+    let originalFilePath; // Store for rollback
+    let newFilePath; // Store moved file path
+
+    try {
+        // Step 1: Move the file
+    $.ajax({
+        url: `<?= URLROOT ?>/public/json/documents.php?action=copyDocument`,
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            sourceUrl: fullUrlDoc,
+            destinationPath: fullPath,
+            userId: connectedUserId,
+            userName: connectedUserName
+        }),
+        success: async function(moveData) {
+            if (!moveData.success) throw new Error(moveData.message);
+            // Store paths for rollback
+            originalFilePath = moveData.originalPath;
+            newFilePath = moveData.newPath;
+            // Step 2: Create activity
+            console.log(newDocumentUrl)
+            try {
+                await createActivity(idDocument.value, connectedUserId, connectedUserName, user, userSelectedName, nomDoc.value, newNomDoc.value, newDocumentUrl);
+            } catch (activityError) {
+                // Rollback the moved file because createActivity failed
+                $("#msgError").text("Erreur lors de la création de l'activité. Annulation du déplacement...");
+                $('#errorOperation').modal('show');
+                await rollbackMove(originalFilePath, newFilePath, connectedUserId, connectedUserName);
+                throw activityError;  // rethrow to catch block below
+            }
+            
+            // Step 3: Create history
+            await createHistorique("Assignation");
+
+            // Step 4: Send notification (non-critical)
+            try {
+                await createNotification(user, "Tâche assignée", "Nouvelle tâche assigné");
+            } catch (notificationError) {
+                console.error("Notification failed (non-critical):", notificationError);
+            }
+
+            // Step 5: Delete original record
+            await deleteDocument(idDocument.value);
+
+            
+            // Appel de sendEmail avec l'email dynamique
+            const email = selectedUser.email
+            const emailSubject = "Affectation de tâche"
+            const emailBody = `Bonjour,<br /><br /> Vous avez une nouvelle tâche dans votre répertoire personnel affectée par ${connectedUserName}.<br /><br />
+             Si vous avez des questions ou souhaitez obtenir plus d'informations, n'hésitez pas à contacter votre manager.<br /><br />
+            Cordialement,<br />
+            Votre équipe RH<br />`
+            sendEmail(
+                email, // Utilisation de l'email dynamique
+                emailSubject,
+                emailBody
+            );
+
+            // setTimeout(() => window.location.reload(), 500);
+        },
+        error: function(xhr, status, error) {
+            throw new Error("Échec du déplacement du fichier.");
+        }
+    });
+        } catch (error) {
+            console.error("Error:", error);
+
+            // Rollback file move if it was successful
+            if (originalFilePath && newFilePath) {
+                try {
+                    await rollbackMove(originalFilePath, newFilePath, connectedUserId, connectedUserName);
+                } catch (rollbackError) {
+                    console.error("Rollback failed:", rollbackError);
+                }
+            }
+        }
+});
+
+function sendEmail(to, subject, body) {
+            $.ajax({
+                url: `<?= URLROOT ?>/public/json/pointage.php?action=sendEmail`, // URL de la fonction PHP
+                type: 'POST',
+                data: {
+                    to: to,
+                    subject: subject,
+                    body: body
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        console.log('Email sent successfully:', response.message);
+                    } else {
+                        console.error('Failed to send email:', response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending email:', error);
+                }
+            });
+        }
 </script>
