@@ -135,6 +135,26 @@ if ($response == true) {
     tinymce.init({
         menubar: false,
         statusbar: false,
+        selector: 'textarea#noteTextCampagne',
+        height: 500,
+        content_css: '<?= URLROOT ?>/public/assets/css/skin.css',
+        browser_spellcheck: true,
+        language: "fr_FR"
+    });
+
+    tinymce.init({
+        menubar: false,
+        statusbar: false,
+        selector: 'textarea#bodyMailEnvoiDoc',
+        height: 500,
+        content_css: '<?= URLROOT ?>/public/assets/css/skin.css',
+        browser_spellcheck: true,
+        language: "fr_FR"
+    });
+
+    tinymce.init({
+        menubar: false,
+        statusbar: false,
         selector: 'textarea#emailText',
         height: 800,
         content_css: '<?= URLROOT ?>/public/assets/css/skin.css',
