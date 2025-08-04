@@ -1,0 +1,109 @@
+composer require smalot/pdfparser thiagoalessio/tesseract_ocr tecnickcom/tcpdf
+composer require spatie/pdf-to-image
+composer require php-ai/php-ml
+
+q
+add this to composer.json
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+
+https://www.extranet.wbcc.fr/public/json/utilisateur.php?action=findByEmail&email=jawherbaltii@outlook.com
+https://www.extranet.wbcc.fr/public/json/pointage.php?action=filterPointages&userid=5&periode=semestre
+https://www.extranet.wbcc.fr/public/json/utilisateur.php?action=findById&id=900
+https://www.extranet.wbcc.fr/public/json/utilisateur.php?action=getUsersByRole&role=Informaticien
+
+
+
+
+
+
+
+
+
+
+
+
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN type_sinistre prospectB2C VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN civiliteGerant civiliteProspect VARCHAR(8);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN prenomGerant prenomProspect VARCHAR(30);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN nomGerant nomProspect VARCHAR(30);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN emailGerant emailProspect VARCHAR(60);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN telGerant telProspect VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siSignDeleg siOccupe VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN prenomSignataire habitation VARCHAR(15);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN nomSignataire emprunteur VARCHAR(15);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN dateNaissanceSignataire profession VARCHAR(15);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN nomCieAssurance famille VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN dateDebutContrat assuranceAuto VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN dateFinContrat assuranceHabitation VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN emailSign assuranceSante VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN telSign assuranceEmprunteur VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN raisonRefusSignature assurancePrevoyance VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN raisonRefusSignature satisfactionTarifs VARCHAR(11);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siRdvPerso satisfactionGaranties VARCHAR(11);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN accordRVRT satisfactionService VARCHAR(11);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN reponse_sihabile_signature typeAssurance VARCHAR(40);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siSinistreEnCours assuranceText VARCHAR(60);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siRvTelResponsable siAnimal VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN civiliteResponsable typeAnima VARCHAR(30);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN prenomResponsable siVehiculeElec VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN nomResponsable typeVehicule VARCHAR(60);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN jobTitleResponsable siProtection VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN telResponsable typeProtection VARCHAR(60);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN emailResponsable recommendations VARCHAR(60);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siExistePartenaireRep empruntEnCours VARCHAR(3);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siAccepteSuiteQuelAvantage dureeEmprunt VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siAccepteSuitePasTemps mensualite VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN siRDVMefianceInconnu garantiesP VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN autreActivite  mutuelle VARCHAR(50);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN nombreClients  typeCouverture VARCHAR(50);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN typoMonoPropriete  remboursement VARCHAR(50);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN typoCopro primeApprox VARCHAR(10);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN typoCopro primeApprox VARCHAR(10);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN typoZoneCommerciale typePrevoyance VARCHAR(15);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN causes marque VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN autreCauseDegat model VARCHAR(20);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN autreDommage vehiculeAnnee VARCHAR(4);
+alter TABLE wbccgroup_quest_campagne_hb_b2c CHANGE COLUMN dommages typeLogement VARCHAR(11);
+
+
+
+
+
+SELECT * FROM `wbccgroup_quest_campagne_batirym_b2b` WHERE 1
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE dateEcheanceContrat isRefus VARCHAR(3);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE prospectB2C prospectB2B VARCHAR(3);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE assureur siUtile VARCHAR(3);
+
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE dateApproximative dureeOccup VARCHAR(3);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE anneeSurvenance amelioreLocal VARCHAR(30);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE commentaireDateInconnue remarquesClient VARCHAR(100);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE commentaireSinistre industry VARCHAR(20);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE marque typeLocal VARCHAR(20);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE model statutProspect VARCHAR(12);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE typeLogement roleDecisionnaire VARCHAR(15);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE vehiculeAnnee vitrine VARCHAR(6);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE rechercheFuite renovation VARCHAR(10);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE reparationFuite pmr VARCHAR(3);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE siDeclarerSinistre incendie VARCHAR(8);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE repSiMandatExpert acoustique VARCHAR(10);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE repSiExpertVenu optimisation VARCHAR(12);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE repSiIndemProp traffic VARCHAR(7);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE indemnisationRecu image VARCHAR(5);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE repRVExpertise CA VARCHAR(2);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE siEnvoiDoc moderniser VARCHAR(10);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE emailEnvoiDoc normes VARCHAR(6);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE numContrat adresseSite VARCHAR(50);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE numPolice cpSite VARCHAR(10);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE numSinistre etageSite VARCHAR(20);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE adresse interphoneSite VARCHAR(20);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE cp dateRdv VARCHAR(20);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE ville dateRdvViseo VARCHAR(20);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE numPortable lienViseo VARCHAR(100);
+alter table `wbccgroup_quest_campagne_batirym_b2b` CHANGE civiliteProspect  VARCHAR(100);
+
+
+
