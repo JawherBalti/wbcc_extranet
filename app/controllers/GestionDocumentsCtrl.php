@@ -29,7 +29,7 @@ class GestionDocumentsCtrl extends Controller
         header("location:javascript://history.go(-1)");
     }
 
-        public function repertoireCommun() {
+    public function repertoireCommun() {
         $role = $_SESSION['connectedUser']->role;
         $connectedUser = "";
         $listeUtilisateurs = [];
@@ -114,7 +114,7 @@ class GestionDocumentsCtrl extends Controller
         $params[':me'] = $idUser;
 
         
-        $idUtilisateur = "";
+        $userId = "";
         $idSite = "";
         $statut = "";
         $periode = "";
@@ -131,19 +131,16 @@ class GestionDocumentsCtrl extends Controller
             $listeUtilisateurs = $this->userModel->getAll("");
             $sites = $this->siteModel->getAllSites();
             $titre = "Repertoire des employés";
-            $activities = $this->activityModel->getActivities($statut, $idUtilisateur, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $numero);
-        }else if($role == 25) {
-            $listeUtilisateurs =  $this->userModel->getUsersBySite($_SESSION['connectedUser']->idSiteF, 1);
+            $activities = $this->activityModel->getActivities($statut, $userId, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $numero);
         } else {
             $connectedUser = $_SESSION["connectedUser"];
-            $titre = "Repertoire personnel";
-            $sites= [];
-            $listeUtilisateurs = [];
+            $titre = "Repertoire des employés";
+            $sites= [$this->siteModel->findById($_SESSION['connectedUser']->idSiteF)];
+            $listeUtilisateurs = [$_SESSION['connectedUser']];
             $toutesLesTaches = $this->activityModel->getAllActivitiesForSelect($_SESSION['connectedUser']->idUtilisateur);
-            $activities = $this->activityModel->getActivities($statut, $idUtilisateur, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $numero);
+            $activities = $this->activityModel->getActivities($statut, $userId, $idSite, $periode, $dateOne, $dateDebut, $dateFin, $numero);
         }
 
-        $sites = $this->siteModel->getAllSites();
         $data = [
             "gerepresence" => linkTo('GestionInterne', 'gerepresence'),
             "genererAvertissement" => linkTo('GestionInterne', 'genererAvertissement'),
@@ -165,6 +162,14 @@ class GestionDocumentsCtrl extends Controller
             'Taches' => ($_SESSION['connectedUser']->isAdmin) 
                 ? $this->activityModel->getAllActivitiesForSelect() 
                 : $this->activityModel->getAllActivitiesForSelect($_SESSION['connectedUser']->idUtilisateur),
+            "periode" => $periode,
+            "dateOne" => $dateOne,
+            "dateDebut" => $dateDebut,
+            "dateFin" => $dateFin,
+            "statut" => $statut,
+            "idSite" => $idSite,
+            "userId" => $userId,
+            
         ];
         $this->view('gestionDocuments/repertoireEmployes', $data);
     }
