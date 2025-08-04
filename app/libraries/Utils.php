@@ -1932,4 +1932,63 @@ function timeStringToMinutes($timeStr) {
     
     return ($hours * 60) + $minutes;
 }
+
+function getBuildings($path, $company) {
+    $buildings = [];
+    $companyPath = $path . $company . '/';
+    if (is_dir($companyPath)) {
+        $items = array_diff(scandir($companyPath), ['.', '..']);
+        foreach ($items as $item) {
+            if (is_dir($companyPath . $item)) {
+                $buildings[] = $item;
+            }
+        }
+    }
+    return $buildings;
+}
+
+    // Function to get companies
+    function getCompanies($path) {
+        $companies = [];
+        if (is_dir($path)) {
+            $items = array_diff(scandir($path), ['.', '..']);
+            foreach ($items as $item) {
+                if (is_dir($path . $item)) {
+                    $companies[] = $item;
+                }
+            }
+        }
+        return $companies;
+    }
+
+    // Function to get years for a company
+    function getYears($path, $company) {
+        $years = [];
+        $companyPath = $path . $company . '/';
+        if (is_dir($companyPath)) {
+            $items = array_diff(scandir($companyPath), ['.', '..']);
+            foreach ($items as $item) {
+                if (is_dir($companyPath . $item)) {
+                    $years[] = $item;
+                }
+            }
+        }
+        return $years;
+    }
+
+    // Function to get services for a company and year
+    function getServices($path, $company, $year) {
+        $services = [];
+        $yearPath = $path . $company . '/' . $year . '/';
+        if (is_dir($yearPath)) {
+            $items = array_diff(scandir($yearPath), ['.', '..']);
+            foreach ($items as $item) {
+                if (is_dir($yearPath . $item)) {
+                    $services[] = $item;
+                }
+            }
+        }
+        return $services;
+    }
+
 //FIN JAWHAR

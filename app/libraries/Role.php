@@ -153,8 +153,8 @@ class Role
             }
             // Add a recipient
             $mail->Subject = $subject;
-            $mail->Body    = $body;
-            return true;
+            $mail->Body = $body;
+            //return true;
             if ($mail->send()) {
                 //  echo 'Mailer Error: ' . $mail->ErrorInfo;
                 return true;
