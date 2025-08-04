@@ -1,0 +1,21 @@
+{
+  "require": {
+    "smalot/pdfparser": "^2.12",
+    "thiagoalessio/tesseract_ocr": "^2.13",
+    "php-ai/php-ml": "^0.10.0",
+    "spatie/pdf-to-image": "^3.1",
+    "tecnickcom/tcpdf": "^6.10",
+    "openai-php/client": "^0.14.0",
+    "guzzlehttp/guzzle": "^7.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  }
+}
