@@ -6,6 +6,8 @@ require_once "../../app/libraries/SMTP.php";
 require_once "../../app/libraries/PHPMailer.php";
 require_once "../../app/libraries/Role.php";
 require_once "../../app/libraries/Utils.php";
+require_once "../../app/libraries/Model.php"; // Correct path to Model.php
+require_once "../../app/models/Pointage.php";
 
 if (isset($_GET['action'])) {
     $db = new Database();
@@ -2184,7 +2186,6 @@ if (isset($_GET['action'])) {
             $title = $_POST['title'] ?? ''; // Notification title
             $message = $_POST['message'] ?? ''; // Notification message
             $idPointage = $_POST['idPointage'] ?? null;
-
             // Validate required parameters
             if (empty($idUtilisateur) || empty($title) || empty($message)) {
                 echo json_encode(0); // Return 0 on failure if parameters are missing
@@ -2521,6 +2522,73 @@ if (isset($_GET['action'])) {
         } else {
             echo json_encode("0");
         }
+    }
+
+    //************************************************* */
+    if ($action == "batchRapportMensuel") {
+        // $pointage = new Pointage();
+
+        // $result = $pointage->generatePDFInfo(); // Modify this function to save the PDF and return its path
+        // // if ($result === false) {
+        //     // Handle the error case
+        //     echo json_encode(["error" => "Failed to generate PDF"]);
+        // } else {
+        //     // Success case
+        //     echo json_encode(["success" => true, "message" => "PDF generated successfully"]);
+        // }
+
+        $files = file_get_contents(URLROOT . "/public/documents/pointage/generatePDF.php");
+        $file = str_replace('"', "", $file);
+        echo json_encode($file);
+    }
+
+    if ($action == "getAbsenceAndGenerateRapport") {
+        $db->query("SELECT * FROM  wbcc_contact, wbcc_utilisateur, wbcc_roles WHERE idContact=idContactF AND role=idRole AND (isPointageInterne=1 OR isPointageExterne = 1) AND etatUser=1");
+        $datas = $db->resultSet();
+        foreach ($datas as $key => $user) {
+            $date = date("Y-m-d");
+
+            // $begin = new DateTime("2025-02-01");
+            // $end = new DateTime("2025-02-28");
+            // $interval = DateInterval::createFromDateString('1 day');
+            // $period = new DatePeriod($begin, $interval, $end);
+            // foreach ($period as $day) 
+            {
+                // $date = $day->format('Y-m-d');
+
+                // $date = date("2025-02-26");
+                //SEARCH IF CONGE
+
+
+                //SEARCH IF JOUR FERIE
+                $db->query("SELECT * FROM wbcc_jour_ferie j WHERE j.idSiteF = $user->idSiteF AND j.dateJourFerie='$date' ");
+                $jourFerie = $db->single();
+                //SEARCH IF WORK DAY
+                $jour = my_dateEnFrancais($date, 'd');
+                $jours = $user->jourTravail != null && $user->jourTravail != "" && !$jourFerie ? explode(';', trim($user->jourTravail)) : [];
+                $index = array_search(ucfirst($jour), $jours);
+                if ($index > 0) {
+                    //SEARCH IF COMMERCIAL POINTED
+                    $db->query("SELECT * FROM wbcc_pointage WHERE  idUserF= $user->idUtilisateur AND datePointage = :date  LIMIT 1");
+                    $db->bind("date", $date, null);
+                    $pointage = $db->single();
+                    if ($pointage) {
+                    } else {
+                        //INSERT ABSENCE
+                        $numero =  'PNT' . date("dmYHis") . "$user->idUtilisateur$key";
+                        $db->query("INSERT INTO wbcc_pointage(numeroPointage, datePointage,absent, traite, idUserF, auteur) VALUE(:numeroPointage, :datePointage, :absent,:traite, :idUser, :auteur)");
+                        $db->bind("numeroPointage", $numero, null);
+                        $db->bind("datePointage", $date, null);
+                        $db->bind("absent", 1, null);
+                        $db->bind("traite", 0, null);
+                        $db->bind("idUser", $user->idUtilisateur, null);
+                        $db->bind("auteur", $user->fullName, null);
+                        $db->execute();
+                    }
+                }
+            }
+        }
+        echo json_encode("1");
     }
 }
 
