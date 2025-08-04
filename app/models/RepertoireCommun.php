@@ -2,7 +2,8 @@
 
 class RepertoireCommun extends Model
 {
-    public function getRepertoire($periode, $dateOne, $dateDebut, $dateFin) {
+    public function getRepertoire($periode, $dateOne, $dateDebut, $dateFin)
+    {
         $sql = "SELECT * FROM wbcc_repertoire_commun WHERE isDeleted = 0";
         // Filter by time period
         switch ($periode) {
